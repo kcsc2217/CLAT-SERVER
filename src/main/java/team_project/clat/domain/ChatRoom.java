@@ -20,7 +20,7 @@ public class ChatRoom extends BaseEntity{
 
     private String roomName;
 
-    @OneToMany(mappedBy = "chatroom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     List<Message> messageList = new ArrayList<>();
 
     public ChatRoom(Long id, String roomName) {
