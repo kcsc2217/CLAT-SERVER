@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 public class ReportComment extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reportComment_id")
     private Long id;
 
