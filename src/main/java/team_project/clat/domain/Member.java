@@ -38,8 +38,29 @@ public class Member extends BaseEntity {
 
     private String nickName;
 
+    // 신고하기 와 양방향 맵핑
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
     List<Report> reportList = new ArrayList<>();
+
+    // 신고하기 댓글과 양방향 맵핑
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<ReportComment> reportCommentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Like> likeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<FAQItem> faqItemList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<FAQComment> faqCommentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Student_course> student_courseList = new ArrayList<>();
+
+
+
+
 
 
     public Member(Long id, String nickName, String email, String password, int age, Gender gender, UserType userType, Address address) {

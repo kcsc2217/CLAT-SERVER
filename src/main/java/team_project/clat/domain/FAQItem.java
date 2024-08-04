@@ -22,6 +22,10 @@ public class FAQItem extends BaseEntity {
     @JoinColumn(name="faqComment_id")
     private FAQComment faqComment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     public FAQItem(Long id, String title, String description, FAQComment faqComment) {
         this.id = id;
         this.title = title;

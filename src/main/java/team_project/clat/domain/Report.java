@@ -26,8 +26,8 @@ public class Report extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReportComment> reportCommentList = new ArrayList<>();
+    @OneToOne(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ReportComment reportComment;
 
     public Report(Long id, String title, String description, Member member) {
         this.id = id;
@@ -40,6 +40,10 @@ public class Report extends BaseEntity {
     public void addMember(Member member){
         this.member = member;
         member.getReportList().add(this);
+    }
+
+    public void setReportComment(ReportComment reportComment){
+        this.reportComment = reportComment;
     }
 
 

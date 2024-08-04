@@ -15,10 +15,14 @@ public class ChatRoom extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CHATROOM_ID")
+    @Column(name = "chatroom_id")
     private Long id;
 
     private String roomName;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
+    private Course course;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     List<Message> messageList = new ArrayList<>();
@@ -26,5 +30,10 @@ public class ChatRoom extends BaseEntity{
     public ChatRoom(Long id, String roomName) {
         this.id = id;
         this.roomName = roomName;
+    }
+
+
+    public void addCourse(Course course) {
+        this.course = course;
     }
 }

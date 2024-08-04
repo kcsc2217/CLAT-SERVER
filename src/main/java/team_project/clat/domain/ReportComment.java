@@ -17,7 +17,7 @@ public class ReportComment extends BaseEntity {
 
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")
     private Report report;
 
@@ -34,10 +34,11 @@ public class ReportComment extends BaseEntity {
 
     public void setReport(Report report) {
         this.report = report;
-        report.getReportCommentList().add(this);
+        report.setReportComment(this);
     }
 
     public void setMember(Member member) {
         this.member = member;
+        member.getReportCommentList().add(this);
     }
 }

@@ -28,5 +28,6 @@ public class Like {
 
     public void setMember(Member member) {
         this.member = member;
+        member.getLikeList().add(this);
     }
 }
