@@ -21,10 +21,9 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    private String username;
     private String email;
-
     private String password;
-
     private int age;
 
     @Enumerated(EnumType.STRING)
@@ -60,11 +59,9 @@ public class Member extends BaseEntity {
 
 
 
-
-
-
-    public Member(Long id, String nickName, String email, String password, int age, Gender gender, UserType userType, Address address) {
+    public Member(Long id, String username, String nickName, String email, String password, int age, Gender gender, UserType userType, Address address) {
         this.id = id;
+        this.username = username;
         this.nickName = nickName;
         this.email = email;
         this.password = password;
@@ -72,6 +69,16 @@ public class Member extends BaseEntity {
         this.gender = gender;
         this.userType = userType;
         this.address = address;
+    }
+
+    public static Member memberSet(String username, String password, UserType userType){
+        Member member = new Member();
+
+        member.username = username;
+        member.password = password;
+        member.userType = userType;
+
+        return member;
     }
 
     public static class BaseEntity {

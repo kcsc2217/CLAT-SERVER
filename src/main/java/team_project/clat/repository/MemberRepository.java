@@ -5,4 +5,5 @@ import team_project.clat.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
+    Boolean existsByUsername(String username);
 }
