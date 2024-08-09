@@ -21,7 +21,6 @@ public class Message extends BaseEntity{
 
     private String message;
 
-    private LocalDateTime messageDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chatroom_id")
@@ -44,11 +43,14 @@ public class Message extends BaseEntity{
         this.member=member;
     }
 
-    public Message(Long id, String message, LocalDateTime messageDate, ChatRoom chatRoom, Member member) {
-        this.id = id;
+    public Message(String message, ChatRoom chatRoom, Member member) {
         this.message = message;
-        this.messageDate = messageDate;
         addChatRoom(chatRoom);
         addMember(member);
+    }
+
+    public static Message createMessage(Member member, ChatRoom chatRoom, String message) {
+        return new Message(message, chatRoom, member);
+
     }
 }

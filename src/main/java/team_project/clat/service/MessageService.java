@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import team_project.clat.domain.ChatRoom;
+import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
+import team_project.clat.repo.ChatRoomRepository;
+import team_project.clat.repo.MemberRepository;
 import team_project.clat.repo.MessageRepository;
 
 @Service
@@ -14,11 +18,28 @@ import team_project.clat.repo.MessageRepository;
 public class MessageService {
 
     private final MessageRepository messageRepository;
+    private final MemberRepository memberRepository;
+    private final ChatRoomRepository chatRoomRepository;
+
 
     @Transactional
     public Long save(Message message) {
         return messageRepository.save(message).getId();
     }
+
+
+    @Transactional
+    public Long saveMessage(Long memberId, Long chatRoomId, String message){ //controller 에서 해당 회원이 메세지를 사용할 수 있는지 검증
+        Member findByMember = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("해당 멤버가 존재하지 않습니다"));
+        ChatRoom findByChatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 없습니다"));
+
+        Message saveMessage = Message.createMessage(findByMember, findByChatRoom, message);
+
+        save(saveMessage);
+
+        return saveMessage.getId();
+    }
+
 
 
 

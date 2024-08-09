@@ -32,25 +32,18 @@ class ChatRoomServiceTest {
 
 
     @Test
-    @Rollback(false)
-    public void 연관관계() throws Exception {
-
-       //given
-        Course course = new Course("05호실", "12나5476", new TimeTable("12:00", "13:30"), "컴퓨터네트워크", "월");
-
-        //when
-        courseRepository.save(course);
+    public void 연관관계() throws Exception{
 
         em.flush();
         em.clear();
 
-        Long saveId = chatRoomService.save("1-2", course.getId());
+        Long saveId = chatRoomService.save("1-2", 1L);
         //then
         ChatRoom findChatRoom = chatRoomRepository.findById(saveId).get();
 
 
         Assertions.assertThat(findChatRoom.getRoomName()).isEqualTo("1-2");
-        Assertions.assertThat(findChatRoom.getCourse().getRoom()).isEqualTo("05호실");
+        Assertions.assertThat(findChatRoom.getCourse().getRoom()).isEqualTo("공5102");
 
     }
 
