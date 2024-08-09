@@ -29,28 +29,23 @@ public class Message extends BaseEntity{
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
     List<Memo> memoList = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private String senderName;
 
     public void addChatRoom(ChatRoom chatRoom){
         this.chatRoom=chatRoom;
         chatRoom.getMessageList().add(this);
     }
 
-    // 단방향 매핑 연관관계
-    public void addMember(Member member){
-        this.member=member;
-    }
 
-    public Message(String message, ChatRoom chatRoom, Member member) {
+    public Message(String message, ChatRoom chatRoom, String senderName) {
         this.message = message;
         addChatRoom(chatRoom);
-        addMember(member);
+        this.senderName=senderName;
+
     }
 
-    public static Message createMessage(Member member, ChatRoom chatRoom, String message) {
-        return new Message(message, chatRoom, member);
+    public static Message createMessage(String senderName,  ChatRoom chatRoom, String message) {
+        return new Message(message, chatRoom, senderName);
 
     }
 }

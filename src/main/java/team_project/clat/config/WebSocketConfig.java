@@ -22,9 +22,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/sub"); // /sub/~ 로 구독한 클라이언트에게 서버가 메세지를 보낼 수 있다. 예를 들어 클라리언트가 /sub/chat를 구독을 하고 있다면
-        // 서버는 /sub/chat 경로로 메세지를 보낼 수 있다.
+        // 서버는 /sub/chat 경로로 메세지를 보낼 수 있다.  메세지를 받을떄
 
-        registry.setApplicationDestinationPrefixes("/pub"); // 클라이언트가 서버로 메세지를 보낼때 사용하는 경로
+        registry.setApplicationDestinationPrefixes("/pub"); // 클라이언트가 서버로 메세지를 보낼때 사용하는 경로 메세지를 보낼때
 
     }
 

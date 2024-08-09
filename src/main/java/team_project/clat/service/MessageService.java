@@ -29,11 +29,10 @@ public class MessageService {
 
 
     @Transactional
-    public Long saveMessage(Long memberId, Long chatRoomId, String message){ //controller 에서 해당 회원이 메세지를 사용할 수 있는지 검증
-        Member findByMember = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("해당 멤버가 존재하지 않습니다"));
+    public Long saveMessage(String senderName, Long chatRoomId, String message){ //controller 에서 해당 회원이 메세지를 사용할 수 있는지 검증
         ChatRoom findByChatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 없습니다"));
 
-        Message saveMessage = Message.createMessage(findByMember, findByChatRoom, message);
+        Message saveMessage = Message.createMessage(senderName, findByChatRoom, message);
 
         save(saveMessage);
 
