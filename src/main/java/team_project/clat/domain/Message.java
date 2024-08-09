@@ -16,7 +16,7 @@ public class Message extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MESSAGE_ID")
+    @Column(name = "message_id")
     private Long id;
 
     private String message;
@@ -24,21 +24,31 @@ public class Message extends BaseEntity{
     private LocalDateTime messageDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CHATROOM_ID")
+    @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
     List<Memo> memoList = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     public void addChatRoom(ChatRoom chatRoom){
         this.chatRoom=chatRoom;
         chatRoom.getMessageList().add(this);
     }
 
-    public Message(Long id, String message, LocalDateTime messageDate, ChatRoom chatRoom) {
+    // 단방향 매핑 연관관계
+    public void addMember(Member member){
+        this.member=member;
+    }
+
+    public Message(Long id, String message, LocalDateTime messageDate, ChatRoom chatRoom, Member member) {
         this.id = id;
         this.message = message;
         this.messageDate = messageDate;
-        this.chatRoom = chatRoom;
+        addChatRoom(chatRoom);
+        addMember(member);
     }
 }

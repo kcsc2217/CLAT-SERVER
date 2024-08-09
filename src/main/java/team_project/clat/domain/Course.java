@@ -22,27 +22,33 @@ public class Course {
 
     private String room; //강의실
 
-    private String timeTable; //시간표
+    @Embedded
+    private TimeTable timeTable;
+
+    private String Course_name; //강의명
+
+    private String dayOfWeek;    // 요일
+
+    //시간표
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     List<Student_course> studentCourseList = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "course" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "course" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private ChatRoom chatRoom;
 
 
-
-    public Course(String courseCode, String timeTable, String room) {
+    public Course(String room, String courseCode, TimeTable timeTable, String course_name, String dayOfWeek) {
+        this.room = room;
         this.courseCode = courseCode;
         this.timeTable = timeTable;
-        this.room = room;
+        Course_name = course_name;
+        this.dayOfWeek = dayOfWeek;
     }
-
 
     public void addChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
-        chatRoom.addCourse(this);
     }
 
 
