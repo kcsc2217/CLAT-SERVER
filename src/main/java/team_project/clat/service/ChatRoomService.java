@@ -8,6 +8,7 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
 import team_project.clat.domain.Message;
 import team_project.clat.exception.CourseNotFoundException;
+import team_project.clat.exception.DuplicateCourseChatRoomException;
 import team_project.clat.repo.ChatRoomRepository;
 import team_project.clat.repo.CourseRepository;
 
@@ -38,12 +39,8 @@ public class ChatRoomService {
         return saveChatRoom.getId();
     }
 
-    private void ValidationChatRoom(Long courseId) {
-        boolean flag = chatRoomRepository.existsByCourseId(courseId);
-
-        if(flag == true){
-            throw new IllegalArgumentException("해당 강의의 채팅방은 이미 존재합니다");
-        }
+    public ChatRoom findById(Long chatRoomId) {
+        return chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new ChatRoomNotFoundException)
     }
 
 
@@ -55,6 +52,14 @@ public class ChatRoomService {
 
         message.addChatRoom(chatRoom);
 
+    }
+
+    private void ValidationChatRoom(Long courseId) {
+        boolean flag = chatRoomRepository.existsByCourseId(courseId);
+
+        if(flag == true){
+            throw new DuplicateCourseChatRoomException("해당 강의의 채팅방은 이미 존재합니다");
+        }
     }
 
 

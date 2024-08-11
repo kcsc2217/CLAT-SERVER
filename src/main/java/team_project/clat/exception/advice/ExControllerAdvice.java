@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import team_project.clat.domain.Dto.response.RestResponse;
 import team_project.clat.exception.CourseNotFoundException;
+import team_project.clat.exception.DuplicateCourseChatRoomException;
 
 @Slf4j
 @RestControllerAdvice
@@ -31,7 +32,11 @@ public class ExControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler
+    @ExceptionHandler(DuplicateCourseChatRoomException.class)
+    public RestResponse duplicateCourseChatRoomException(DuplicateCourseChatRoomException ex){
+        log.error("[exceptionHandle] ex", ex);
+        return new RestResponse("CONFLICT", ex.getMessage());
+    }
 
 
 
