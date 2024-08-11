@@ -30,6 +30,9 @@ public class ChatRoomController {
 
     )
     public CreateMemberResponse createChatRoom(@RequestBody @Valid ChatRoomCreateDto chatRoomCreateDto) {
+
+        log.info("id ={}", chatRoomCreateDto.getCourseId());
+
         Long saveId = chatRoomService.save(chatRoomCreateDto.getRoomName(), chatRoomCreateDto.getCourseId());
 
         log.info("채팅방 생성완료");

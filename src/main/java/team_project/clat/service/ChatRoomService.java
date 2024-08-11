@@ -25,6 +25,8 @@ public class ChatRoomService {
     @Transactional
     public Long save(String roomName, Long courseId) {
 
+        ValidationChatRoom(courseId);
+
         Course findCourse = courseRepository.findById(courseId).orElseThrow(() -> new CourseNotFoundException("Course not found")); //강의실 아이디찾기
 
         log.info("수업 찾기 완료");
@@ -34,6 +36,14 @@ public class ChatRoomService {
         ChatRoom saveChatRoom = chatRoomRepository.save(chatRoom);
         log.info("생성이 되었습니다");
         return saveChatRoom.getId();
+    }
+
+    private void ValidationChatRoom(Long courseId) {
+        boolean flag = chatRoomRepository.existsByCourseId(courseId);
+
+        if(flag == true){
+            throw new IllegalArgumentException("해당 강의의 채팅방은 이미 존재합니다");
+        }
     }
 
 

@@ -14,7 +14,7 @@ import team_project.clat.exception.CourseNotFoundException;
 public class ExControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class) // 타입 매핑이 안맞을때
     public RestResponse validationException(MethodArgumentNotValidException ex){
         log.error("[exceptionHandle] ex", ex);
 
@@ -23,13 +23,15 @@ public class ExControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(CourseNotFoundException.class)
+    @ExceptionHandler(CourseNotFoundException.class) //해당 강의를 찾을수 없을떄
     public RestResponse courseNotFoundException(CourseNotFoundException ex){
         log.error("[exceptionHandle] ex", ex);
 
         return new RestResponse("NOT_FOUND", ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler
 
 
 
