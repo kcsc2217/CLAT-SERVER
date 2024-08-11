@@ -34,14 +34,10 @@ public class MessageService {
 
         Message saveMessage = Message.createMessage(senderName, findByChatRoom, message);
 
-        save(saveMessage);
+        Long saveId = save(saveMessage);
 
-        return saveMessage.getId();
+        return saveId;
     }
-
-
-
-
 
 
 
