@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
 import team_project.clat.domain.Message;
+import team_project.clat.exception.CourseNotFoundException;
 import team_project.clat.repo.ChatRoomRepository;
 import team_project.clat.repo.CourseRepository;
 
@@ -24,7 +25,7 @@ public class ChatRoomService {
     @Transactional
     public Long save(String roomName, Long courseId) {
 
-        Course findCourse = courseRepository.findById(courseId).orElseThrow(() -> new IllegalArgumentException("Course not found")); //강의실 아이디찾기
+        Course findCourse = courseRepository.findById(courseId).orElseThrow(() -> new CourseNotFoundException("Course not found")); //강의실 아이디찾기
 
         log.info("수업 찾기 완료");
 
