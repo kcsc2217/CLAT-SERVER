@@ -1,6 +1,7 @@
 package team_project.clat.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -9,7 +10,7 @@ import team_project.clat.service.MessageService;
 
 @Controller
 @RequiredArgsConstructor
-
+@Slf4j
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
@@ -23,11 +24,12 @@ public class MessageController {
 
     @MessageMapping(value = "/chat/message")
     public void message(MessageRequestDto messageRequestDto){
+        log.info("메세지가 수신됐습니다");
         String senderName = messageRequestDto.getSenderName();
         Long chatRoomId = messageRequestDto.getChatRoomId();
         String message = messageRequestDto.getMessage();
         Long saveId = messageService.saveMessage(senderName, chatRoomId, message);
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, message);
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, messageRequestDto);
 
 
     }

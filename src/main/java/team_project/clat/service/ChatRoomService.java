@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
 import team_project.clat.domain.Message;
+import team_project.clat.exception.NotFoundException;
 import team_project.clat.exception.CourseNotFoundException;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
 import team_project.clat.repo.ChatRoomRepository;
@@ -39,8 +40,12 @@ public class ChatRoomService {
         return saveChatRoom.getId();
     }
 
-    public ChatRoom findById(Long chatRoomId) {
-        return chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new ChatRoomNotFoundException)
+    public ChatRoom findFetchById(Long chatRoomId) {
+        return chatRoomRepository.findFetchChatRoomById(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방은 없습니다"));
+    }
+
+    public ChatRoom findFetchMessageById(Long chatRoomId) {
+        return chatRoomRepository.findFetchByMessage(chatRoomId).orElseThrow(() ->  new NotFoundException("해당 채팅방은 없습니다"));
     }
 
 
@@ -56,6 +61,8 @@ public class ChatRoomService {
 
     private void ValidationChatRoom(Long courseId) {
         boolean flag = chatRoomRepository.existsByCourseId(courseId);
+
+        log.info("강의실 검증부준");
 
         if(flag == true){
             throw new DuplicateCourseChatRoomException("해당 강의의 채팅방은 이미 존재합니다");

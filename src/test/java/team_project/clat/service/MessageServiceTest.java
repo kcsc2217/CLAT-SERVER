@@ -50,6 +50,7 @@ class MessageServiceTest {
         Message message = messageRepository.findById(findId).get();
         //then
         Assertions.assertThat(message.getMessage()).isEqualTo("Hello World");
+        Assertions.assertThat(message.getChatRoom().getRoomName()).isEqualTo("1-2");
 
 
     }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import team_project.clat.domain.Dto.response.RestResponse;
 import team_project.clat.exception.CourseNotFoundException;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
+import team_project.clat.exception.NotFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -24,8 +25,8 @@ public class ExControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(CourseNotFoundException.class) //해당 강의를 찾을수 없을떄
-    public RestResponse courseNotFoundException(CourseNotFoundException ex){
+    @ExceptionHandler(NotFoundException.class) //해당 강의를 찾을수 없을떄
+    public RestResponse courseNotFoundException(NotFoundException ex){
         log.error("[exceptionHandle] ex", ex);
 
         return new RestResponse("NOT_FOUND", ex.getMessage());
