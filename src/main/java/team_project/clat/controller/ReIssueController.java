@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import team_project.clat.domain.Enum.UserType;
+import team_project.clat.dto.CommonResult;
 import team_project.clat.jwt.JwtUtil;
 
 @Controller
@@ -21,7 +22,7 @@ public class ReIssueController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/reIssue")
-    public ResponseEntity<?> reIssue(HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<CommonResult> reIssue(HttpServletRequest request, HttpServletResponse response){
 
         //get refresh token
         String refresh = null;
@@ -36,7 +37,8 @@ public class ReIssueController {
         if (refresh == null) {
 
             //response status code
-            return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
+            CommonResult commonResult = new CommonResult("400 bad_request", "refresh token null.");
+            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
         }
         //expired check
         try {
@@ -44,7 +46,8 @@ public class ReIssueController {
         } catch (ExpiredJwtException e) {
 
             //response status code
-            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
+            CommonResult commonResult = new CommonResult("400 bad_request", "refresh token expired.");
+            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
         }
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
         String category = jwtUtil.getCategory(refresh);
@@ -52,7 +55,9 @@ public class ReIssueController {
         if (!category.equals("refresh")) {
 
             //response status code
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+            CommonResult commonResult = new CommonResult("400 bad_request", "invalid refresh token.");
+            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
+
         }
 
         String username = jwtUtil.getUsername(refresh);
@@ -65,7 +70,8 @@ public class ReIssueController {
         //response
         response.setHeader("access", newAccess);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        CommonResult commonResult = new CommonResult("200 OK", "토큰 재발급이 완료되었습니다..");
+        return new ResponseEntity<>(commonResult, HttpStatus.OK);
 
     }
 }
