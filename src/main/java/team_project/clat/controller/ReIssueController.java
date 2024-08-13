@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import team_project.clat.domain.Enum.UserType;
 import team_project.clat.jwt.JwtUtil;
 
 @Controller
@@ -58,10 +59,11 @@ public class ReIssueController {
         }
 
         String username = jwtUtil.getUsername(refresh);
-        String role = jwtUtil.getUserType(refresh);
+        UserType userType = jwtUtil.getUserType(refresh);
+
 
         //make new JWT
-        String newAccess = jwtUtil.createJwt("access", username, role, 600000L);
+        String newAccess = jwtUtil.createJwt("access", username, userType, 600000L);
 
         //response
         response.setHeader("access", newAccess);

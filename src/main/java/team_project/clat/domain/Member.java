@@ -21,9 +21,11 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    private String name;
     private String username;
     private String email;
     private String password;
+    private String schoolName;
     private int age;
 
     @Enumerated(EnumType.STRING)
@@ -59,19 +61,33 @@ public class Member extends BaseEntity {
 
 
 
-    public Member(Long id, String username, String nickName, String email, String password, int age, Gender gender, UserType userType, Address address) {
+    public Member(Long id, String name, String username, String nickName, String email, String password, String schoolName, int age, Gender gender, UserType userType, Address address) {
         this.id = id;
+        this.name = name;
         this.username = username;
         this.nickName = nickName;
         this.email = email;
         this.password = password;
+        this.schoolName = schoolName;
         this.age = age;
         this.gender = gender;
         this.userType = userType;
         this.address = address;
     }
 
-    public static Member memberSet(String username, String password, UserType userType){
+    public static Member memberSet(String name, String username, String password, String schoolName, UserType userType){
+        Member member = new Member();
+
+        member.name = name;
+        member.username = username;
+        member.password = password;
+        member.schoolName = schoolName;
+        member.userType = userType;
+
+        return member;
+    }
+
+    public static Member JwtMemberSet(String username, String password, UserType userType){
         Member member = new Member();
 
         member.username = username;
