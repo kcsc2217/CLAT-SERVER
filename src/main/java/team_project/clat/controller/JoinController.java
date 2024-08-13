@@ -50,11 +50,11 @@ public class JoinController {
         joinService.joinProcess(joinDto);
 
         String username = joinDto.getUsername();
-        UserType userType = joinDto.getUserType();
+        String role = joinDto.getUserType().getDescription();
 
         //토큰 생성
-        String access = jwtUtil.createJwt("access", username, userType, 600000L);
-        String refresh = jwtUtil.createJwt("refresh", username, userType, 86400000L);
+        String access = jwtUtil.createJwt("access", username, role, 600000L);
+        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
         //응답 설정
         response.setHeader("access", access);

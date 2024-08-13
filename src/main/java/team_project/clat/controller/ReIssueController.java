@@ -33,13 +33,11 @@ public class ReIssueController {
                 refresh = cookie.getValue();
             }
         }
-
         if (refresh == null) {
 
             //response status code
             return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
         }
-
         //expired check
         try {
             jwtUtil.isExpired(refresh);
@@ -48,7 +46,6 @@ public class ReIssueController {
             //response status code
             return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
         }
-
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
         String category = jwtUtil.getCategory(refresh);
 
@@ -59,11 +56,11 @@ public class ReIssueController {
         }
 
         String username = jwtUtil.getUsername(refresh);
-        UserType userType = jwtUtil.getUserType(refresh);
+        String userType = jwtUtil.getUserType(refresh);
 
 
         //make new JWT
-        String newAccess = jwtUtil.createJwt("access", username, userType, 600000L);
+        String newAccess = jwtUtil.createJwt("access", username, userType , 600000L);
 
         //response
         response.setHeader("access", newAccess);

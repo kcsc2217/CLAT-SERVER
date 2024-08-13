@@ -87,12 +87,12 @@ public class Member extends BaseEntity {
         return member;
     }
 
-    public static Member JwtMemberSet(String username, String password, UserType userType){
+    public static Member JwtMemberSet(String username, String password, String userType){
         Member member = new Member();
 
         member.username = username;
         member.password = password;
-        member.userType = userType;
+        member.userType = UserType.valueOf(userType);
 
         return member;
     }
