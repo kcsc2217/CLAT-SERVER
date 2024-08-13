@@ -9,9 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Dto.request.ChatRoomCreateDto;
 import team_project.clat.domain.Dto.response.CreateMemberResponse;
+import team_project.clat.domain.Dto.response.MessageResponse;
 import team_project.clat.service.ChatRoomService;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -38,6 +42,19 @@ public class ChatRoomController {
 
         return new CreateMemberResponse(saveId);
     }
+
+    @GetMapping(value = "/messages/{chatRoomId}")
+    @Operation(summary = "select List Message", description = "채팅 메세지 조회")
+    public List<MessageResponse> getMessage(@PathVariable Long chatRoomId) {
+        log.info("전체 메세지 조회");
+        ChatRoom chatRoom = chatRoomService.findFetchMessageById(chatRoomId);
+
+        List<MessageResponse> list = chatRoom.getMessageList().stream().map(message -> new MessageResponse(message.getSenderName(), message.getMessage(), message.getCreatedDate()))
+                .toList();
+        return list;
+
+    }
+
 
 
 

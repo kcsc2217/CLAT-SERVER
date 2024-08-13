@@ -81,37 +81,65 @@
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
 <script>
-    var socket = new SockJS('/ws');
-    var stompClient = Stomp.over(socket);
-    var chatRoomId = 1; // 테스트할 채팅방 ID
+    document.addEventListener('DOMContentLoaded', function() {
 
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
+        var chatRoomId = 1; // 테스트할 채팅방 ID
+        fetchMessages();
 
-        // 채팅방 구독
-        stompClient.subscribe('/sub/chat/' + chatRoomId, function (message) {
-            var content = JSON.parse(message.body);
-            var messagesDiv = document.getElementById('messages');
-            messagesDiv.innerHTML += '<p><strong>' + content.senderName + ':</strong> ' + content.message + '</p>';
-            messagesDiv.scrollTop = messagesDiv.scrollHeight; // 최신 메시지로 스크롤
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+
+            // 채팅방 구독
+            stompClient.subscribe('/sub/chat/' + chatRoomId, function (message) {
+                var content = JSON.parse(message.body);
+                var messagesDiv = document.getElementById('messages');
+                messagesDiv.innerHTML += '<p><strong>' + content.senderName + ':</strong> ' + content.message + '</p>';
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // 최신 메시지로 스크롤
+            });
         });
-    });
 
-    function sendMessage() {
-        var senderName = document.getElementById('senderName').value;
-        var message = document.getElementById('message').value;
-
-        if(senderName && message) {
-            stompClient.send("/pub/chat/message", {}, JSON.stringify({
-                'chatRoomId': chatRoomId,
-                'senderName': senderName,
-                'message': message
-            }));
-            document.getElementById('message').value = ''; // 메시지 전송 후 입력창 초기화
-        } else {
-            alert("Please enter your name and a message.");
+        function fetchMessages() {
+            fetch('/chatRoom/messages/' + chatRoomId)
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(message => {
+                        appendMessage(message.senderName, message.message, message.timestamp);
+                    });
+                });
         }
-    }
+
+        function appendMessage(senderName, message, timestamp) {
+            var messagesDiv = document.getElementById('messages');
+
+            // 시간 형식을 원하는 대로 포맷팅할 수 있습니다.
+            var date = new Date(timestamp);
+            var formattedTime = date.toLocaleString();  // 예: "2024-08-13 10:30 AM"
+
+            messagesDiv.innerHTML += '<p><strong>' + senderName + ':</strong> ' + message + ' <span style="color: grey; font-size: 0.8em;">(' + formattedTime + ')</span></p>';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // 최신 메시지로 스크롤
+        }
+
+        // sendMessage를 여기서 선언하여 전역 스코프에 노출시킵니다.
+        window.sendMessage = function() {
+            var senderName = document.getElementById('senderName').value;
+            var message = document.getElementById('message').value;
+
+            if(senderName && message) {
+                stompClient.send("/pub/chat/message", {}, JSON.stringify({
+                    'chatRoomId': chatRoomId,
+                    'senderName': senderName,
+                    'message': message
+                }));
+                document.getElementById('message').value = ''; // 메시지 전송 후 입력창 초기화
+            } else {
+                alert("Please enter your name and a message.");
+            }
+        }
+    });
+</script>
+
 </script>
 </body>
 </html>
