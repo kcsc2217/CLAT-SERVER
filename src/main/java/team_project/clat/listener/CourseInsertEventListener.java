@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import team_project.clat.domain.Course;
+import team_project.clat.domain.TimeTable;
 import team_project.clat.event.CourseInsertEvent;
-import team_project.clat.repository.CourseRepository;
+import team_project.clat.repo.CourseRepository;
 
 @Component
 public class CourseInsertEventListener {
@@ -16,11 +17,11 @@ public class CourseInsertEventListener {
   @EventListener
   public void handleCourseCreatedEvent(CourseInsertEvent event) {
     Course course = new Course(
-            event.getCourseCode(),
-            event.getCourseName(),
             event.getRoom(),
-            event.getStartDate(),
-            event.getEndDate(),
+            event.getCourseCode(),
+            new TimeTable( event.getStartDate(),
+                    event.getEndDate()),
+            event.getCourseName(),
             event.getDayOfWeek()
     );
 

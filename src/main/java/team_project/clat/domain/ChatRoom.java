@@ -27,13 +27,14 @@ public class ChatRoom extends BaseEntity{
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     List<Message> messageList = new ArrayList<>();
 
-    public ChatRoom(Long id, String roomName) {
-        this.id = id;
+    public ChatRoom(String roomName, Course course) {
         this.roomName = roomName;
+        addCourse(course);
     }
 
 
     public void addCourse(Course course) {
         this.course = course;
+        course.addChatRoom(this);
     }
 }

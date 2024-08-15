@@ -18,40 +18,44 @@ public class Course {
     @Column(name = "course_id")
     private Long id;
 
+    @Column(name = "course_code")
     private String courseCode; //학수번호
 
+    @Column(name = "course_name")
     private String courseName;
-
-    private String startDate;
-
-    private String endDate;
 
     private String room; //강의실
 
-    private String dayOfWeek; //시간표
+    @Embedded
+    private TimeTable timeTable;
+
+
+
+    private String dayOfWeek;    // 요일
+
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     List<Student_course> studentCourseList = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "course" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "course" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private ChatRoom chatRoom;
 
 
 
-    public Course(String courseCode, String courseName, String room, String startDate, String endDate, String dayOfWeek) {
-        this.courseCode = courseCode;
-        this.dayOfWeek = dayOfWeek;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.courseName = courseName;
+    public Course(String room, String courseCode, TimeTable timeTable, String course_name, String dayOfWeek) {
         this.room = room;
+        this.courseCode = courseCode;
+        this.timeTable = timeTable;
+        this.courseName = course_name;
+        this.dayOfWeek = dayOfWeek;
     }
+
 
 
     public void addChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
-        chatRoom.addCourse(this);
     }
+
 
 }
