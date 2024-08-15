@@ -66,12 +66,25 @@ public class ReIssueController {
 
         //make new JWT
         String newAccess = jwtUtil.createJwt("access", username, userType , 600000L);
+        String newRefresh = jwtUtil.createJwt("refresh", username, userType, 86400000L);
 
         //response
         response.setHeader("access", newAccess);
+        response.addCookie(createCookie("refresh", newRefresh));
 
         CommonResult commonResult = new CommonResult("200 OK", "토큰 재발급이 완료되었습니다..");
         return new ResponseEntity<>(commonResult, HttpStatus.OK);
 
+    }
+
+    private Cookie createCookie(String key, String value) {
+
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(24*60*60);
+        //cookie.setSecure(true);
+        //cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
     }
 }
