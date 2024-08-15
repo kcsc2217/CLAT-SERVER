@@ -29,7 +29,7 @@ public class ChatRoomService {
 
         ValidationChatRoom(courseId);
 
-        Course findCourse = courseRepository.findById(courseId).orElseThrow(() -> new CourseNotFoundException("Course not found")); //강의실 아이디찾기
+        Course findCourse = courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException("Course not found")); //강의실 아이디찾기
 
         log.info("수업 찾기 완료");
 

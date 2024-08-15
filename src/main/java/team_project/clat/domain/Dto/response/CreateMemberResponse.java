@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class CreateMemberResponse {
-    private Long id;
+    private Long chat_Room_id;
 
     public CreateMemberResponse(Long id) {
-        this.id = id;
+        this.chat_Room_id = id;
     }
 }

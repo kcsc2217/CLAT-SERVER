@@ -1,5 +1,7 @@
 package team_project.clat.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -11,6 +13,7 @@ import team_project.clat.service.MessageService;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "WebSocket Chat", description = "WebSocket 기반 채팅 API")
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
