@@ -3,12 +3,15 @@ package team_project.clat.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import team_project.clat.Service.EmailService;
 import team_project.clat.Service.JoinService;
 import team_project.clat.domain.Enum.UserType;
@@ -17,11 +20,14 @@ import team_project.clat.dto.EmailRequest;
 import team_project.clat.dto.JoinDto;
 import team_project.clat.jwt.JwtUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Controller
 @ResponseBody
 @RequiredArgsConstructor
+@Slf4j
 public class JoinController {
 
     private final JoinService joinService;
@@ -45,10 +51,18 @@ public class JoinController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<CommonResult> joinProcess(JoinDto joinDto, HttpServletResponse response){
+    public ResponseEntity<CommonResult> joinProcess(@RequestPart JoinDto joinDto,
+                                                    @RequestPart MultipartFile file,
+                                                    HttpServletResponse response) throws IOException {
 
         joinService.joinProcess(joinDto);
+        String fileDir = "/Users/akk/Desktop/test/";
 
+        if(!file.isEmpty()){
+            String fullPath = fileDir + file.getOriginalFilename();
+            log.info("파일 저장 fullPath={}", fullPath);
+            file.transferTo(new File(fullPath));
+        }
         String username = joinDto.getUsername();
         String role = joinDto.getUserType().getDescription();
 
