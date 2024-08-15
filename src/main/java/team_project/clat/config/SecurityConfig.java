@@ -86,6 +86,7 @@ public class SecurityConfig {
         //AuthenticationManager()와 JWTUtil 인수 전달
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
+
         //세션 설정
         http.sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
