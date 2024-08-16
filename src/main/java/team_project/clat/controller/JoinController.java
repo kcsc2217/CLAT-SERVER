@@ -55,14 +55,16 @@ public class JoinController {
                                                     @RequestPart MultipartFile file,
                                                     HttpServletResponse response) throws IOException {
 
-        joinService.joinProcess(joinDto);
         String fileDir = "/Users/akk/Desktop/test/";
-
+        String fullPath = null;
         if(!file.isEmpty()){
-            String fullPath = fileDir + file.getOriginalFilename();
+            fullPath = fileDir + file.getOriginalFilename();
             log.info("파일 저장 fullPath={}", fullPath);
             file.transferTo(new File(fullPath));
         }
+
+        joinService.joinProcess(joinDto, fullPath);
+
         String username = joinDto.getUsername();
         String role = joinDto.getUserType().getDescription();
 

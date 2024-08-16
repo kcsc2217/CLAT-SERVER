@@ -2,6 +2,7 @@ package team_project.clat.Service;
 
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,14 @@ import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JoinService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-    public void joinProcess(JoinDto joinDto){
+    public void joinProcess(JoinDto joinDto, String filePath){
 
         String username = joinDto.getUsername();
         String password = joinDto.getPassword();
@@ -37,7 +39,9 @@ public class JoinService {
             return;
         }
 
-        Member member = Member.memberSet(name, username, bCryptPasswordEncoder.encode(password), schoolName, userType);
+        log.info("{}", filePath);
+
+        Member member = Member.memberSet(name, username, bCryptPasswordEncoder.encode(password), schoolName, userType, filePath);
 
         memberRepository.save(member);
     }

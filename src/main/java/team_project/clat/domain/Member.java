@@ -26,6 +26,7 @@ public class Member extends BaseEntity {
     private String email;
     private String password;
     private String schoolName;
+    private String filePath;
     private int age;
 
     @Enumerated(EnumType.STRING)
@@ -61,7 +62,7 @@ public class Member extends BaseEntity {
 
 
 
-    public Member(Long id, String name, String username, String nickName, String email, String password, String schoolName, int age, Gender gender, UserType userType, Address address) {
+    public Member(Long id, String name, String username, String nickName, String email, String password, String schoolName, String filePath, int age, Gender gender, UserType userType, Address address) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -69,13 +70,14 @@ public class Member extends BaseEntity {
         this.email = email;
         this.password = password;
         this.schoolName = schoolName;
+        this.filePath = filePath;
         this.age = age;
         this.gender = gender;
         this.userType = userType;
         this.address = address;
     }
 
-    public static Member memberSet(String name, String username, String password, String schoolName, UserType userType){
+    public static Member memberSet(String name, String username, String password, String schoolName, UserType userType, String filePath){
         Member member = new Member();
 
         member.name = name;
@@ -83,6 +85,7 @@ public class Member extends BaseEntity {
         member.password = password;
         member.schoolName = schoolName;
         member.userType = userType;
+        member.filePath = filePath;
 
         return member;
     }
