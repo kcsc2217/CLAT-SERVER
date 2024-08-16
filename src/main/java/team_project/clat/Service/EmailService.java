@@ -49,15 +49,17 @@ public class EmailService {
         mailSender.send(mailMessage);
     }
 
-    public void verifyCode(String code, LocalDateTime verifiedAt) {
+    public void verifyCode(String to, String code, LocalDateTime verifiedAt) {
         VerificationCode verificationCode = verificationCodeRepository.findByCode(code)
                 .orElseThrow(() -> new MailVerifyException("인증코드 올바르지않습니다."));
 
         if (verificationCode.isExpired(verifiedAt)) {
             verificationCodeRepository.remove(verificationCode);
+            verificationCodeRepository.toRemove(to);
             throw new MailVerifyException("인증코드가 만료되었습니다.");
         }
 
+        verificationCodeRepository.toRemove(to);
         verificationCodeRepository.remove(verificationCode);
     }
 }

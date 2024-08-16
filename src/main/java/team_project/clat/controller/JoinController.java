@@ -46,7 +46,7 @@ public class JoinController {
     @PostMapping("/verification-code")
     public ResponseEntity<CommonResult> verificationByCode(@RequestBody EmailRequest.VerificationCodeRequest request) {
         LocalDateTime requestedAt = LocalDateTime.now();
-        emailService.verifyCode(request.getCode(), requestedAt);
+        emailService.verifyCode(request.getEmail(), request.getCode(), requestedAt);
         CommonResult commonResult = new CommonResult("200 OK", "인증이 완료되었습니다.");
         return new ResponseEntity<>(commonResult, HttpStatus.OK);
     }
