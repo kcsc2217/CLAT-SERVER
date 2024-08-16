@@ -18,6 +18,7 @@ import team_project.clat.domain.Enum.UserType;
 import team_project.clat.dto.CommonResult;
 import team_project.clat.dto.EmailRequest;
 import team_project.clat.dto.JoinDto;
+import team_project.clat.dto.JoinResult;
 import team_project.clat.jwt.JwtUtil;
 
 import java.io.File;
@@ -51,7 +52,7 @@ public class JoinController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<CommonResult> joinProcess(@RequestPart JoinDto joinDto,
+    public ResponseEntity<JoinResult> joinProcess(@RequestPart JoinDto joinDto,
                                                     @RequestPart MultipartFile file,
                                                     HttpServletResponse response) throws IOException {
 
@@ -77,8 +78,8 @@ public class JoinController {
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
 
-        CommonResult commonResult = new CommonResult("200 OK", "회원가입이 완료되었습니다.");
-        return new ResponseEntity<>(commonResult, HttpStatus.OK);
+        JoinResult joinResult = new JoinResult("200 OK", "회원가입이 완료되었습니다.", joinDto.getName());
+        return new ResponseEntity<>(joinResult, HttpStatus.OK);
     }
 
     private Cookie createCookie(String key, String value) {
