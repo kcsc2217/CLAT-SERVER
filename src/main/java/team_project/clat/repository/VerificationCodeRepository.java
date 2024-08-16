@@ -31,7 +31,7 @@ public class VerificationCodeRepository {
     public void remove(VerificationCode verificationCode) {
         repository.remove(verificationCode.getCode());
     }
-    public void remove(String to) {
+    public void toRemove(String to) {
         repository.remove(to);
     }
 }
