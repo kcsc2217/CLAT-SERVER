@@ -15,10 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import team_project.clat.Service.EmailService;
 import team_project.clat.Service.JoinService;
 import team_project.clat.domain.Enum.UserType;
-import team_project.clat.dto.CommonResult;
-import team_project.clat.dto.EmailRequest;
-import team_project.clat.dto.JoinDto;
-import team_project.clat.dto.JoinResult;
+import team_project.clat.dto.*;
 import team_project.clat.jwt.JwtUtil;
 
 import java.io.File;
@@ -34,6 +31,11 @@ public class JoinController {
     private final JoinService joinService;
     private final EmailService emailService;
     private final JwtUtil jwtUtil;
+
+    @PostMapping("/idCheck")
+    public ResponseEntity<CommonResult> isDuplicateUsername(@RequestBody JoinDto joinDto){
+        return joinService.existsByUsername(joinDto);
+    }
 
     @PostMapping("/verify-email")
     public ResponseEntity<CommonResult> getEmailForVerification(@RequestBody EmailRequest.EmailForVerificationRequest request){
