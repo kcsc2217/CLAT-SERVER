@@ -1,12 +1,10 @@
 package team_project.clat.domain;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -18,7 +16,7 @@ public class Report extends BaseEntity {
     @Column(name = "report_id")
     private Long id;
 
-    private String title;
+    private String email;   // 신고하기 답변을 받을 수 있는 이메일 정보
 
     private String description;
 
@@ -26,25 +24,19 @@ public class Report extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ReportComment reportComment;
-
-    public Report(Long id, String title, String description, Member member) {
+    public Report(Long id, String email, String description, Member member) {
         this.id = id;
-        this.title = title;
+        this.email = email;
         this.description = description;
         addMember(member);
     }
 
     //연관관계 메서드
-    public void addMember(Member member){
-        this.member = member;
-        member.getReportList().add(this);
+    public void addMember(@Nullable Member member){
+        if (member != null) {
+            this.member = member;
+            member.getReportList().add(this);
+        }
     }
-
-    public void setReportComment(ReportComment reportComment){
-        this.reportComment = reportComment;
-    }
-
 
 }
