@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import team_project.clat.domain.Course;
 import team_project.clat.domain.TimeTable;
 import team_project.clat.event.CourseInsertEvent;
-import team_project.clat.repo.CourseRepository;
+import team_project.clat.repository.CourseRepository;
 
 @Component
 public class CourseInsertEventListener {

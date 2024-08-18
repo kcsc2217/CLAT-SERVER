@@ -8,10 +8,9 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
 import team_project.clat.domain.Message;
 import team_project.clat.exception.NotFoundException;
-import team_project.clat.exception.CourseNotFoundException;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
-import team_project.clat.repo.ChatRoomRepository;
-import team_project.clat.repo.CourseRepository;
+import team_project.clat.repository.ChatRoomRepository;
+import team_project.clat.repository.CourseRepository;
 
 @Service
 @RequiredArgsConstructor
