@@ -21,10 +21,12 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    private String name;
+    private String username;
     private String email;
-
     private String password;
-
+    private String schoolName;
+    private String filePath;
     private int age;
 
     private String username;
@@ -52,14 +54,44 @@ public class Member extends BaseEntity {
 
 
 
-    public Member( String nickName, String email, String password, int age, Gender gender, UserType userType, Address address) {
+    public Member(Long id, String name, String username, String nickName, String email, String password, String schoolName, String filePath, int age, Gender gender, UserType userType, Address address) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
         this.nickName = nickName;
         this.email = email;
         this.password = password;
+        this.schoolName = schoolName;
+        this.filePath = filePath;
         this.age = age;
         this.gender = gender;
         this.userType = userType;
         this.address = address;
     }
 
+    public static Member memberSet(String name, String username, String password, String schoolName, UserType userType, String filePath){
+        Member member = new Member();
+
+        member.name = name;
+        member.username = username;
+        member.password = password;
+        member.schoolName = schoolName;
+        member.userType = userType;
+        member.filePath = filePath;
+
+        return member;
+    }
+
+    public static Member JwtMemberSet(String username, String password, String userType){
+        Member member = new Member();
+
+        member.username = username;
+        member.password = password;
+        member.userType = UserType.valueOf(userType);
+
+        return member;
+    }
+
+    public static class BaseEntity {
+    }
 }
