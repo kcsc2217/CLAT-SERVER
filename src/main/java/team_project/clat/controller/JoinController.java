@@ -60,7 +60,7 @@ public class JoinController {
 
         log.info("{},{},{},{}",joinDto.getName(),joinDto.getSchoolName(),joinDto.getUserType(),joinDto.getUsername());
 
-        String fileDir = "/Users/akk/Desktop/test/";
+        String fileDir = "/home/ubuntu/upload/";
         String fullPath = null;
         if(!file.isEmpty()){
             fullPath = fileDir + file.getOriginalFilename();
