@@ -17,7 +17,7 @@ import java.io.InputStreamReader;
 
 @SpringBootApplication
 @EnableJpaAuditing
-public class ClatApplication implements CommandLineRunner {
+public class ClatApplication {
 
 	@Autowired
 	private ApplicationContext applicationContext;
@@ -26,7 +26,7 @@ public class ClatApplication implements CommandLineRunner {
 		SpringApplication.run(ClatApplication.class, args);
 	}
 
-	@Override
+	/*@Override
 	public void run(String... args) throws Exception {
 		Resource resource = new ClassPathResource("courses.csv");
 
@@ -51,6 +51,6 @@ public class ClatApplication implements CommandLineRunner {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 }
