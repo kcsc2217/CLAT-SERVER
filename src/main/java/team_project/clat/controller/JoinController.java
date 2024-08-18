@@ -58,7 +58,9 @@ public class JoinController {
                                                     @RequestPart MultipartFile file,
                                                     HttpServletResponse response) throws IOException {
 
-        String fileDir = "/home/ubuntu/upload/";
+        log.info("{},{},{},{}",joinDto.getName(),joinDto.getSchoolName(),joinDto.getUserType(),joinDto.getUsername());
+
+        String fileDir = "/Users/akk/Desktop/test/";
         String fullPath = null;
         if(!file.isEmpty()){
             fullPath = fileDir + file.getOriginalFilename();
