@@ -6,15 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import team_project.clat.domain.Address;
-import team_project.clat.domain.Enum.Gender;
-import team_project.clat.domain.Enum.UserType;
-import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
-import team_project.clat.repo.MemberRepository;
-import team_project.clat.repo.MessageRepository;
-
-import static org.junit.jupiter.api.Assertions.*;
+import team_project.clat.repository.MemberRepository;
+import team_project.clat.repository.MessageRepository;
 
 @SpringBootTest
 @Transactional

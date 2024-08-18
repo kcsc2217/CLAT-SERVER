@@ -5,14 +5,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
-import team_project.clat.domain.Course;
 import team_project.clat.domain.Message;
-import team_project.clat.domain.TimeTable;
-import team_project.clat.repo.ChatRoomRepository;
-import team_project.clat.repo.CourseRepository;
+import team_project.clat.repository.ChatRoomRepository;
 
 
 @SpringBootTest

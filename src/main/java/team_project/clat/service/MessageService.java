@@ -5,11 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
-import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
-import team_project.clat.repo.ChatRoomRepository;
-import team_project.clat.repo.MemberRepository;
-import team_project.clat.repo.MessageRepository;
+import team_project.clat.repository.ChatRoomRepository;
+import team_project.clat.repository.MemberRepository;
+import team_project.clat.repository.MessageRepository;
 
 @Service
 @RequiredArgsConstructor
