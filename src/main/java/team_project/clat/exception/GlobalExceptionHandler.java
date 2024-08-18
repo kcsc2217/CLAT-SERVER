@@ -11,7 +11,7 @@ import team_project.clat.domain.response.ErrorResponse;
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(GlobalException.class)
-  public ResponseEntity<ErrorResponse> handleDevlogException(
+  public ResponseEntity<ErrorResponse> handleGlobalException(
           HttpServletRequest request, GlobalException e
   ) {
     return ResponseEntity.status(e.getErrorCode().getHttpStatus())

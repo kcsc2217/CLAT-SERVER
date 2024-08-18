@@ -50,8 +50,7 @@ public class Member extends BaseEntity {
 
 
 
-    public Member(Long id, String nickName, String email, String password, int age, Gender gender, UserType userType, Address address) {
-        this.id = id;
+    public Member( String nickName, String email, String password, int age, Gender gender, UserType userType, Address address) {
         this.nickName = nickName;
         this.email = email;
         this.password = password;
