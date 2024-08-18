@@ -16,29 +16,36 @@ public class Message extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MESSAGE_ID")
+    @Column(name = "message_id")
     private Long id;
 
     private String message;
 
-    private LocalDateTime messageDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CHATROOM_ID")
+    @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
     List<Memo> memoList = new ArrayList<>();
+
+    private String senderName;
 
     public void addChatRoom(ChatRoom chatRoom){
         this.chatRoom=chatRoom;
         chatRoom.getMessageList().add(this);
     }
 
-    public Message(Long id, String message, LocalDateTime messageDate, ChatRoom chatRoom) {
-        this.id = id;
+
+    public Message(String message, ChatRoom chatRoom, String senderName) {
         this.message = message;
-        this.messageDate = messageDate;
-        this.chatRoom = chatRoom;
+        addChatRoom(chatRoom);
+        this.senderName=senderName;
+
+    }
+
+    public static Message createMessage(String senderName,  ChatRoom chatRoom, String message) {
+        return new Message(message, chatRoom, senderName);
+
     }
 }

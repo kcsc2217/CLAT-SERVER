@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FAQItem extends BaseEntity {
 
@@ -16,20 +17,15 @@ public class FAQItem extends BaseEntity {
     private Long id;
 
     private String title;
+
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="faqComment_id")
-    private FAQComment faqComment;
+    private String comment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
-    public FAQItem(Long id, String title, String description, FAQComment faqComment) {
+    public FAQItem(Long id, String title, String description, String comment) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.faqComment = faqComment;
+        this.comment = comment;
     }
 }

@@ -29,6 +29,8 @@ public class Member extends BaseEntity {
     private String filePath;
     private int age;
 
+    private String username;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -44,18 +46,8 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
     List<Report> reportList = new ArrayList<>();
 
-    // 신고하기 댓글과 양방향 맵핑
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<ReportComment> reportCommentList = new ArrayList<>();
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Like> likeList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<FAQItem> faqItemList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<FAQComment> faqCommentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Student_course> student_courseList = new ArrayList<>();
