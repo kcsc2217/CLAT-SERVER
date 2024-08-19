@@ -1,9 +1,7 @@
-package team_project.clat.service;
+package team_project.clat.service1.service;
 
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,10 +11,6 @@ import team_project.clat.domain.Member;
 import team_project.clat.dto.CommonResult;
 import team_project.clat.dto.JoinDto;
 import team_project.clat.repository.MemberRepository;
-
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor

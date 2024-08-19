@@ -1,4 +1,4 @@
-package team_project.clat.service;
+package team_project.clat.service1.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
 import team_project.clat.domain.Message;
-import team_project.clat.exception.NotFoundException;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
+import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.ChatRoomRepository;
 import team_project.clat.repository.CourseRepository;
 

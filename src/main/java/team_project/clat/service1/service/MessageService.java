@@ -1,4 +1,4 @@
-package team_project.clat.service;
+package team_project.clat.service1.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
