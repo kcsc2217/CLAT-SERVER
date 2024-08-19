@@ -1,7 +1,7 @@
 package team_project.clat.repository;
 
 import org.springframework.stereotype.Repository;
-import team_project.clat.Service.VerificationCode;
+import team_project.clat.service.VerificationCode;
 
 import java.util.Map;
 import java.util.Optional;

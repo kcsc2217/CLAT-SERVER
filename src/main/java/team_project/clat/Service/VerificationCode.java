@@ -1,4 +1,4 @@
-package team_project.clat.Service;
+package team_project.clat.service;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
