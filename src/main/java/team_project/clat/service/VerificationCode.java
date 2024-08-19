@@ -1,4 +1,4 @@
-package team_project.clat.service1.service;
+package team_project.clat.service;
 
 import lombok.Getter;
 
