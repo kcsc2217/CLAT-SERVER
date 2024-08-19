@@ -19,6 +19,7 @@ import team_project.clat.jwt.JwtUtil;
 import team_project.clat.jwt.LoginFilter;
 
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -57,7 +58,7 @@ public class SecurityConfig {
                 configuration.setAllowedHeaders(Collections.singletonList("*"));
                 configuration.setMaxAge(3600L);
 
-                configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+                configuration.setExposedHeaders(List.of("Authorization", "access"));
 
                 return configuration;
             }
