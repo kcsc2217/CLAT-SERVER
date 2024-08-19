@@ -3,6 +3,7 @@ package team_project.clat.domain.Dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.cglib.core.Local;
+import team_project.clat.domain.Message;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +17,12 @@ public class MessageResponse {
     private String message;
     @Schema(description = "timestamp", example = "메세지 저장 시간")
     private LocalDateTime timestamp;
+
+    public MessageResponse(Message message) {
+        this.senderName = message.getSenderName();
+        this.message = message.getMessage();
+        this.timestamp = message.getCreatedDate();
+    }
 
     public MessageResponse(String senderName, String message, LocalDateTime timestamp) {
         this.senderName = senderName;

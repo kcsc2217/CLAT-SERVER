@@ -43,9 +43,9 @@ public class ChatRoomService {
         return chatRoomRepository.findFetchChatRoomById(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방은 없습니다"));
     }
 
-    public ChatRoom findFetchMessageById(Long chatRoomId) {
-        log.info("chatRoomId: {}", chatRoomId);
-        return chatRoomRepository.findFetchByMessage(chatRoomId).orElseThrow(() ->  new NotFoundException("해당 채팅방은 없습니다"));
+    public ChatRoom findFetchMessageCourseById(Long courseId) {
+        log.info("chatRoomId: {}", courseId);
+        return chatRoomRepository.findFetchByMessage(courseId).orElseThrow(() ->  new NotFoundException("해당 채팅방은 없습니다"));
     }
 
 

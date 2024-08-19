@@ -61,20 +61,15 @@ class ChatRoomServiceTest {
 
     @Test
     public void Fetchjoin을_사용한_메세지성능_최적화() throws Exception {
-        Long saveId = chatRoomService.save("1-2", 1L);
-
-        Long l1 = messageService.saveMessage("이성원", saveId, "안녕1");
-        Long l2 = messageService.saveMessage("김지우", saveId, "안녕2");
 
         //then
-        em.flush();
-        em.clear();
 
-        ChatRoom chatRoom = chatRoomService.findFetchMessageById(saveId);
+        ChatRoom chatRoom = chatRoomService.findFetchMessageCourseById(1L);
 
         for(Message  message: chatRoom.getMessageList()){
             System.out.println(message.getMessage());
         }
+
 
         //then
     }

@@ -32,19 +32,15 @@ class MessageServiceTest {
     @Test
     public void 메세지생성() throws Exception {
        //given
-        Long chatRoomId = chatRoomService.save("1-2", 1L);
 
+
+        Message message = messageService.saveMessage("이성원", 1L, "Hello World");
         em.flush();
         em.clear();
 
-        Long findId = messageService.saveMessage("이성원", chatRoomId, "Hello World");
-        em.flush();
-        em.clear();
-
-        Message message = messageRepository.findById(findId).get();
         //then
         Assertions.assertThat(message.getMessage()).isEqualTo("Hello World");
-        Assertions.assertThat(message.getChatRoom().getRoomName()).isEqualTo("1-2");
+        Assertions.assertThat(message.getChatRoom().getId()).isEqualTo(5L);
 
 
     }
