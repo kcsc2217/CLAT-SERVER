@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import team_project.clat.domain.Dto.request.MessageRequestDto;
+import team_project.clat.domain.Dto.response.MessageResponse;
+import team_project.clat.domain.Message;
 import team_project.clat.service.MessageService;
 
 @Controller
@@ -30,9 +32,8 @@ public class MessageController {
         String senderName = messageRequestDto.getSenderName();
         Long courseId = messageRequestDto.getCourseId();
         String message = messageRequestDto.getMessage();
-        Long saveId = messageService.saveMessage(senderName, courseId, message);
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, messageRequestDto);
-
+        Message findMessage = messageService.saveMessage(senderName, courseId, message);
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageResponse(findMessage));
 
     }
 

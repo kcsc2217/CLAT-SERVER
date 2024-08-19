@@ -81,25 +81,40 @@
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
 <script>
+    // DOM이 완전히 로드된 후에 실행될 코드를 포함하는 이벤트 리스너
     document.addEventListener('DOMContentLoaded', function() {
-
-        var socket = new SockJS('/ws');
+       // SockJS로 웹소켓 연결을 위한 소켓 생성
+        var socket = new SockJS('/ws');4
+        // Stomp.js를 사용하여 웹소켓을 관리하고 메시지를 주고받을 클라이언트 객체를 생성
         var stompClient = Stomp.over(socket);
-        var courseId = 1; // 테스트할 채팅방 ID
+
+         // 강의 아이디 설정 (예: 1번 강의)
+        var courseId = 1; // 강의 아이디
+
+         // 기존 메시지를 서버에서 불러오기 위한 함수 호출
         fetchMessages();
 
-        stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
+  // 웹소켓 연결 (서버와 연결 시 실행되는 콜백 함수)
+       stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
 
-            // 채팅방 구독
-            stompClient.subscribe('/sub/chat/' + courseId, function (message) {
-                var content = JSON.parse(message.body);
-                var messagesDiv = document.getElementById('messages');
-                messagesDiv.innerHTML += '<p><strong>' + content.senderName + ':</strong> ' + content.message + '</p>';
-                messagesDiv.scrollTop = messagesDiv.scrollHeight; // 최신 메시지로 스크롤
-            });
+       // 채팅방 구독: 서버로부터 특정 강의(courseId)에 해당하는 채팅 메시지를 수신
+        stompClient.subscribe('/sub/chat/' + courseId, function (message) {
+            var content = JSON.parse(message.body);  // 수신된 메시지 본문을 JSON으로 파싱
+            var messagesDiv = document.getElementById('messages');  // 메시지를 추가할 요소
+
+            // 메시지에 시간 표시 추가
+            var date = new Date(content.timestamp);  // 수신된 timestamp 값을 Date 객체로 변환
+            var formattedTime = date.toLocaleString();  // 시간 포맷을 사용자가 보기 좋게 변환
+
+            // 메시지와 함께 시간을 화면에 출력
+            messagesDiv.innerHTML += '<p><strong>' + content.senderName + ':</strong> ' + content.message +
+                                     ' <span style="color: grey; font-size: 0.8em;">(' + formattedTime + ')</span></p>';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;  // 메시지 창을 최신 메시지로 스크롤
         });
+    });
 
+// 서버에서 해당 강의(courseId)에 대한 메시지 목록을 가져와 화면에 표시하는 함수
         function fetchMessages() {
             fetch('/chatRoom/' + courseId)
                 .then(response => response.json())
@@ -110,6 +125,7 @@
                 });
         }
 
+ // 특정 메시지를 화면에 추가하는 함수
         function appendMessage(senderName, message, timestamp) {
             var messagesDiv = document.getElementById('messages');
 
@@ -121,7 +137,7 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight; // 최신 메시지로 스크롤
         }
 
-        // sendMessage를 여기서 선언하여 전역 스코프에 노출시킵니다.
+        // 메시지를 서버로 전송하는 함수 (전역으로 선언하여 버튼 클릭 시 호출 가능)
         window.sendMessage = function() {
             var senderName = document.getElementById('senderName').value;
             var message = document.getElementById('message').value;

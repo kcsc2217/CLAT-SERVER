@@ -34,11 +34,10 @@ class MessageServiceTest {
        //given
 
 
-        Long findId = messageService.saveMessage("이성원", 1L, "Hello World");
+        Message message = messageService.saveMessage("이성원", 1L, "Hello World");
         em.flush();
         em.clear();
 
-        Message message = messageRepository.findById(findId).get();
         //then
         Assertions.assertThat(message.getMessage()).isEqualTo("Hello World");
         Assertions.assertThat(message.getChatRoom().getId()).isEqualTo(5L);

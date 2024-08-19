@@ -70,6 +70,7 @@ class ChatRoomServiceTest {
             System.out.println(message.getMessage());
         }
 
+
         //then
     }
 
