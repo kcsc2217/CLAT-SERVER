@@ -1,0 +1,3 @@
+[submodule "CLAT-SERVER-Sub"]
+	path = CLAT-SERVER-Sub
+	url = https://github.com/CLAT-Project/CLAT-SERVER-Sub.git
