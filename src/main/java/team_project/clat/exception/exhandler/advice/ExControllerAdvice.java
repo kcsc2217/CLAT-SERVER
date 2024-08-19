@@ -16,10 +16,10 @@ import team_project.clat.exception.NotFoundException;
 @RestControllerAdvice
 public class ExControllerAdvice {
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
     public CommonResult exHandle(MailVerifyException e){
-        String errorText = HttpStatus.UNAUTHORIZED.value() +" "+ HttpStatus.UNAUTHORIZED.getReasonPhrase();
+        String errorText = HttpStatus.CONFLICT.value() +" "+ HttpStatus.CONFLICT.getReasonPhrase();
         return new CommonResult(errorText, e.getMessage());
     }
 

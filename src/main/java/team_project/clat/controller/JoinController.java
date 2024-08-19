@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import team_project.clat.service.EmailService;
 import team_project.clat.service.JoinService;
+
 import team_project.clat.dto.*;
 import team_project.clat.jwt.JwtUtil;
 
@@ -90,7 +92,7 @@ public class JoinController {
 
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true); //https로 진행할 시
+        cookie.setSecure(true); //https로 진행할 시
         //cookie.setPath("/"); //쿠키가 적용될 범위
         cookie.setHttpOnly(true);
 
