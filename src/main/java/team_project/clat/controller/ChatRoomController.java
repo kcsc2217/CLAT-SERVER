@@ -43,11 +43,11 @@ public class ChatRoomController {
         return new CreateMemberResponse(saveId);
     }
 
-    @GetMapping(value = "/messages/{chatRoomId}")
+    @GetMapping(value = "/{courseId}")
     @Operation(summary = "select List Message", description = "채팅 메세지 조회")
-    public List<MessageResponse> getMessage(@PathVariable Long chatRoomId) {
+    public List<MessageResponse> getMessage(@PathVariable Long courseId) {
         log.info("전체 메세지 조회");
-        ChatRoom chatRoom = chatRoomService.findFetchMessageById(chatRoomId);
+        ChatRoom chatRoom = chatRoomService.findFetchMessageCourseById(courseId);
 
         List<MessageResponse> list = chatRoom.getMessageList().stream().map(message -> new MessageResponse(message.getSenderName(), message.getMessage(), message.getCreatedDate()))
                 .toList();

@@ -85,14 +85,14 @@
 
         var socket = new SockJS('/ws');
         var stompClient = Stomp.over(socket);
-        var chatRoomId = 1; // 테스트할 채팅방 ID
+        var courseId = 1; // 테스트할 채팅방 ID
         fetchMessages();
 
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
 
             // 채팅방 구독
-            stompClient.subscribe('/sub/chat/' + chatRoomId, function (message) {
+            stompClient.subscribe('/sub/chat/' + courseId, function (message) {
                 var content = JSON.parse(message.body);
                 var messagesDiv = document.getElementById('messages');
                 messagesDiv.innerHTML += '<p><strong>' + content.senderName + ':</strong> ' + content.message + '</p>';
@@ -101,7 +101,7 @@
         });
 
         function fetchMessages() {
-            fetch('/chatRoom/messages/' + chatRoomId)
+            fetch('/chatRoom/' + courseId)
                 .then(response => response.json())
                 .then(messages => {
                     messages.forEach(message => {
@@ -128,7 +128,7 @@
 
             if(senderName && message) {
                 stompClient.send("/pub/chat/message", {}, JSON.stringify({
-                    'chatRoomId': chatRoomId,
+                    'courseId': courseId,
                     'senderName': senderName,
                     'message': message
                 }));

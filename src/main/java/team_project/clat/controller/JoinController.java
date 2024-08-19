@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import team_project.clat.Service.EmailService;
-import team_project.clat.Service.JoinService;
-import team_project.clat.domain.Enum.UserType;
+
+import team_project.clat.service.EmailService;
+import team_project.clat.service.JoinService;
 import team_project.clat.dto.*;
 import team_project.clat.jwt.JwtUtil;
 

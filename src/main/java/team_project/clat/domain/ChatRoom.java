@@ -20,7 +20,7 @@ public class ChatRoom extends BaseEntity{
 
     private String roomName;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id")
     private Course course;
 
