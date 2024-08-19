@@ -1,4 +1,4 @@
-package team_project.clat.Service;
+package team_project.clat.service;
 
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;

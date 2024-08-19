@@ -1,5 +1,6 @@
 package team_project.clat.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import team_project.clat.jwt.JwtUtil;
 import team_project.clat.jwt.LoginFilter;
 
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +30,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     //JWTUtil 주입
     private final JwtUtil jwtUtil;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -57,7 +60,7 @@ public class SecurityConfig {
                 configuration.setAllowedHeaders(Collections.singletonList("*"));
                 configuration.setMaxAge(3600L);
 
-                configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+                configuration.setExposedHeaders(List.of("Authorization", "access"));
 
                 return configuration;
             }
@@ -84,7 +87,7 @@ public class SecurityConfig {
 
 
         //AuthenticationManager()와 JWTUtil 인수 전달
-        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, objectMapper), UsernamePasswordAuthenticationFilter.class);
 
 
         //세션 설정

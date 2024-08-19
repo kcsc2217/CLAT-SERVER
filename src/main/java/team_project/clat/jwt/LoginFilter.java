@@ -18,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StreamUtils;
 import team_project.clat.domain.Enum.UserType;
+import team_project.clat.dto.CommonResult;
 import team_project.clat.dto.CustomUserDetails;
 import team_project.clat.dto.LoginDto;
 
@@ -32,6 +33,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final ObjectMapper objectMapper;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -86,14 +88,25 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         @Override
         protected void unsuccessfulAuthentication (HttpServletRequest request, HttpServletResponse
         response, AuthenticationException failed) throws IOException, ServletException {
-            response.setStatus(401);
+            response.setStatus(409);
+            response.setContentType("application/json"); // 응답 형식 설정
+            response.setCharacterEncoding("UTF-8");
+
+            CommonResult commonResult = new CommonResult("409 Conflict", "올바르지않은 아이디 또는 비밀번호 입니다.");
+
+            // CommonResult 객체를 JSON으로 직렬화
+            String jsonResponse = objectMapper.writeValueAsString(commonResult);
+
+            // 응답 본문에 JSON 작성
+            response.getWriter().write(jsonResponse);
+
         }
 
         private Cookie createCookie (String key, String value){
 
             Cookie cookie = new Cookie(key, value);
             cookie.setMaxAge(24 * 60 * 60);
-            //cookie.setSecure(true); //https로 진행할 시
+            cookie.setSecure(true); //https로 진행할 시
             //cookie.setPath("/"); //쿠키가 적용될 범위
             cookie.setHttpOnly(true);
 
