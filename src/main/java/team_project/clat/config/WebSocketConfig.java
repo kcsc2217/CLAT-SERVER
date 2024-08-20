@@ -15,8 +15,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("https://c-lat.site") // 실제 도메인으로 설정
+                .setAllowedOriginPatterns("*") // 실제 도메인으로 설정
                 .withSockJS();
+                // setTransports를 사용하여 지원할 전송 방식 설정;
+
     }
 
     @Override
