@@ -7,7 +7,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*") // 모든 출처를 허용 (운영 환경에서는 특정 도메인만 허용하는 것이 좋습니다)
+                .allowedOrigins("https://c-lat.site") // 실제 도메인으로 설정
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
