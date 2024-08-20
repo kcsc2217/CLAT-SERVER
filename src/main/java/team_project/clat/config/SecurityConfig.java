@@ -19,6 +19,7 @@ import team_project.clat.jwt.JwtFilter;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.jwt.LoginFilter;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,10 +55,10 @@ public class SecurityConfig {
 
                 CorsConfiguration configuration = new CorsConfiguration();
 
-                configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-                configuration.setAllowedMethods(Collections.singletonList("*"));
+                configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://c-lat.site"));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(Arrays.asList("Authorization", "access", "Content-Type"));
                 configuration.setAllowCredentials(true);
-                configuration.setAllowedHeaders(Collections.singletonList("*"));
                 configuration.setMaxAge(3600L);
 
                 configuration.setExposedHeaders(List.of("Authorization", "access"));
