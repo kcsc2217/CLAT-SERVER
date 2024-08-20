@@ -14,9 +14,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws") // 클라이언트가 엔드포인트로 설정한 /ws로 WebSocket 연결 시도
-                .setAllowedOriginPatterns("*").withSockJS();// 모든 도메인에서 접근이 가능하도록 함 그리고 Socket Js 즉 웹 소켓
-        // 을 지원하지 않는 브라우저에서도 HTTP 풀링 방식으로 WebSocket과 유사하게 동작 할 수 있다.
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("https://c-lat.site") // 실제 도메인으로 설정
+                .withSockJS();
     }
 
     @Override
