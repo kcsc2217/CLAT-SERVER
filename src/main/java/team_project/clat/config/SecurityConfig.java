@@ -63,6 +63,7 @@ public class SecurityConfig {
 
                 configuration.setExposedHeaders(List.of("Authorization", "access"));
 
+
                 return configuration;
             }
         })));
@@ -79,7 +80,7 @@ public class SecurityConfig {
         //경로별 인가 작업
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/login","/chatRoom/**",  "/","index.html", "/join","/verify-email", "/verification-code", "/idCheck").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/login","/chatRoom/**", "/swagger-ui/**", "/","index.html", "/join","/verify-email", "/verification-code", "/idCheck").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/reIssue").permitAll()
                         .anyRequest().authenticated());
