@@ -1,5 +1,6 @@
 package team_project.clat.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +15,13 @@ import team_project.clat.service.MessageService;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "WebSocket Chat", description = "WebSocket 기반 채팅 API")
+@Tag(name = "WebSocket Chat", description = "STOMP 기반의 WebSocket 채팅 API. 이 API는 WebSocket을 통해 실시간 채팅 기능을 제공합니다.")
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping(value = "/chat/enter")
+    @Operation(summary = "채팅방 입장", description = "사용자가 채팅방에 입장하면, STOMP 메시지를 통해 입장 메시지를 브로드캐스트합니다.")
     public void enter(MessageRequestDto messageRequestDto){
         messageRequestDto.setMessage(messageRequestDto.getSenderName() + "님이 채팅방에 입장하셨습니다.");
         simpMessagingTemplate.convertAndSend("/sub/chat/" + messageRequestDto.getCourseId(), messageRequestDto);  // 해당 채팅방으로 메세지 전송

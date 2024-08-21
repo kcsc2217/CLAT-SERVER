@@ -26,7 +26,7 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
 
-    @PostMapping(value = "/create",   consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create",consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "create ChatRoom", description = "강의아이디로 채팅방을 만든다.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "성공"),
     @ApiResponse(responseCode = "404", description = "해당 강의실 아이디가 존재 하지 않습니다")}
