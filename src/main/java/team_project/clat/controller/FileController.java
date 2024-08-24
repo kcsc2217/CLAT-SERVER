@@ -4,30 +4,31 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import team_project.clat.dto.ImageResponseDTO;
 import team_project.clat.dto.TestImageDto;
 import team_project.clat.service.ImageService;
 
 import java.util.List;
 
-@Controller
+
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 @Slf4j
-public class FileTestController {
+public class FileController {
 
     private final ImageService imageService;
 
 
     @PostMapping("/image")
     @ResponseStatus(HttpStatus.OK)
-    public List<String> saveImage(@ModelAttribute TestImageDto testImageDto){
+    public ImageResponseDTO saveImage(@ModelAttribute TestImageDto testImageDto){
         log.info("파일 컨트롤러 통과 ");
         log.info("t");
-        return imageService.saveImages(testImageDto);
+        List<String> strings = imageService.saveImages(testImageDto);
+
+        return new ImageResponseDTO(strings);
     }
 
 }
