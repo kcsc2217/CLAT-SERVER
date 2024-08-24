@@ -10,7 +10,6 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +31,17 @@ public class Image {
         this.accessUrl = accessUrl;
     }
 
-    public String extractExtension(String originName){
-        int index = originName.lastIndexOf('.');
-        return originName.substring(index, originName.length());
-    }
+
 
     public String getFileName(String originName){
-        return UUID.randomUUID() + "." + extractExtension(originName);
+        String ext = extractExtension(originName);
+        String uuid = UUID.randomUUID().toString();
+
+        return uuid + "." + ext;
+    }
+
+    public String extractExtension(String originName){
+        int index = originName.lastIndexOf('.');
+        return originName.substring(index+1);
     }
 }

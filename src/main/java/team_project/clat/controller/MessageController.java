@@ -29,7 +29,7 @@ public class MessageController {
     }
 
     @MessageMapping(value = "/chat/message")
-    public void message(MessageRequestDto messageRequestDto){
+    public void message(MessageRequestDto messageRequestDto){ // 강의 아이디로 채팅 구독
         log.info("메세지가 수신됐습니다");
         String senderName = messageRequestDto.getSenderName();
         Long courseId = messageRequestDto.getCourseId();

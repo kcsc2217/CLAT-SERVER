@@ -43,7 +43,7 @@ public class ImageService {
         String originalFilename = multipartFile.getOriginalFilename(); //파일 원래 이름
 
         Image image = new Image(originalFilename); // 이미지 객체생성
-        String storedName = image.getStoredName(); // 이미지 내에서 파일 구별 할 수 있게 저장 이미지 경로 만듬
+        String storedName = "chat-service/" + image.getStoredName(); // 이미지 내에서 파일 구별 할 수 있게 저장 이미지 경로 만듬
 
         try{
             ObjectMetadata objectMetadata = new ObjectMetadata(); // S3 에 저장할 메타데이터 객체 생성
