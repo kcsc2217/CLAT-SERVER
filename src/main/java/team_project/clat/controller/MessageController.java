@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import team_project.clat.domain.Dto.request.MessageRequestDto;
 import team_project.clat.domain.Dto.response.MessageResponse;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.MessageFileRequestDTO;
+import team_project.clat.dto.MessageFileResponseDTO;
 import team_project.clat.service.MessageService;
 
 @Controller
@@ -36,6 +38,18 @@ public class MessageController {
         String message = messageRequestDto.getMessage();
         Message findMessage = messageService.saveMessage(senderName, courseId, message);
         simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageResponse(findMessage));
+
+    }
+
+    @MessageMapping(value = "/chat/file")
+    public void message(MessageFileRequestDTO messageFileRequest){
+        log.info("파일이 전송되었습니다");
+        String senderName = messageFileRequest.getSenderName();
+        Long courseId = messageFileRequest.getCourseId();
+        String imageUrl = messageFileRequest.getImageUrl();
+        Message message = messageService.saveFileMessage(senderName, courseId, imageUrl);
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageFileResponseDTO(message));
+
 
     }
 

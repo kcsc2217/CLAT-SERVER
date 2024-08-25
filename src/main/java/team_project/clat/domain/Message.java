@@ -31,6 +31,9 @@ public class Message extends BaseEntity{
 
     private String senderName;
 
+    private String imageUrl;
+
+
     public void addChatRoom(ChatRoom chatRoom){
         this.chatRoom=chatRoom;
         chatRoom.getMessageList().add(this);
@@ -44,8 +47,17 @@ public class Message extends BaseEntity{
 
     }
 
-    public static Message createMessage(String senderName,  ChatRoom chatRoom, String message) {
-        return new Message(message, chatRoom, senderName);
+    public Message(ChatRoom chatRoom, String senderName, String imageUrl) {
+        addChatRoom(chatRoom);
+        this.senderName = senderName;
+        this.imageUrl = imageUrl;
+    }
 
+    public static Message createMessage(String senderName, ChatRoom chatRoom, String message) {
+        return new Message(message, chatRoom, senderName);
+    }
+
+    public static Message creteFilePathMessage(String senderName, ChatRoom chatRoom, String imageUrl){
+        return new Message(chatRoom, senderName, imageUrl);
     }
 }

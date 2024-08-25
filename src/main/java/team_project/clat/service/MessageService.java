@@ -44,6 +44,19 @@ public class MessageService {
         return messageRepository.findById(saveId).orElseThrow(()-> new NotFoundException("해당 메세지는 없습니다"));
     }
 
+    @Transactional
+    public Message saveFileMessage(String senderName, Long courseId, String imageUrl){
+        Course findCourse = courseRepository.findFetchCourseById(courseId).orElseThrow(() -> new IllegalArgumentException("해당 강의는 없습니다"));
+        log.info("메세지 찾기");
+        ChatRoom chatRoom = findCourse.getChatRoom();
+        Message saveMessage = Message.creteFilePathMessage(senderName, chatRoom, imageUrl);
+        log.info("메세지 생성완료");
+        Long saveId = save(saveMessage);
+
+        return messageRepository.findById(saveId).orElseThrow(()-> new NotFoundException("해당 메세지는 없습니다"));
+
+    }
+
     public Message findById(Long id){
         return messageRepository.findById(id).orElseThrow(()-> new NotFoundException("해당 메세지는 없습니다"));
     }
