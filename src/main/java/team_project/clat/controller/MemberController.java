@@ -27,11 +27,7 @@ public class MemberController {
 
         Member findMember = memberRepository.findByUsername(username);
 
-        MemberDto memberDto = new MemberDto();
-        memberDto.setUsername(username);
-        memberDto.setName(findMember.getName());
-        memberDto.setSchoolName(findMember.getSchoolName());
-        memberDto.setUserType(userType);
+        MemberDto memberDto = new MemberDto(username, findMember.getName(), findMember.getSchoolName(), userType);
 
         return new ResponseEntity<>(memberDto, HttpStatus.OK);
     }
