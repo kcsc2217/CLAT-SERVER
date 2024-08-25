@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+import team_project.clat.domain.Message;
 
 import java.util.UUID;
 
@@ -22,6 +24,10 @@ public class Image {
 
     private String accessUrl; // 내부 s3 접근 할 수 있는 url
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "message_id")
+    private Message message;
+
     public Image(String originName) {
         this.originName = originName;
         this.storedName = getFileName(originName);
@@ -29,6 +35,14 @@ public class Image {
     }
     public void setAccessUrl(String accessUrl){
         this.accessUrl = accessUrl;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
+    public void setId(Long imageId){
+        this.id = imageId;
     }
 
 

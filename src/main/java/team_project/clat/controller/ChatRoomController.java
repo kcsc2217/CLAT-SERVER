@@ -13,9 +13,14 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Dto.request.ChatRoomCreateDto;
 import team_project.clat.domain.Dto.response.CreateMemberResponse;
 import team_project.clat.domain.Dto.response.MessageResponse;
+import team_project.clat.domain.Message;
+import team_project.clat.dto.MessageFileResponseDTO;
+import team_project.clat.dto.MessageinclueFileDTO;
+import team_project.clat.repository.MessageRepository;
 import team_project.clat.service.ChatRoomService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -24,6 +29,7 @@ import java.util.List;
 @Tag(name = "ChatRoom", description = "ChatRoomApi") 
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
+    private final MessageRepository messageRepository;
 
 
     @PostMapping(value = "/create",consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,6 +60,14 @@ public class ChatRoomController {
         return list;
 
     }
+
+    @GetMapping("/{chatRoomId}")
+    public List<MessageinclueFileDTO> getFileMessage(@PathVariable Long chatRoomId){
+        List<Message> findByMessageList = messageRepository.findByFileMessage(chatRoomId);
+
+        return findByMessageList.stream().map(message -> new MessageinclueFileDTO(message)).collect(Collectors.toList());
+    }
+
 
 
 

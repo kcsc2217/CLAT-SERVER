@@ -5,10 +5,15 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.FileImageDTO;
 import team_project.clat.repository.MemberRepository;
 import team_project.clat.repository.MessageRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -43,6 +48,25 @@ class MessageServiceTest {
         Assertions.assertThat(message.getChatRoom().getId()).isEqualTo(5L);
 
 
+    }
+
+    @Test
+    @Rollback(value = false)
+    public void 파일_메세지_생성쿼리() throws Exception {
+
+       //given
+
+        List<FileImageDTO> fileImageDTOList = new ArrayList<>();
+
+        fileImageDTOList.add(new FileImageDTO(1L, "https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/efdeea52-51ff-48d5-b1d6-420002d33d5c.jpg"));
+        fileImageDTOList.add(new FileImageDTO(2L, "https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/efdeea52-51ff-48d5-b1d6-420002d33d5c.jpg"));
+
+
+        messageService.saveFileMessage("이성원", 1L, fileImageDTOList);
+
+       //when
+
+       //then
     }
 
 }

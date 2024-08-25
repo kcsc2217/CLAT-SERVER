@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import team_project.clat.domain.File.Image;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,12 +32,20 @@ public class Message extends BaseEntity{
 
     private String senderName;
 
-    private String imageUrl;
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
 
 
     public void addChatRoom(ChatRoom chatRoom){
         this.chatRoom=chatRoom;
         chatRoom.getMessageList().add(this);
+    }
+
+    // 이미지와 연관관계 메서드
+    public void addImages(Image image){
+        this.images.add(image);
+        image.setMessage(this);
+
     }
 
 
@@ -47,17 +56,21 @@ public class Message extends BaseEntity{
 
     }
 
-    public Message(ChatRoom chatRoom, String senderName, String imageUrl) {
-        addChatRoom(chatRoom);
+    public Message(String senderName, ChatRoom chatRoom, List<Image> images){
         this.senderName = senderName;
-        this.imageUrl = imageUrl;
+        addChatRoom(chatRoom);
+        this.images = images;
+
+        for(Image image:images){
+            image.setMessage(this);
+        }
     }
 
     public static Message createMessage(String senderName, ChatRoom chatRoom, String message) {
         return new Message(message, chatRoom, senderName);
     }
 
-    public static Message creteFilePathMessage(String senderName, ChatRoom chatRoom, String imageUrl){
-        return new Message(chatRoom, senderName, imageUrl);
+    public static Message creteFilePathMessage(String senderName, ChatRoom chatRoom, List<Image> images){
+        return new Message(senderName,chatRoom, images);
     }
 }
