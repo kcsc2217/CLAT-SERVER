@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import team_project.clat.domain.Enum.Gender;
 import team_project.clat.domain.Enum.UserType;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //기본생성자 protected로
+@Slf4j
 public class Member extends BaseEntity {
 
     @Id
@@ -85,8 +88,7 @@ public class Member extends BaseEntity {
 
         member.username = username;
         member.password = password;
-        member.userType = UserType.valueOf(userType);
-
+        member.userType = UserType.fromRole(userType);
         return member;
     }
 

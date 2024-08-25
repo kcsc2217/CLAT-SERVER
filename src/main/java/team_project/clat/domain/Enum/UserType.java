@@ -13,4 +13,14 @@ public enum UserType {
     }
 
     public String getDescription() {return description;}
+
+    // 문자열로부터 enum 상수를 찾는 메서드
+    public static UserType fromRole(String role) {
+        for (UserType userType : UserType.values()) {
+            if (userType.getDescription().equalsIgnoreCase(role)) {
+                return userType;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with role " + role);
+    }
 }
