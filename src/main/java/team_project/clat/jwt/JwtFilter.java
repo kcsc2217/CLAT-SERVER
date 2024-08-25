@@ -68,7 +68,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // username, role 값을 획득
         String username = jwtUtil.getUsername(accessToken);
+        log.info("{}",username);
         String role = jwtUtil.getUserType(accessToken);
+        log.info("{}",role);
 
         Member member = Member.JwtMemberSet(username, "teampassword", role);
         CustomUserDetails customUserDetails = new CustomUserDetails(member);
