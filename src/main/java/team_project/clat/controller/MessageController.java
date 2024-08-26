@@ -10,7 +10,12 @@ import org.springframework.stereotype.Controller;
 import team_project.clat.domain.Dto.request.MessageRequestDto;
 import team_project.clat.domain.Dto.response.MessageResponse;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.FileImageDTO;
+import team_project.clat.dto.MessageFileRequestDTO;
+import team_project.clat.dto.MessageFileResponseDTO;
 import team_project.clat.service.MessageService;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,13 +34,26 @@ public class MessageController {
     }
 
     @MessageMapping(value = "/chat/message")
-    public void message(MessageRequestDto messageRequestDto){
+    public void message(MessageRequestDto messageRequestDto){ // 강의 아이디로 채팅 구독
         log.info("메세지가 수신됐습니다");
         String senderName = messageRequestDto.getSenderName();
         Long courseId = messageRequestDto.getCourseId();
         String message = messageRequestDto.getMessage();
         Message findMessage = messageService.saveMessage(senderName, courseId, message);
         simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageResponse(findMessage));
+
+    }
+
+    @MessageMapping(value = "/chat/file")
+    public void message(MessageFileRequestDTO messageFileRequest){
+        log.info("파일이 전송되었습니다");
+        String senderName = messageFileRequest.getSenderName();
+        Long courseId = messageFileRequest.getCourseId();
+        List<FileImageDTO> fileImageDTOList = messageFileRequest.getFileImageDTOList();
+
+        Message message = messageService.saveFileMessage(senderName, courseId, fileImageDTOList); //파일 메세지 생성
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageFileResponseDTO(message,fileImageDTOList));
+
 
     }
 

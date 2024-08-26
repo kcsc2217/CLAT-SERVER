@@ -8,6 +8,7 @@ public class MessageRequestDto {
     private Long courseId;
     private String message;
 
+
     private String senderName;
 
     public MessageRequestDto(Long courseId, String message, String senderName) {

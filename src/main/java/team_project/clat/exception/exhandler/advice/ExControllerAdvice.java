@@ -6,9 +6,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import team_project.clat.domain.Dto.response.RestResponse;
 import team_project.clat.dto.CommonResult;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
+import team_project.clat.exception.FileSizeLimitException;
 import team_project.clat.exception.MailVerifyException;
 import team_project.clat.exception.NotFoundException;
 
@@ -46,5 +48,22 @@ public class ExControllerAdvice {
         log.error("[exceptionHandle] ex", ex);
         return new RestResponse("CONFLICT", ex.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(FileSizeLimitException.class)
+    public RestResponse fileException(FileSizeLimitException ex){
+        log.error("[exceptionHandle] ex", ex);
+        return new RestResponse("Bad", ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public String MaxUploadSIze(MaxUploadSizeExceededException ex){
+        log.error("[exceptionHandle] ex", ex);
+        return "file size  exceeds the maximum allowed limit!";
+    }
+
+
+
 
 }

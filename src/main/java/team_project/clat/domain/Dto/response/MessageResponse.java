@@ -10,15 +10,19 @@ import java.time.LocalDateTime;
 
 @Data
 public class MessageResponse {
-    @Schema(description = "senderName", example = "사용자 이름")
+
+    private Long messageId;
+
     private String senderName;
 
-    @Schema(description = "message", example = "메세지 내용")
+
     private String message;
-    @Schema(description = "timestamp", example = "메세지 저장 시간")
+
     private LocalDateTime timestamp;
 
+
     public MessageResponse(Message message) {
+        this.messageId = message.getId();
         this.senderName = message.getSenderName();
         this.message = message.getMessage();
         this.timestamp = message.getCreatedDate();
