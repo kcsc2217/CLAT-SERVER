@@ -61,7 +61,7 @@ public class ChatRoomController {
 
     }
 
-    @GetMapping("/{chatRoomId}")
+    @GetMapping("/chat/{chatRoomId}")
     public List<MessageinclueFileDTO> getFileMessage(@PathVariable Long chatRoomId){
         List<Message> findByMessageList = messageRepository.findByFileMessage(chatRoomId);
 

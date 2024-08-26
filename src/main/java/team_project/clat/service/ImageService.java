@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import team_project.clat.domain.File.Image;
+import team_project.clat.dto.ImageResponseDTO;
 import team_project.clat.dto.TestImageDto;
 import team_project.clat.repository.ImageRepository;
 
@@ -27,19 +28,20 @@ public class ImageService {
     private final ImageRepository imageRepository;
 
     @Transactional
-    public List<String> saveImages(TestImageDto testImageDto){
-        List<String> resultList = new ArrayList<>();
+    public List<ImageResponseDTO> saveImages(TestImageDto testImageDto){
+
+        List<ImageResponseDTO> list = new ArrayList<>();
 
         for( MultipartFile multipartFile: testImageDto.getImages()){
-            String value = saveImage(multipartFile);
-            resultList.add(value);
+            ImageResponseDTO imageResponseDTO = saveImage(multipartFile);
+            list.add(imageResponseDTO);
         }
-    return resultList;
+    return list;
     }
 
 
     @Transactional
-    public String saveImage(MultipartFile multipartFile){
+    public ImageResponseDTO saveImage(MultipartFile multipartFile){
         String originalFilename = multipartFile.getOriginalFilename(); //파일 원래 이름
 
         Image image = new Image(originalFilename); // 이미지 객체생성
@@ -58,9 +60,9 @@ public class ImageService {
 
         }
 
-        imageRepository.save(image);
+        Image findImage = imageRepository.save(image);
 
-        return image.getAccessUrl();
+        return new ImageResponseDTO(findImage.getId(), findImage.getAccessUrl());
 
     }
     

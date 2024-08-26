@@ -24,15 +24,16 @@ public class FileController {
 
     @PostMapping("/image")
     @ResponseStatus(HttpStatus.OK)
-    public ImageResponseDTO saveImage(@ModelAttribute TestImageDto testImageDto){
+    public List<ImageResponseDTO> saveImage(@ModelAttribute TestImageDto testImageDto){
 
         ValidationFileSize.sizeCheck(testImageDto.getImages());
 
         log.info("파일 컨트롤러 통과 ");
         log.info("t");
-        List<String> strings = imageService.saveImages(testImageDto);
 
-        return new ImageResponseDTO(strings);
+    return imageService.saveImages(testImageDto);
+
+
     }
 
 }

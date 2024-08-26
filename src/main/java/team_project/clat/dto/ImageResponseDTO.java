@@ -7,9 +7,11 @@ import java.util.List;
 @Data
 public class ImageResponseDTO {
 
-    private List<String> imageUrl;
+    private Long imageId;
+    private String imageUrl;
 
-    public ImageResponseDTO(List<String> imageUrl) {
+    public ImageResponseDTO(Long imageId, String imageUrl) {
+        this.imageId = imageId;
         this.imageUrl = imageUrl;
     }
 

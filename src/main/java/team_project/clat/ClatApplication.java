@@ -26,31 +26,31 @@ public class ClatApplication {
 		SpringApplication.run(ClatApplication.class, args);
 	}
 
-	/*@Override
-	public void run(String... args) throws Exception {
-		Resource resource = new ClassPathResource("courses.csv");
-
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
-
-			String line;
-			br.readLine();
-			while ((line = br.readLine()) != null) {
-				String[] fields = line.split(",");
-				String courseCode = fields[0].trim();
-				String courseName = fields[1].trim();
-				String room = fields[2].trim();
-				String startDate = fields[3].trim();
-				String endDate = fields[4].trim();
-				String dayOfWeek = fields[5].trim();
-
-				applicationContext.publishEvent(new CourseInsertEvent(
-								this, courseCode, courseName, room, startDate, endDate, dayOfWeek
-				));
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
+//	@Override
+//	public void run(String... args) throws Exception {
+//		Resource resource = new ClassPathResource("courses.csv");
+//
+//		try (BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
+//
+//			String line;
+//			br.readLine();
+//			while ((line = br.readLine()) != null) {
+//				String[] fields = line.split(",");
+//				String courseCode = fields[0].trim();
+//				String courseName = fields[1].trim();
+//				String room = fields[2].trim();
+//				String startDate = fields[3].trim();
+//				String endDate = fields[4].trim();
+//				String dayOfWeek = fields[5].trim();
+//
+//				applicationContext.publishEvent(new CourseInsertEvent(
+//								this, courseCode, courseName, room, startDate, endDate, dayOfWeek
+//				));
+//			}
+//
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 }

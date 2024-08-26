@@ -58,8 +58,8 @@ class MessageServiceTest {
 
         List<FileImageDTO> fileImageDTOList = new ArrayList<>();
 
-        fileImageDTOList.add(new FileImageDTO(1L, "https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/efdeea52-51ff-48d5-b1d6-420002d33d5c.jpg"));
-        fileImageDTOList.add(new FileImageDTO(2L, "https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/efdeea52-51ff-48d5-b1d6-420002d33d5c.jpg"));
+        fileImageDTOList.add(new FileImageDTO(3L, "https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/efdeea52-51ff-48d5-b1d6-420002d33d5c.jpg"));
+        fileImageDTOList.add(new FileImageDTO(4L, "https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/efdeea52-51ff-48d5-b1d6-420002d33d5c.jpg"));
 
 
         messageService.saveFileMessage("이성원", 1L, fileImageDTOList);

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    @Query("SELECT DISTINCT m FROM Message m JOIN FETCH m.images im WHERE m.chatRoom.id = :chatRoomId")
+    @Query("SELECT DISTINCT m FROM Message m  LEFT JOIN FETCH m.images im WHERE m.chatRoom.id = :chatRoomId")
     List<Message> findByFileMessage(@Param("chatRoomId") Long chatRoomId);
 
 }

@@ -1,6 +1,8 @@
 package team_project.clat.service;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.FlushModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final ImageRepository imageRepository;
     private final CourseRepository courseRepository;
+    private final EntityManager em;
 
 
     @Transactional
@@ -57,13 +60,17 @@ public class MessageService {
         log.info("메세지 찾기");
         ChatRoom chatRoom = findCourse.getChatRoom();
 
-        List<Image> findByImage = convertToImages(fileImageDTOList);
+        List<Image> findByImage = convertToImages(fileImageDTOList); // 이미지 찾아옴
         Message saveMessage = Message.creteFilePathMessage(senderName, chatRoom, findByImage);
         log.info("메세지 생성완료");
         Long saveId = save(saveMessage);
+        em.clear(); // 쿼리 성능 최적화 변경감지로 인한 업데이트를 없애기 위해 clear 작업 그러면 트랜잭션이 끝나서 변경감질할 일 없음
+
+        List<Long> imageIds = findByImage.stream().map(Image::getId).collect(Collectors.toList()); //그러면 여기서 외래키 설정해주
+        imageRepository.updateImageMessageId(saveId, imageIds);
 
 
-        return messageRepository.findById(saveId).orElseThrow(()-> new NotFoundException("해당 메세지는 없습니다"));
+        return saveMessage;
 
     }
 

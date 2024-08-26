@@ -8,8 +8,8 @@ import java.util.List;
 public class ValidationFileSize {
 
     public static void sizeCheck(List<MultipartFile> multipartFileList){
-        if(multipartFileList.size() > 9){
-            throw new FileSizeLimitException("9개를 초과해서는 안됩니다!");
+        if(multipartFileList.size() > 5){
+            throw new FileSizeLimitException("5개를 초과해서는 안됩니다!");
         }
     }
 }

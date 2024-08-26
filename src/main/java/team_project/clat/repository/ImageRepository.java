@@ -13,10 +13,10 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     List<Image> findByIdIn(List<Long> ids);
 
-//    @Modifying
-//    @Transactional
-//    @Query("UPDATE Image i SET i.message.id = :messageId WHERE i.imageId IN :imageIds")
-//    void updateImageMessageId(@Param("messageId") Long messageId, @Param("imageIds") List<Long> imageIds);
+    @Modifying
+    @Transactional
+    @Query("UPDATE Image i SET i.message.id = :messageId WHERE i.id IN :imageIds")
+    void updateImageMessageId(@Param("messageId") Long messageId, @Param("imageIds") List<Long> imageIds);
 
 
 

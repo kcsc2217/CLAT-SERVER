@@ -51,7 +51,7 @@ public class MessageController {
         Long courseId = messageFileRequest.getCourseId();
         List<FileImageDTO> fileImageDTOList = messageFileRequest.getFileImageDTOList();
 
-        Message message = messageService.saveFileMessage(senderName, courseId, fileImageDTOList);
+        Message message = messageService.saveFileMessage(senderName, courseId, fileImageDTOList); //파일 메세지 생성
         simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageFileResponseDTO(message,fileImageDTOList));
 
 
