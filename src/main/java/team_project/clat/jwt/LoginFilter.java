@@ -18,9 +18,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StreamUtils;
 import team_project.clat.domain.Enum.UserType;
+import team_project.clat.domain.Token;
 import team_project.clat.dto.CommonResult;
 import team_project.clat.dto.CustomUserDetails;
 import team_project.clat.dto.LoginDto;
+import team_project.clat.repository.TokenRepository;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,6 +36,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
+    private final TokenRepository tokenRepository;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -76,6 +79,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             //토큰 생성
         String access = jwtUtil.createJwt("access", username, role, 600000L);
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+
+        Token token = new Token(username, refresh, 86400000L);
+        tokenRepository.save(token);
+
 
             //응답 설정
         response.setHeader("access", access);
