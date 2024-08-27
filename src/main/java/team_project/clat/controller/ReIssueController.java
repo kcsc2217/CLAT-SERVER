@@ -5,24 +5,32 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import team_project.clat.domain.Enum.UserType;
+import team_project.clat.domain.Token;
 import team_project.clat.dto.CommonResult;
 import team_project.clat.jwt.JwtUtil;
+import team_project.clat.repository.TokenRepository;
+
+import java.util.Optional;
 
 @Controller
 @ResponseBody
 @RequiredArgsConstructor
+@Slf4j
 public class ReIssueController {
 
     private final JwtUtil jwtUtil;
+    private final TokenRepository tokenRepository;
 
     @PostMapping("/reIssue")
     public ResponseEntity<CommonResult> reIssue(HttpServletRequest request, HttpServletResponse response){
+
 
         //get refresh token
         String refresh = null;
@@ -59,14 +67,31 @@ public class ReIssueController {
             return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
 
         }
+        
 
         String username = jwtUtil.getUsername(refresh);
         String userType = jwtUtil.getUserType(refresh);
+
+        boolean isExist = tokenRepository.existsById(username);
+        if(!isExist){
+            CommonResult commonResult = new CommonResult("400 bad_request", "invalid refresh token.");
+            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<Token> byId = tokenRepository.findById(username);
+        Token token = byId.get();
+        log.info("=======기존 refresh : {}========",token.getRefreshToken());
 
 
         //make new JWT
         String newAccess = jwtUtil.createJwt("access", username, userType , 600000L);
         String newRefresh = jwtUtil.createJwt("refresh", username, userType, 86400000L);
+
+        tokenRepository.deleteById(username);
+        Token refreshToken = new Token(username, newRefresh, 86400000L);
+        log.info("=======재발급 refresh : {}========",refreshToken.getRefreshToken());
+        tokenRepository.save(refreshToken);
+
 
         //response
         response.setHeader("access", newAccess);

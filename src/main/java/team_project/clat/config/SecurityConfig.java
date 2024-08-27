@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import team_project.clat.jwt.JwtFilter;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.jwt.LoginFilter;
+import team_project.clat.repository.TokenRepository;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,6 +33,7 @@ public class SecurityConfig {
     //JWTUtil 주입
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
+    private final TokenRepository tokenRepository;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -90,7 +92,7 @@ public class SecurityConfig {
 
 
         //AuthenticationManager()와 JWTUtil 인수 전달
-        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, objectMapper), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, objectMapper, tokenRepository), UsernamePasswordAuthenticationFilter.class);
 
 
         //세션 설정
