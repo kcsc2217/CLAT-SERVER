@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,8 @@ public class Course {
     List<Student_course> studentCourseList = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "course" , cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "course" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private ChatRoom chatRoom;
 
 
@@ -56,6 +58,5 @@ public class Course {
     public void addChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
-
 
 }
