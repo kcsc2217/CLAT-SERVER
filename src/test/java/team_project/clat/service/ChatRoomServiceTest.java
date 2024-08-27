@@ -10,6 +10,9 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Message;
 import team_project.clat.repository.ChatRoomRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 
 @SpringBootTest
 @Transactional
@@ -44,20 +47,6 @@ class ChatRoomServiceTest {
 
     }
 
-    @Test
-    public void ChatRoomFetchjoin쿼리최적화() throws Exception {
-       //given
-
-        Long saveId = chatRoomService.save("1-2", 1L);
-        //then
-        em.flush();
-        em.clear();
-
-       //when
-        chatRoomRepository.findFetchChatRoomById(saveId).get();
-
-       //then
-    }
 
     @Test
     public void Fetchjoin을_사용한_메세지성능_최적화() throws Exception {
@@ -67,6 +56,27 @@ class ChatRoomServiceTest {
         ChatRoom chatRoom = chatRoomService.findFetchMessageCourseById(1L);
 
         for(Message  message: chatRoom.getMessageList()){
+            System.out.println(message.getMessage());
+        }
+
+
+        //then
+    }
+
+    @Test
+    public void fetchjoin_쿼리_보기() throws Exception {
+       //given
+        Optional<ChatRoom> fetchByCourseAndMessage = chatRoomRepository.findFetchByCourseAndMessage(1L);
+
+        //when
+
+        ChatRoom chatRoom = fetchByCourseAndMessage.get();
+
+        System.out.println(chatRoom.getCourse().getRoom());
+
+        List<Message> messageList = chatRoom.getMessageList();
+
+        for(Message message : messageList){
             System.out.println(message.getMessage());
         }
 

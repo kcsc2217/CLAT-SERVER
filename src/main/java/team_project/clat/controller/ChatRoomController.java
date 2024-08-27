@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +14,16 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Dto.request.ChatRoomCreateDto;
 import team_project.clat.domain.Dto.response.CreateMemberResponse;
 import team_project.clat.domain.Dto.response.MessageResponse;
+import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.MessageFileResponseDTO;
-import team_project.clat.dto.MessageinclueFileDTO;
+import team_project.clat.dto.ChatRoomMessageDTO;
+import team_project.clat.dto.MessageIncludeFileDTO;
+import team_project.clat.exception.NotFoundException;
+import team_project.clat.repository.ChatRoomRepository;
 import team_project.clat.repository.MessageRepository;
 import team_project.clat.service.ChatRoomService;
+import team_project.clat.service.CourseService;
+import team_project.clat.service.TokenService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +35,9 @@ import java.util.stream.Collectors;
 @Tag(name = "ChatRoom", description = "ChatRoomApi") 
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
-    private final MessageRepository messageRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final TokenService tokenService;
+    private final CourseService courseService;
 
 
     @PostMapping(value = "/create",consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,15 +69,23 @@ public class ChatRoomController {
 
     }
 
-    @GetMapping("/chat/{chatRoomId}")
-    public List<MessageinclueFileDTO> getFileMessage(@PathVariable Long chatRoomId){
-        List<Message> findByMessageList = messageRepository.findByFileMessage(chatRoomId);
+    @GetMapping("/chat/{chatRoomId}") // 채팅방 이름과 채팅방 메세지 조회
+    public ChatRoomMessageDTO getFileMessage(@PathVariable Long chatRoomId, HttpServletRequest request){
+        Member findMember = tokenService.getUsernameFromToken(request);
 
-        return findByMessageList.stream().map(message -> new MessageinclueFileDTO(message)).collect(Collectors.toList());
+        validationCourse(chatRoomId, findMember);
+        ChatRoom chatRoom = chatRoomRepository.findFetchByCourseAndMessage(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방 없습니다"));
+
+        return new ChatRoomMessageDTO(chatRoom);
     }
 
+    private void validationCourse(Long chatRoomId, Member findMember) {
+        boolean flag = courseService.existUseMemberCourse(findMember, chatRoomId);
 
-
+        if(!flag){
+            throw new NotFoundException("해당 학생은 해당 강의를 듣지 않습니다");
+        }
+    }
 
 
 }

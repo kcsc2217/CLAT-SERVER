@@ -1,5 +1,6 @@
 package team_project.clat.service;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +20,7 @@ class Student_Course_ServiceTest {
     private Student_Course_Service studentCourseService;
 
     @Autowired
-    private CourseRepository courseRepository;
+    private CourseService courseService;
 
 
     @Test
@@ -28,9 +29,19 @@ class Student_Course_ServiceTest {
      studentCourseService.courseList(1L);
 
         //when
-
-
        //then
     }
+
+//    @Test
+//    public void 쿼리_보기() throws Exception {
+//       //given
+//        boolean admin = courseService.existUseMemberCourse("admin", 46L);
+//
+//        //when
+//
+//        Assertions.assertThat(admin).isEqualTo(false);
+//
+//       //then
+//    }
 
 }

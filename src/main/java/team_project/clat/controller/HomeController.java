@@ -14,6 +14,7 @@ import team_project.clat.dto.CourseHomeDTO;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.repository.MemberRepository;
 import team_project.clat.service.Student_Course_Service;
+import team_project.clat.service.TokenService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,21 +26,22 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     private final Student_Course_Service studentCourseService;
-    private final JwtUtil jwtUtil;
-    private final MemberRepository memberRepository;
 
+    private final TokenService tokenService;
     @GetMapping("/home")
     public List<CourseHomeDTO> selectCourse(HttpServletRequest request){
-        String accessToken = request.getHeader("access");
-        String username = jwtUtil.getUsername(accessToken);
+        Member usernameFromToken = tokenService.getUsernameFromToken(request);
 
-
-        Member byUsername = memberRepository.findByUsername(username);
-
-        List<Course> courseList = studentCourseService.courseList(byUsername.getId());
+        List<Course> courseList = studentCourseService.courseList(usernameFromToken.getId());
 
        return courseList.stream().map(CourseHomeDTO::new).collect(Collectors.toList());
     }
+
+
+
+
+
+
 
 
 
