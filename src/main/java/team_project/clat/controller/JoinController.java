@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import team_project.clat.domain.Token;
+import team_project.clat.repository.TokenRepository;
 import team_project.clat.service.EmailService;
 import team_project.clat.service.JoinService;
 
@@ -33,6 +35,7 @@ public class JoinController {
     private final JoinService joinService;
     private final EmailService emailService;
     private final JwtUtil jwtUtil;
+    private final TokenRepository tokenRepository;
 
     @PostMapping("/idCheck")
     public ResponseEntity<CommonResult> isDuplicateUsername(@RequestBody JoinDto joinDto){
@@ -78,6 +81,9 @@ public class JoinController {
         //토큰 생성
         String access = jwtUtil.createJwt("access", username, role, 600000L);
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+
+        Token token = new Token(username, refresh, 86400000L);
+        tokenRepository.save(token);
 
         //응답 설정
         response.setHeader("access", access);
