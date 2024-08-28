@@ -20,6 +20,8 @@ public class ChatRoom extends BaseEntity{
 
     private String roomName;
 
+    private int roomKey;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id")
     private Course course;
@@ -27,9 +29,16 @@ public class ChatRoom extends BaseEntity{
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     List<Message> messageList = new ArrayList<>();
 
+
     public ChatRoom(String roomName, Course course) {
         this.roomName = roomName;
         addCourse(course);
+        randomNumber();
+    }
+
+
+    public void randomNumber(){
+        this.roomKey = (int)(Math.random() * 8999) + 1000;
     }
 
 

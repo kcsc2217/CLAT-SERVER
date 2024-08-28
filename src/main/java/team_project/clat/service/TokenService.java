@@ -25,4 +25,9 @@ public class TokenService {
         return memberRepository.findByUsername(username);
     }
 
+    public String getUserTypeFromToken(HttpServletRequest request){
+        String accessToken = request.getHeader("access");
+        return jwtUtil.getUserType(accessToken);
+    }
+
 }

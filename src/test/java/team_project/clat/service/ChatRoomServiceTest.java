@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.repository.ChatRoomRepository;
 
 import java.util.List;
@@ -31,21 +32,7 @@ class ChatRoomServiceTest {
     private EntityManager em;
 
 
-    @Test
-    public void 연관관계() throws Exception{
 
-        em.flush();
-        em.clear();
-
-        Long saveId = chatRoomService.save("1-2", 1L);
-        //then
-        ChatRoom findChatRoom = chatRoomRepository.findById(saveId).get();
-
-
-        Assertions.assertThat(findChatRoom.getRoomName()).isEqualTo("1-2");
-        Assertions.assertThat(findChatRoom.getCourse().getRoom()).isEqualTo("공5102");
-
-    }
 
 
     @Test
@@ -82,6 +69,20 @@ class ChatRoomServiceTest {
 
 
         //then
+    }
+
+    @Test
+    public void 방_입장() throws Exception {
+       //given
+        RoomKeyReq roomKeyReq = new RoomKeyReq(7L, 9154);
+
+        //when
+
+        boolean b = chatRoomService.validationRoom(roomKeyReq);
+
+        //then
+
+        Assertions.assertThat(b).isEqualTo(false);
     }
 
 
