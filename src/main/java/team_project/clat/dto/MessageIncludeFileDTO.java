@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class MessageinclueFileDTO {
+public class MessageIncludeFileDTO {
 
     private Long messageId;
 
@@ -21,7 +21,7 @@ public class MessageinclueFileDTO {
 
     private LocalDateTime timestamp;
 
-    public MessageinclueFileDTO(Message message) {
+    public MessageIncludeFileDTO(Message message) {
         this.messageId = message.getId();
         this.senderName = message.getSenderName();
         this.imageUrl = message.getImages().stream().map(image -> image.getAccessUrl()).collect(Collectors.toList());
@@ -29,6 +29,6 @@ public class MessageinclueFileDTO {
         this.message = message.getMessage();
     }
 
-    public MessageinclueFileDTO() {
+    public MessageIncludeFileDTO() {
     }
 }

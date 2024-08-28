@@ -8,7 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.repository.ChatRoomRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @SpringBootTest
@@ -28,36 +32,8 @@ class ChatRoomServiceTest {
     private EntityManager em;
 
 
-    @Test
-    public void 연관관계() throws Exception{
-
-        em.flush();
-        em.clear();
-
-        Long saveId = chatRoomService.save("1-2", 1L);
-        //then
-        ChatRoom findChatRoom = chatRoomRepository.findById(saveId).get();
 
 
-        Assertions.assertThat(findChatRoom.getRoomName()).isEqualTo("1-2");
-        Assertions.assertThat(findChatRoom.getCourse().getRoom()).isEqualTo("공5102");
-
-    }
-
-    @Test
-    public void ChatRoomFetchjoin쿼리최적화() throws Exception {
-       //given
-
-        Long saveId = chatRoomService.save("1-2", 1L);
-        //then
-        em.flush();
-        em.clear();
-
-       //when
-        chatRoomRepository.findFetchChatRoomById(saveId).get();
-
-       //then
-    }
 
     @Test
     public void Fetchjoin을_사용한_메세지성능_최적화() throws Exception {
@@ -72,6 +48,41 @@ class ChatRoomServiceTest {
 
 
         //then
+    }
+
+    @Test
+    public void fetchjoin_쿼리_보기() throws Exception {
+       //given
+        Optional<ChatRoom> fetchByCourseAndMessage = chatRoomRepository.findFetchByCourseAndMessage(1L);
+
+        //when
+
+        ChatRoom chatRoom = fetchByCourseAndMessage.get();
+
+        System.out.println(chatRoom.getCourse().getRoom());
+
+        List<Message> messageList = chatRoom.getMessageList();
+
+        for(Message message : messageList){
+            System.out.println(message.getMessage());
+        }
+
+
+        //then
+    }
+
+    @Test
+    public void 방_입장() throws Exception {
+       //given
+        RoomKeyReq roomKeyReq = new RoomKeyReq(7L, 9154);
+
+        //when
+
+        boolean b = chatRoomService.validationRoom(roomKeyReq);
+
+        //then
+
+        Assertions.assertThat(b).isEqualTo(false);
     }
 
 

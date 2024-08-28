@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import team_project.clat.domain.Course;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CourseRepository extends CrudRepository<Course, Long> {
