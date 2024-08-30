@@ -30,7 +30,13 @@ public class Message extends BaseEntity{
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
     List<Memo> memoList = new ArrayList<>();
 
+
     private String senderName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
@@ -41,11 +47,18 @@ public class Message extends BaseEntity{
         chatRoom.getMessageList().add(this);
     }
 
+
     // 이미지와 연관관계 메서드
     public void addImages(Image image){
         this.images.add(image);
         image.setMessage(this);
 
+    }
+
+    // 메세지와 멤버 연관관계 메서드
+    public void addMember(Member member){
+        this.member=member;
+        member.getMessageList().add(this);
     }
 
 
