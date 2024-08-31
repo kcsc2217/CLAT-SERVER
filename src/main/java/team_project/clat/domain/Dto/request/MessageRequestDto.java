@@ -9,12 +9,10 @@ public class MessageRequestDto {
     private String message;
 
 
-    private String senderName;
 
-    public MessageRequestDto(Long courseId, String message, String senderName) {
+    public MessageRequestDto(Long courseId, String message) {
         this.courseId = courseId;
         this.message = message;
-        this.senderName = senderName;
     }
 
     public MessageRequestDto() {
