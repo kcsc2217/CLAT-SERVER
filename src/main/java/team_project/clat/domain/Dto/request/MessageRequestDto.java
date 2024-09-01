@@ -5,12 +5,12 @@ import lombok.Data;
 @Data
 public class MessageRequestDto {
 
-    private Long courseId;
+    private Long chatRoomId;
     private String message;
 
 
-    public MessageRequestDto(Long courseId, String message) {
-        this.courseId = courseId;
+    public MessageRequestDto(Long chatRoomId, String message) {
+        this.chatRoomId = chatRoomId;
         this.message = message;
     }
 
