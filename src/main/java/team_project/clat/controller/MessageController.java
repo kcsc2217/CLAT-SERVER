@@ -2,19 +2,26 @@ package team_project.clat.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import team_project.clat.domain.Dto.request.MessageRequestDto;
 import team_project.clat.domain.Dto.response.MessageResponse;
+import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.CustomUserDetails;
 import team_project.clat.dto.FileImageDTO;
 import team_project.clat.dto.MessageFileRequestDTO;
 import team_project.clat.dto.MessageFileResponseDTO;
 import team_project.clat.service.MessageService;
+import team_project.clat.service.TokenService;
 
+import java.net.http.HttpRequest;
 import java.util.List;
 
 @Controller
@@ -24,34 +31,36 @@ import java.util.List;
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final TokenService tokenService;
 
     @MessageMapping(value = "/chat/enter")
     @Operation(summary = "채팅방 입장", description = "사용자가 채팅방에 입장하면, STOMP 메시지를 통해 입장 메시지를 브로드캐스트합니다.")
-    public void enter(MessageRequestDto messageRequestDto){
-        messageRequestDto.setMessage(messageRequestDto.getSenderName() + "님이 채팅방에 입장하셨습니다.");
+    public void enter(MessageRequestDto messageRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        Member member = customUserDetails.getMember();
+        messageRequestDto.setMessage(member.getUsername() + "님이 채팅방에 입장하셨습니다.");
         simpMessagingTemplate.convertAndSend("/sub/chat/" + messageRequestDto.getCourseId(), messageRequestDto);  // 해당 채팅방으로 메세지 전송
 
     }
 
     @MessageMapping(value = "/chat/message")
-    public void message(MessageRequestDto messageRequestDto){ // 강의 아이디로 채팅 구독
+    public void message(MessageRequestDto messageRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){ // 강의 아이디로 채팅 구독
         log.info("메세지가 수신됐습니다");
-        String senderName = messageRequestDto.getSenderName();
+        Member member = customUserDetails.getMember();
         Long courseId = messageRequestDto.getCourseId();
         String message = messageRequestDto.getMessage();
-        Message findMessage = messageService.saveMessage(senderName, courseId, message);
+        Message findMessage = messageService.saveMessage(member, courseId, message);
         simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageResponse(findMessage));
 
     }
 
     @MessageMapping(value = "/chat/file")
-    public void message(MessageFileRequestDTO messageFileRequest){
+    public void messageFile(MessageFileRequestDTO messageFileRequest, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         log.info("파일이 전송되었습니다");
-        String senderName = messageFileRequest.getSenderName();
+        Member member = customUserDetails.getMember();
         Long courseId = messageFileRequest.getCourseId();
         List<FileImageDTO> fileImageDTOList = messageFileRequest.getFileImageDTOList();
 
-        Message message = messageService.saveFileMessage(senderName, courseId, fileImageDTOList); //파일 메세지 생성
+        Message message = messageService.saveFileMessage(member, courseId, fileImageDTOList); //파일 메세지 생성
         simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageFileResponseDTO(message,fileImageDTOList));
 
 

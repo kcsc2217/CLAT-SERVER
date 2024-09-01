@@ -23,7 +23,7 @@ public class MessageResponse {
 
     public MessageResponse(Message message) {
         this.messageId = message.getId();
-        this.senderName = message.getSenderName();
+        this.senderName = message.getMember().getUsername();
         this.message = message.getMessage();
         this.timestamp = message.getCreatedDate();
     }

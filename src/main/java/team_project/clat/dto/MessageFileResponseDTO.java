@@ -20,7 +20,7 @@ public class MessageFileResponseDTO {
 
     public MessageFileResponseDTO(Message message, List<FileImageDTO> fileImageDTOList) {
         this.messageId = message.getId();
-        this.senderName = message.getSenderName();
+        this.senderName = message.getMember().getUsername();
         for(FileImageDTO fileImageDTO : fileImageDTOList){
             this.imageUrl.add(fileImageDTO.getImageURL());
         }

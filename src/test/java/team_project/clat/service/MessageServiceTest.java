@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.FileImageDTO;
 import team_project.clat.repository.MemberRepository;
@@ -23,13 +24,7 @@ class MessageServiceTest {
     private MessageService messageService;
 
     @Autowired
-    private MessageRepository messageRepository;
-
-    @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private ChatRoomService chatRoomService;
 
     @Autowired
     private EntityManager em;
@@ -37,15 +32,15 @@ class MessageServiceTest {
     @Test
     public void 메세지생성() throws Exception {
        //given
+        Member member = memberRepository.findById(1L).get();
 
 
-        Message message = messageService.saveMessage("이성원", 1L, "Hello World");
+        Message message = messageService.saveMessage(member, 1L, "Hello World");
         em.flush();
         em.clear();
 
         //then
-        Assertions.assertThat(message.getMessage()).isEqualTo("Hello World");
-        Assertions.assertThat(message.getChatRoom().getId()).isEqualTo(5L);
+        Assertions.assertThat(message.getMember().getUsername()).isEqualTo("admin");
 
 
     }
@@ -55,6 +50,7 @@ class MessageServiceTest {
     public void 파일_메세지_생성쿼리() throws Exception {
 
        //given
+        Member member = memberRepository.findById(1L).get();
 
         List<FileImageDTO> fileImageDTOList = new ArrayList<>();
 
@@ -62,9 +58,12 @@ class MessageServiceTest {
         fileImageDTOList.add(new FileImageDTO(4L, "https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/efdeea52-51ff-48d5-b1d6-420002d33d5c.jpg"));
 
 
-        messageService.saveFileMessage("이성원", 1L, fileImageDTOList);
+        Message message = messageService.saveFileMessage(member, 1L, fileImageDTOList);
 
-       //when
+
+        //when
+
+        Assertions.assertThat(message.getMember().getUsername()).isEqualTo("admin");
 
        //then
     }

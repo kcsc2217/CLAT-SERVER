@@ -17,7 +17,6 @@ import team_project.clat.domain.Dto.response.MessageResponse;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.ChatRoomMessageDTO;
-import team_project.clat.dto.MessageIncludeFileDTO;
 import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.dto.RoomKeyRes;
 import team_project.clat.exception.NotFoundException;
@@ -75,10 +74,10 @@ public class ChatRoomController {
 
     @GetMapping("/{chatRoomId}") // 채팅방 이름과 채팅방 메세지 조회
     public ChatRoomMessageDTO getFileMessage(@PathVariable Long chatRoomId, HttpServletRequest request){
-        Member findMember = tokenService.getUsernameFromToken(request);
+        Member findMember = tokenService.getUsernameFromToken(request); // 현재 유저가 해당 강의를 듣고 있는지 검증하기 위해
 
 
-        validationCourse(chatRoomId, findMember);
+         validationCourse(chatRoomId, findMember);  //검증 로직
         ChatRoom chatRoom = chatRoomRepository.findFetchByCourseAndMessage(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방 없습니다"));
 
         return new ChatRoomMessageDTO(chatRoom);

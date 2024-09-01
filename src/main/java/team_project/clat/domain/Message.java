@@ -30,7 +30,11 @@ public class Message extends BaseEntity{
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
     List<Memo> memoList = new ArrayList<>();
 
-    private String senderName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
@@ -41,6 +45,7 @@ public class Message extends BaseEntity{
         chatRoom.getMessageList().add(this);
     }
 
+
     // 이미지와 연관관계 메서드
     public void addImages(Image image){
         this.images.add(image);
@@ -48,16 +53,22 @@ public class Message extends BaseEntity{
 
     }
 
+    // 메세지와 멤버 연관관계 메서드
+    public void addMember(Member member){
+        this.member=member;
+        member.getMessageList().add(this);
+    }
 
-    public Message(String message, ChatRoom chatRoom, String senderName) {
+
+    public Message(String message, ChatRoom chatRoom, Member member) {
         this.message = message;
         addChatRoom(chatRoom);
-        this.senderName=senderName;
+        addMember(member);
 
     }
 
-    public Message(String senderName, ChatRoom chatRoom, List<Image> images){
-        this.senderName = senderName;
+    public Message(Member member, ChatRoom chatRoom, List<Image> images){
+        addMember(member);
         addChatRoom(chatRoom);
         this.images = images;
 
@@ -66,11 +77,11 @@ public class Message extends BaseEntity{
         }
     }
 
-    public static Message createMessage(String senderName, ChatRoom chatRoom, String message) {
-        return new Message(message, chatRoom, senderName);
+    public static Message createMessage(Member member, ChatRoom chatRoom, String message) {
+        return new Message(message, chatRoom, member);
     }
 
-    public static Message creteFilePathMessage(String senderName, ChatRoom chatRoom, List<Image> images){
-        return new Message(senderName,chatRoom, images);
+    public static Message creteFilePathMessage(Member member, ChatRoom chatRoom, List<Image> images){
+        return new Message(member,chatRoom, images);
     }
 }

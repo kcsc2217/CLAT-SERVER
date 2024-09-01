@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import team_project.clat.domain.Dto.response.RestResponse;
 import team_project.clat.dto.CommonResult;
-import team_project.clat.exception.DuplicateCourseChatRoomException;
-import team_project.clat.exception.FileSizeLimitException;
-import team_project.clat.exception.MailVerifyException;
-import team_project.clat.exception.NotFoundException;
+import team_project.clat.exception.*;
 
 @Slf4j
 @RestControllerAdvice
@@ -54,6 +51,13 @@ public class ExControllerAdvice {
     public RestResponse fileException(FileSizeLimitException ex){
         log.error("[exceptionHandle] ex", ex);
         return new RestResponse("Bad", ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AccessTokenInvalidException.class)
+    public RestResponse tokenException(AccessTokenInvalidException ex){
+        log.error("[exceptionHandle] ex", ex);
+        return new RestResponse("UNAUTHORIZED", ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -23,7 +23,13 @@ public class MessageIncludeFileDTO {
 
     public MessageIncludeFileDTO(Message message) {
         this.messageId = message.getId();
-        this.senderName = message.getSenderName();
+
+        if(message.getMember() == null){
+            this.senderName = "";
+        }
+        else{
+            this.senderName = message.getMember().getUsername();
+        }
         this.imageUrl = message.getImages().stream().map(image -> image.getAccessUrl()).collect(Collectors.toList());
         this.timestamp = message.getCreatedDate();
         this.message = message.getMessage();
