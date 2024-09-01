@@ -1,7 +1,6 @@
 package team_project.clat.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,11 +10,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @RequiredArgsConstructor
-@AllArgsConstructor
-@NoArgsConstructor  // 기본 생성자 추가
 public class CustomUserDetails implements UserDetails {
 
-    private  Member member;
+    private final Member member;
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -66,7 +64,6 @@ public class CustomUserDetails implements UserDetails {
     public Member getMember() {
         return member;
     }
-
 
 
 
