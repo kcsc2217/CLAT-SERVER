@@ -2,6 +2,8 @@ package team_project.clat.config.handler;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -13,6 +15,7 @@ import team_project.clat.jwt.JwtUtil;
 
 @Component
 @RequiredArgsConstructor
+@Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class StompHandler implements ChannelInterceptor {
 
     private final JwtUtil jwtUtil;
@@ -22,29 +25,20 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
         if (accessor.getCommand() == StompCommand.CONNECT) {
-            if (!this.validateAccessToken(accessor.getFirstNativeHeader("access"))) {
-                throw new AccessTokenInvalidException("access token이 필요합니다.");
+            String token = accessor.getFirstNativeHeader("Authorization");
+
+            if (token == null || token.isEmpty()) {
+                throw new AccessTokenInvalidException("Access token is required.");
             }
 
-            if(!isValidationToken(accessor.getFirstNativeHeader("access"))){
-                throw new AccessTokenInvalidException("access token이 만료되었습니다.");
+            if (jwtUtil.isExpired(token)) {
+                throw new AccessTokenInvalidException("Access token has expired.");
             }
 
+            // Optional: Add logging for debugging
+            System.out.println("Valid token received: " + token);
         }
 
         return message;
     }
-
-    private boolean validateAccessToken(String accessToken) {
-        if(accessToken == null ){  //토큰값이 없으면 return false;
-            return false;
-        }
-        return true;
-    }
-
-
-    private boolean isValidationToken(String token){
-        return jwtUtil.isExpired(token);
-    }
-
 }
