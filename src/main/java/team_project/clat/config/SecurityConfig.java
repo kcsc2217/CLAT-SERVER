@@ -59,11 +59,11 @@ public class SecurityConfig {
 
                 configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://c-lat.site"));
                 configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                configuration.setAllowedHeaders(Arrays.asList("Authorization", "access", "Content-Type"));
+                configuration.setAllowedHeaders(Arrays.asList("Authorization", "access", "Content-Type","Set-Cookie"));
                 configuration.setAllowCredentials(true);
                 configuration.setMaxAge(3600L);
 
-                configuration.setExposedHeaders(List.of("Authorization", "access"));
+                configuration.setExposedHeaders(List.of("Authorization", "access","Set-Cookie"));
 
 
                 return configuration;
