@@ -34,7 +34,6 @@ import java.util.List;
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final TokenService tokenService;
     private final MemberRepository memberRepository;
 
     @MessageMapping(value = "/chat/enter")

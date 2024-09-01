@@ -3,8 +3,6 @@ package team_project.clat.config.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -17,12 +15,11 @@ import team_project.clat.jwt.JwtUtil;
 
 @Component
 @RequiredArgsConstructor
-@Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class StompHandler implements ChannelInterceptor {
 
     private final JwtUtil jwtUtil;
 
-    String username;
+
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -39,7 +36,7 @@ public class StompHandler implements ChannelInterceptor {
                 throw new AccessTokenInvalidException("Access token has expired.");
             }
 
-             username = jwtUtil.getUsername(token);
+          String username = jwtUtil.getUsername(token);
             accessor.addNativeHeader("username", username);
             accessor.getSessionAttributes().put("username", username);
             // Optional: Add logging for debugging
@@ -48,7 +45,7 @@ public class StompHandler implements ChannelInterceptor {
 
         return message;
     }
-
+//
 //    @EventListener(SessionConnectEvent.class)
 //    public void onApplicationEvent(SessionConnectEvent event) {
 //        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
