@@ -31,8 +31,6 @@ public class Message extends BaseEntity{
     List<Memo> memoList = new ArrayList<>();
 
 
-    private String senderName;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -62,15 +60,15 @@ public class Message extends BaseEntity{
     }
 
 
-    public Message(String message, ChatRoom chatRoom, String senderName) {
+    public Message(String message, ChatRoom chatRoom, Member member) {
         this.message = message;
         addChatRoom(chatRoom);
-        this.senderName=senderName;
+        addMember(member);
 
     }
 
-    public Message(String senderName, ChatRoom chatRoom, List<Image> images){
-        this.senderName = senderName;
+    public Message(Member member, ChatRoom chatRoom, List<Image> images){
+        addMember(member);
         addChatRoom(chatRoom);
         this.images = images;
 
@@ -79,11 +77,11 @@ public class Message extends BaseEntity{
         }
     }
 
-    public static Message createMessage(String senderName, ChatRoom chatRoom, String message) {
-        return new Message(message, chatRoom, senderName);
+    public static Message createMessage(Member member, ChatRoom chatRoom, String message) {
+        return new Message(message, chatRoom, member);
     }
 
-    public static Message creteFilePathMessage(String senderName, ChatRoom chatRoom, List<Image> images){
-        return new Message(senderName,chatRoom, images);
+    public static Message creteFilePathMessage(Member member, ChatRoom chatRoom, List<Image> images){
+        return new Message(member,chatRoom, images);
     }
 }

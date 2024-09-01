@@ -9,7 +9,6 @@ public class MessageRequestDto {
     private String message;
 
 
-
     public MessageRequestDto(Long courseId, String message) {
         this.courseId = courseId;
         this.message = message;

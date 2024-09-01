@@ -14,4 +14,7 @@ public interface CourseRepository extends CrudRepository<Course, Long> {
     Optional<Course> findFetchCourseById(@Param("courseId") Long courseId);
 
 
+//    @Query("select distinct c from Course c join fetch ")
+
+
 }
