@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,7 @@ import team_project.clat.dto.FileImageDTO;
 import team_project.clat.dto.MessageFileRequestDTO;
 import team_project.clat.dto.MessageFileResponseDTO;
 import team_project.clat.exception.NotFoundException;
+import team_project.clat.repository.MemberRepository;
 import team_project.clat.service.MessageService;
 import team_project.clat.service.TokenService;
 
@@ -33,6 +35,7 @@ public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final TokenService tokenService;
+    private final MemberRepository memberRepository;
 
     @MessageMapping(value = "/chat/enter")
     @Operation(summary = "채팅방 입장", description = "사용자가 채팅방에 입장하면, STOMP 메시지를 통해 입장 메시지를 브로드캐스트합니다.")
@@ -44,9 +47,12 @@ public class MessageController {
     }
 
     @MessageMapping(value = "/chat/message")
-    public void message(MessageRequestDto messageRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){ // 강의 아이디로 채팅 구독
+    public void message(MessageRequestDto messageRequestDto, SimpMessageHeaderAccessor accessor){ // 강의 아이디로 채팅 구독
         log.info("메세지가 수신됐습니다");
-        Member member = customUserDetails.getMember();
+
+        String username = (String) accessor.getSessionAttributes().get("username");
+
+        Member member = memberRepository.findByUsername(username);
 
         if(member ==null){
             throw new NotFoundException("멤버가 없습니다");
