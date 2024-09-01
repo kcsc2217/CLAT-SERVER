@@ -1,5 +1,6 @@
 package team_project.clat.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +10,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
+
+    public CustomUserDetails() {
+        this.member = null;  // 실제로는 사용되지 않겠지만, 기본 생성자 필요할 때 사용
+    }
+
 
     private final Member member;
 
@@ -62,4 +69,8 @@ public class CustomUserDetails implements UserDetails {
     public Member getMember() {
         return member;
     }
+
+
+
+
 }
