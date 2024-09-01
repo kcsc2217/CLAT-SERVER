@@ -2,6 +2,7 @@ package team_project.clat.config.handler;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.messaging.Message;
@@ -10,6 +11,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.messaging.SessionConnectEvent;
 import team_project.clat.exception.AccessTokenInvalidException;
 import team_project.clat.jwt.JwtUtil;
 
@@ -19,6 +21,8 @@ import team_project.clat.jwt.JwtUtil;
 public class StompHandler implements ChannelInterceptor {
 
     private final JwtUtil jwtUtil;
+
+    String username;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -35,10 +39,21 @@ public class StompHandler implements ChannelInterceptor {
                 throw new AccessTokenInvalidException("Access token has expired.");
             }
 
+             username = jwtUtil.getUsername(token);
+            accessor.addNativeHeader("username", username);
+            accessor.getSessionAttributes().put("username", username);
             // Optional: Add logging for debugging
             System.out.println("Valid token received: " + token);
         }
 
         return message;
     }
+
+//    @EventListener(SessionConnectEvent.class)
+//    public void onApplicationEvent(SessionConnectEvent event) {
+//        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+//            accessor.getSessionAttributes().put("username", username);
+//
+//    }
+
 }
