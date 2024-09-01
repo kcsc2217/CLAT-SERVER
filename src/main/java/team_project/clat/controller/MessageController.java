@@ -18,6 +18,7 @@ import team_project.clat.dto.CustomUserDetails;
 import team_project.clat.dto.FileImageDTO;
 import team_project.clat.dto.MessageFileRequestDTO;
 import team_project.clat.dto.MessageFileResponseDTO;
+import team_project.clat.exception.NotFoundException;
 import team_project.clat.service.MessageService;
 import team_project.clat.service.TokenService;
 
@@ -46,6 +47,10 @@ public class MessageController {
     public void message(MessageRequestDto messageRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){ // 강의 아이디로 채팅 구독
         log.info("메세지가 수신됐습니다");
         Member member = customUserDetails.getMember();
+
+        if(member ==null){
+            throw new NotFoundException("멤버가 없습니다");
+        }
         Long courseId = messageRequestDto.getCourseId();
         String message = messageRequestDto.getMessage();
         Message findMessage = messageService.saveMessage(member, courseId, message);
