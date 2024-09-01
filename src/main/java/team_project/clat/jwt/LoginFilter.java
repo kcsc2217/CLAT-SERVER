@@ -9,7 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -86,7 +88,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
             //응답 설정
         response.setHeader("access", access);
-        response.addCookie(createCookie("refresh", refresh));
+        //response.addCookie(createCookie("refresh", refresh));
+        response.setHeader(HttpHeaders.SET_COOKIE, createCookie("refresh", refresh).toString());
         response.setStatus(HttpStatus.OK.value());
 
         chain.doFilter(request, response);
@@ -109,14 +112,23 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         }
 
-        private Cookie createCookie (String key, String value){
+        private ResponseCookie createCookie (String key, String value){
 
-            Cookie cookie = new Cookie(key, value);
+            return ResponseCookie
+                    .from(key, value)
+                    .path("/")
+                    .secure(true)
+                    .httpOnly(true)
+                    .maxAge(24*60*60)
+                    .sameSite("None")
+                    .build();
+
+            /*Cookie cookie = new Cookie(key, value);
             cookie.setMaxAge(24 * 60 * 60);
             cookie.setSecure(true); //https로 진행할 시
             cookie.setPath("/"); //쿠키가 적용될 범위
             cookie.setHttpOnly(true);
 
-            return cookie;
+            return cookie;*/
         }
     }

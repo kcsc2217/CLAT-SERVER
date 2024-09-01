@@ -6,7 +6,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -95,21 +97,30 @@ public class ReIssueController {
 
         //response
         response.setHeader("access", newAccess);
-        response.addCookie(createCookie("refresh", newRefresh));
+        //response.addCookie(createCookie("refresh", newRefresh));
+        response.setHeader(HttpHeaders.SET_COOKIE, createCookie("refresh", newRefresh).toString());
 
         CommonResult commonResult = new CommonResult("200 OK", "토큰 재발급이 완료되었습니다..");
         return new ResponseEntity<>(commonResult, HttpStatus.OK);
 
     }
 
-    private Cookie createCookie(String key, String value) {
+    private ResponseCookie createCookie(String key, String value) {
 
-        Cookie cookie = new Cookie(key, value);
+        return ResponseCookie
+                .from(key, value)
+                .path("/")
+                .secure(true)
+                .httpOnly(true)
+                .maxAge(24*60*60)
+                .sameSite("None")
+                .build();
+
+        /*Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
         cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
+        cookie.setHttpOnly(true);*/
+        //return cookie;
     }
 }
