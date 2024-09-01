@@ -32,6 +32,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final ImageRepository imageRepository;
     private final CourseRepository courseRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final EntityManager em;
 
 
@@ -42,12 +43,11 @@ public class MessageService {
 
 
     @Transactional
-    public Message saveMessage(Member member, Long courseId, String message){ //controller 에서 해당 회원이 메세지를 사용할 수 있는지 검증
-//        ChatRoom findByChatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 없습니다"));
-        Course findCourse = courseRepository.findFetchCourseById(courseId).orElseThrow(() -> new IllegalArgumentException("해당 강의는 없습니다"));
+    public Message saveMessage(Member member, Long chatRoomId, String message){ //controller 에서 해당 회원이 메세지를 사용할 수 있는지 검증
+        ChatRoom findByChatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 없습니다"));
+//        Course findCourse = courseRepository.findFetchCourseById(courseId).orElseThrow(() -> new IllegalArgumentException("해당 강의는 없습니다"));
         log.info("찾는로그");
-        ChatRoom chatRoom = findCourse.getChatRoom();
-        Message saveMessage = Message.createMessage(member, chatRoom, message);
+        Message saveMessage = Message.createMessage(member, findByChatRoom, message);
         log.info("메세지 생성완료");
 
         Long saveId = save(saveMessage);

@@ -39,9 +39,9 @@ public class MessageController {
     @MessageMapping(value = "/chat/enter")
     @Operation(summary = "채팅방 입장", description = "사용자가 채팅방에 입장하면, STOMP 메시지를 통해 입장 메시지를 브로드캐스트합니다.")
     public void enter(MessageRequestDto messageRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){
-        Member member = customUserDetails.getMember();
-        messageRequestDto.setMessage(member.getUsername() + "님이 채팅방에 입장하셨습니다.");
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + messageRequestDto.getCourseId(), messageRequestDto);  // 해당 채팅방으로 메세지 전송
+//        Member member = customUserDetails.getMember();
+//        messageRequestDto.setMessage(member.getUsername() + "님이 채팅방에 입장하셨습니다.");
+//        simpMessagingTemplate.convertAndSend("/sub/chat/" + messageRequestDto.getCourseId(), messageRequestDto);  // 해당 채팅방으로 메세지 전송
 
     }
 
@@ -56,10 +56,10 @@ public class MessageController {
         if(member ==null){
             throw new NotFoundException("멤버가 없습니다");
         }
-        Long courseId = messageRequestDto.getCourseId();
+        Long chatRoomId = messageRequestDto.getChatRoomId();
         String message = messageRequestDto.getMessage();
-        Message findMessage = messageService.saveMessage(member, courseId, message);
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageResponse(findMessage));
+        Message findMessage = messageService.saveMessage(member, chatRoomId, message);
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, new MessageResponse(findMessage));
 
     }
 

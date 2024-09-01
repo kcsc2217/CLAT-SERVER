@@ -53,7 +53,7 @@ public class Message extends BaseEntity{
 
     }
 
-    // 메세지와 멤버 연관관계 메서드
+    // 메세지와 멤버 연관관계 메서드 
     public void addMember(Member member){
         this.member=member;
         member.getMessageList().add(this);
