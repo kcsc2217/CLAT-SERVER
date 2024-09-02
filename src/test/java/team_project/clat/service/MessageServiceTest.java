@@ -68,4 +68,19 @@ class MessageServiceTest {
        //then
     }
 
+    @Test
+    public void 메세지_생성쿼리_확인() throws Exception {
+       //given
+        Member member = memberRepository.findById(1L).get();
+
+        List<Message> messages = member.getMessageList();
+
+        System.out.println(messages.size());
+
+
+
+
+        //then
+    }
+
 }

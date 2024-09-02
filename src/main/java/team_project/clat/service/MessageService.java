@@ -74,6 +74,12 @@ public class MessageService {
 
     }
 
+    public List<Message> memberSelectMessage(Long memberId){
+        Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new NotFoundException("해당 학생이 없습니다"));
+
+        return member.getMessageList();
+    }
+
     private List<Image> convertToImages(List<FileImageDTO> fileImageDTOList) {
         List<Long> imagesId = fileImageDTOList.stream().map(FileImageDTO::getImageId).collect(Collectors.toList());
 
