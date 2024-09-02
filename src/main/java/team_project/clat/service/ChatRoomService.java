@@ -25,14 +25,11 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final CourseRepository courseRepository;
-    private final MessageService messageService;
     private final MessageRepository messageRepository;
 
 
     @Transactional
     public ChatRoom save(String roomName, Long courseId) {
-
-        ValidationChatRoom(courseId);
 
         Course findCourse = courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException("Course not found")); //강의실 아이디찾기
 
