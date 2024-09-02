@@ -11,8 +11,7 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
-    @Query("select c from Course c join fetch c.chatRoom cr where c.id = :courseId")
-    Optional<Course> findFetchCourseById(@Param("courseId") Long courseId);
+
 
 
 //    @Query("select distinct c from Course c join fetch ")

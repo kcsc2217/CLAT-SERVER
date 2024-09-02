@@ -39,8 +39,8 @@ public class Course {
     List<Student_course> studentCourseList = new ArrayList<>();
 
 
-    @OneToOne(mappedBy = "course" , fetch =  FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
-    private ChatRoom chatRoom;
+    @OneToMany(mappedBy = "course" ,cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatRoom> chatRoomList = new ArrayList<>();
 
 
 
@@ -52,10 +52,5 @@ public class Course {
         this.dayOfWeek = dayOfWeek;
     }
 
-
-
-    public void addChatRoom(ChatRoom chatRoom) {
-        this.chatRoom = chatRoom;
-    }
 
 }

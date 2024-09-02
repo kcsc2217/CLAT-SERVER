@@ -1,7 +1,10 @@
 package team_project.clat.dto;
 
 import lombok.Data;
+import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
+
+import java.util.List;
 
 @Data
 public class CourseHomeDTO {
@@ -22,10 +25,10 @@ public class CourseHomeDTO {
         this.courseName = course.getCourseName();
         this.room = course.getRoom();
         this.start_date = course.getTimeTable().getStart_date();
-        if(course.getChatRoom() == null){
-            this.chatRoomId = null;
-        }else{
-            this.chatRoomId = course.getChatRoom().getId();
+        List<ChatRoom> chatRoomList = course.getChatRoomList();
+
+        for(ChatRoom chatRoom : chatRoomList) {
+            this.chatRoomId = chatRoom.getId();
         }
 
         this.end_date = course.getTimeTable().getEnd_date();

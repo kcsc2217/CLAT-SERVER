@@ -22,11 +22,11 @@ public class ChatRoom extends BaseEntity{
 
     private int roomKey;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chatRoom")
     List<Message> messageList = new ArrayList<>();
 
 
@@ -44,6 +44,6 @@ public class ChatRoom extends BaseEntity{
 
     public void addCourse(Course course) {
         this.course = course;
-        course.addChatRoom(this);
+       course.getChatRoomList().add(this);
     }
 }
