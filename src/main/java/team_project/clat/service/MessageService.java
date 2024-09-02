@@ -14,10 +14,7 @@ import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.FileImageDTO;
 import team_project.clat.exception.NotFoundException;
-import team_project.clat.repository.ChatRoomRepository;
-import team_project.clat.repository.CourseRepository;
-import team_project.clat.repository.ImageRepository;
-import team_project.clat.repository.MessageRepository;
+import team_project.clat.repository.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,8 +28,8 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
     private final ImageRepository imageRepository;
-    private final CourseRepository courseRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final MemberRepository memberRepository;
     private final EntityManager em;
 
 
@@ -43,9 +40,10 @@ public class MessageService {
 
 
     @Transactional
-    public Message saveMessage(Member member, Long chatRoomId, String message){ //controller 에서 해당 회원이 메세지를 사용할 수 있는지 검증
+    public Message saveMessage(String username, Long chatRoomId, String message){ //controller 에서 해당 회원이 메세지를 사용할 수 있는지 검증
         ChatRoom findByChatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 없습니다"));
 //        Course findCourse = courseRepository.findFetchCourseById(courseId).orElseThrow(() -> new IllegalArgumentException("해당 강의는 없습니다"));
+        Member member = memberRepository.findByUsername(username);
         log.info("찾는로그");
         Message saveMessage = Message.createMessage(member, findByChatRoom, message);
         log.info("메세지 생성완료");
@@ -56,13 +54,14 @@ public class MessageService {
     }
 
     @Transactional
-    public Message saveFileMessage(Member member, Long courseId, List<FileImageDTO> fileImageDTOList){
-        Course findCourse = courseRepository.findFetchCourseById(courseId).orElseThrow(() -> new EntityNotFoundException("해당 강의는 없습니다"));
+    public Message saveFileMessage(String username, Long chatRoomId, List<FileImageDTO> fileImageDTOList){
+        ChatRoom findByChatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 없습니다"));
         log.info("메세지 찾기");
-        ChatRoom chatRoom = findCourse.getChatRoom();
+
+        Member member = memberRepository.findByUsername(username);
 
         List<Image> findByImage = convertToImages(fileImageDTOList); // 이미지 찾아옴
-        Message saveMessage = Message.creteFilePathMessage(member, chatRoom, findByImage);
+        Message saveMessage = Message.creteFilePathMessage(member, findByChatRoom, findByImage);
         log.info("메세지 생성완료");
         Long saveId = save(saveMessage);
         em.clear(); // 쿼리 성능 최적화 변경감지로 인한 업데이트를 없애기 위해 clear 작업 그러면 트랜잭션이 끝나서 변경감질할 일 없음

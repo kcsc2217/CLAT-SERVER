@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.ChatRoomMessageDTO;
 import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.repository.ChatRoomRepository;
 
@@ -83,6 +84,16 @@ class ChatRoomServiceTest {
         //then
 
         Assertions.assertThat(b).isEqualTo(false);
+    }
+
+    @Test
+    public void chatroom_에서_메서지와_이미지전체조회() throws Exception {
+       //given
+        ChatRoom chatRoom = chatRoomService.findFetchMessageAndImage(1L);
+        //when
+
+        ChatRoomMessageDTO chatRoomMessageDTO = new ChatRoomMessageDTO(chatRoom);
+        //then
     }
 
 

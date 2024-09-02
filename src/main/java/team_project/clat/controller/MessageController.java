@@ -51,27 +51,22 @@ public class MessageController {
 
         String username = (String) accessor.getSessionAttributes().get("username");
 
-        Member member = memberRepository.findByUsername(username);
-
-        if(member ==null){
-            throw new NotFoundException("멤버가 없습니다");
-        }
         Long chatRoomId = messageRequestDto.getChatRoomId();
         String message = messageRequestDto.getMessage();
-        Message findMessage = messageService.saveMessage(member, chatRoomId, message);
+        Message findMessage = messageService.saveMessage(username, chatRoomId, message);
         simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, new MessageResponse(findMessage));
 
     }
 
     @MessageMapping(value = "/chat/file")
-    public void messageFile(MessageFileRequestDTO messageFileRequest, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+    public void messageFile(MessageFileRequestDTO messageFileRequest, SimpMessageHeaderAccessor accessor){
         log.info("파일이 전송되었습니다");
-        Member member = customUserDetails.getMember();
-        Long courseId = messageFileRequest.getCourseId();
+        String username = (String) accessor.getSessionAttributes().get("username");
+        Long chatRoomId = messageFileRequest.getChatRoomId();
         List<FileImageDTO> fileImageDTOList = messageFileRequest.getFileImageDTOList();
 
-        Message message = messageService.saveFileMessage(member, courseId, fileImageDTOList); //파일 메세지 생성
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + courseId, new MessageFileResponseDTO(message,fileImageDTOList));
+        Message message = messageService.saveFileMessage(username, chatRoomId, fileImageDTOList); //파일 메세지 생성
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, new MessageFileResponseDTO(message,fileImageDTOList));
 
 
     }

@@ -73,19 +73,21 @@ public class ChatRoomController {
 //    }
 
     @GetMapping("/{chatRoomId}") // 채팅방 이름과 채팅방 메세지 조회
-    public ChatRoomMessageDTO getFileMessage(@PathVariable Long chatRoomId, HttpServletRequest request){
-//        Member findMember = tokenService.getUsernameFromToken(request); // 현재 유저가 해당 강의를 듣고 있는지 검증하기 위해
-//
-//
-//         validationCourse(chatRoomId, findMember);  //검증 로직
-        ChatRoom chatRoom = chatRoomRepository.findFetchByCourseAndMessage(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방 없습니다"));
+    public ChatRoomMessageDTO getFileMessage(@PathVariable Long chatRoomId ){
+
+        ChatRoom chatRoom = chatRoomService.findFetchMessageAndImage(chatRoomId);
 
         return new ChatRoomMessageDTO(chatRoom);
     }
 
     // 채팅방 검증 로직
     @PostMapping("/validation")
-    public RoomKeyRes validationRoom(@RequestBody RoomKeyReq roomKeyReq){
+    public RoomKeyRes validationRoom(@RequestBody RoomKeyReq roomKeyReq, HttpServletRequest request){
+
+        Member findMember = tokenService.getUsernameFromToken(request); // 현재 유저가 해당 강의를 듣고 있는지 검증하기 위해
+
+        validationCourse(roomKeyReq.getChatRoomId(), findMember);  //검증 로직
+
         boolean flag = chatRoomService.validationRoom(roomKeyReq);
 
         return new RoomKeyRes(flag);

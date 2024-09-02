@@ -12,6 +12,10 @@ import team_project.clat.exception.DuplicateCourseChatRoomException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.ChatRoomRepository;
 import team_project.clat.repository.CourseRepository;
+import team_project.clat.repository.MessageRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +25,8 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final CourseRepository courseRepository;
-
+    private final MessageService messageService;
+    private final MessageRepository messageRepository;
 
 
     @Transactional
@@ -46,16 +51,17 @@ public class ChatRoomService {
         return chatRoomRepository.findFetchByMessage(courseId).orElseThrow(() ->  new NotFoundException("해당 채팅방은 없습니다"));
     }
 
+    public ChatRoom findFetchMessageAndImage(Long chatRoomId){
+        ChatRoom chatRoom = chatRoomRepository.findFetchByChatRoom(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방은 없습니다"));
 
-    @Transactional
-    public void setMessage(Long chatRoomId, Message message) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new IllegalArgumentException("해당 채팅방이 없습니다"));
+        List<Long> messageIds = chatRoom.getMessageList().stream().map(Message::getId).collect(Collectors.toList());
 
-        log.info("charRoom 찾기 완료 ");
+        List<Message> allMessageIds = messageRepository.findAllMessageIds(messageIds);
 
-        message.addChatRoom(chatRoom);
+        return  chatRoom;
 
     }
+
 
     // 채팅방 검증 로직
     public boolean validationRoom(RoomKeyReq roomKeyReq){

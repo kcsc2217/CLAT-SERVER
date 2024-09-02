@@ -7,14 +7,14 @@ import java.util.List;
 @Data
 public class MessageFileRequestDTO {
 
-    private Long courseId;
+    private Long chatRoomId;
 
     private List<FileImageDTO> fileImageDTOList;
 
 
 
-    public MessageFileRequestDTO(Long courseId, List<FileImageDTO> fileImageDTOList) {
-        this.courseId = courseId;
+    public MessageFileRequestDTO(Long chatRoomId, List<FileImageDTO> fileImageDTOList) {
+        this.chatRoomId = chatRoomId;
         this.fileImageDTOList = fileImageDTOList;
     }
 
