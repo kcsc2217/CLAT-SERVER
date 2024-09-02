@@ -19,6 +19,7 @@ import java.util.List;
 @SpringBootTest
 @Transactional
 
+
 class MessageServiceTest {
     @Autowired
     private MessageService messageService;
@@ -35,9 +36,8 @@ class MessageServiceTest {
         Member member = memberRepository.findById(1L).get();
 
 
-        Message message = messageService.saveMessage(member, 1L, "Hello World");
-        em.flush();
-        em.clear();
+        Message message = messageService.saveMessage(member.getUsername(), 1L, "Hello World");
+
 
         //then
         Assertions.assertThat(message.getMember().getUsername()).isEqualTo("admin");
@@ -46,7 +46,6 @@ class MessageServiceTest {
     }
 
     @Test
-    @Rollback(value = false)
     public void 파일_메세지_생성쿼리() throws Exception {
 
        //given
@@ -58,12 +57,13 @@ class MessageServiceTest {
         fileImageDTOList.add(new FileImageDTO(4L, "https://sung-won-chat.s3.ap-northeast-2.amazonaws.com/chat-service/efdeea52-51ff-48d5-b1d6-420002d33d5c.jpg"));
 
 
-        Message message = messageService.saveFileMessage(member, 1L, fileImageDTOList);
+        Message message = messageService.saveFileMessage(member.getUsername(), 1L, fileImageDTOList);
 
 
         //when
 
         Assertions.assertThat(message.getMember().getUsername()).isEqualTo("admin");
+        Assertions.assertThat(message.getImages().size()).isEqualTo(2);
 
        //then
     }
