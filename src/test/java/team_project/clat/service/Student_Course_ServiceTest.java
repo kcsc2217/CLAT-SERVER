@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.Course;
 import team_project.clat.repository.CourseRepository;
+import team_project.clat.repository.Student_course_Repository;
 
 import java.util.List;
 
@@ -20,13 +21,14 @@ class Student_Course_ServiceTest {
     private Student_Course_Service studentCourseService;
 
     @Autowired
-    private CourseService courseService;
+    private Student_course_Repository studentCourseRepository;
+
 
 
     @Test
     public void fetch_join_student_course_Test() throws Exception {
        //given
-     studentCourseService.courseList(1L);
+     studentCourseRepository.fetchStudentCourse(1L);
 
         //when
        //then
