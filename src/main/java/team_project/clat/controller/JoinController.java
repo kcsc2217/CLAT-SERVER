@@ -2,11 +2,15 @@ package team_project.clat.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -59,11 +63,18 @@ public class JoinController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<JoinResult> joinProcess(@RequestPart JoinDto joinDto,
+    public ResponseEntity<?> joinProcess(@Valid @RequestPart JoinDto joinDto,
+                                                    BindingResult bindingResult,
                                                     @RequestPart MultipartFile file,
                                                     HttpServletResponse response) throws IOException {
 
         log.info("{},{},{},{}",joinDto.getName(),joinDto.getSchoolName(),joinDto.getUserType(),joinDto.getUsername());
+
+        if(bindingResult.hasErrors()){
+            String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+            CommonResult commonResult = new CommonResult("400 bad_request", errorMessage);
+            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
+        }
 
         String fileDir = "/home/ubuntu/upload/";
         String fullPath = null;
@@ -87,21 +98,29 @@ public class JoinController {
 
         //응답 설정
         response.setHeader("access", access);
-        response.addCookie(createCookie("refresh", refresh));
+        response.setHeader(HttpHeaders.SET_COOKIE, createCookie("refresh", refresh).toString());
         response.setStatus(HttpStatus.OK.value());
 
         JoinResult joinResult = new JoinResult("200 OK", "회원가입이 완료되었습니다.", joinDto.getName());
         return new ResponseEntity<>(joinResult, HttpStatus.OK);
     }
 
-    private Cookie createCookie(String key, String value) {
+    private ResponseCookie createCookie(String key, String value) {
 
-        Cookie cookie = new Cookie(key, value);
+        return ResponseCookie
+                .from(key, value)
+                .path("/")
+                .secure(true)
+                .httpOnly(true)
+                .maxAge(24*60*60)
+                .sameSite("None")
+                .build();
+
+        /*Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(24*60*60);
-        cookie.setSecure(true); //https로 진행할 시
-        //cookie.setPath("/"); //쿠키가 적용될 범위
-        cookie.setHttpOnly(true);
-
-        return cookie;
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);*/
+        //return cookie;
     }
 }
