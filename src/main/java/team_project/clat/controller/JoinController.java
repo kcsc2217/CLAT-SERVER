@@ -72,7 +72,7 @@ public class JoinController {
 
         if(bindingResult.hasErrors()){
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            CommonResult commonResult = new CommonResult("400 bad_request", errorMessage);
+            CommonResult commonResult = new CommonResult("400 BAD_REQUEST", errorMessage);
             return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
         }
 
