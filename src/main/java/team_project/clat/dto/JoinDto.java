@@ -24,6 +24,5 @@ public class JoinDto {
     @NotBlank(message = "학교/기관은 필수 입력값입니다.")
     private String schoolName;
 
-    @NotBlank(message = "회원구분은 필수 입력값입니다.")
     private UserType userType;
 }
