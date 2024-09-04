@@ -24,7 +24,7 @@ public class Student_Course_Service {
     private final CourseRepository courseRepository;
 
 
-    public List<Course> courseList(Long memberId){
+    public List<Course> courseList(Long memberId, String term){
         List<Student_course> studentCourses = studentCourseRepository.fetchStudentCourseWithoutChatRooms(memberId);
 
         if(studentCourses.isEmpty()){
@@ -36,7 +36,7 @@ public class Student_Course_Service {
                 .collect(Collectors.toList());
 
 
-        List<Course> coursesWithChatRooms = courseRepository.fetchCoursesWithChatRooms(courseIds);
+        List<Course> coursesWithChatRooms = courseRepository.fetchCoursesWithChatRooms(courseIds, term);
 
         return coursesWithChatRooms;
     }

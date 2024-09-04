@@ -1,6 +1,7 @@
 package team_project.clat.domain.Dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class ChatRoomCreateDto {
     @Schema(description = "Course courseId", example = "1")
     private Long courseId;
 
-    @NotNull
+    @Min(1)
     private int week;
 
     public ChatRoomCreateDto(String roomName, Long courseId, int week) {

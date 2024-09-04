@@ -11,8 +11,8 @@ import java.util.Optional;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
-    @Query("SELECT c FROM Course c LEFT JOIN FETCH c.chatRoomList WHERE c.id IN :courseIds")
-    List<Course> fetchCoursesWithChatRooms(@Param("courseIds") List<Long> courseIds);
+    @Query("SELECT c FROM Course c LEFT JOIN FETCH c.chatRoomList WHERE c.id IN :courseIds AND  c.term =:term")
+    List<Course> fetchCoursesWithChatRooms(@Param("courseIds") List<Long> courseIds, @Param("term") String term);
 
 
 
