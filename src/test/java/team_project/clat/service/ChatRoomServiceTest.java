@@ -10,10 +10,13 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.ChatRoomMessageDTO;
 import team_project.clat.dto.RoomKeyReq;
+import team_project.clat.exception.DuplicateCourseChatRoomException;
 import team_project.clat.repository.ChatRoomRepository;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest
@@ -94,6 +97,19 @@ class ChatRoomServiceTest {
 
         ChatRoomMessageDTO chatRoomMessageDTO = new ChatRoomMessageDTO(chatRoom);
         //then
+    }
+
+    @Test
+    public void 채빙방_같은방_메세지_조회() throws Exception {
+       //given
+
+        assertThrows(DuplicateCourseChatRoomException.class, ()->{
+            chatRoomService.roomSaveValidation(2L, 2);
+        });
+
+
+
+       //then
     }
 
 

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -82,9 +83,9 @@ public class SecurityConfig {
         //경로별 인가 작업
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**","/api/image","/chatRoom/**","/login", "/swagger-ui/**", "/","index.html", "/join","/verify-email", "/verification-code", "/idCheck").permitAll()
+                        .requestMatchers("/v3/api-docs/**","/api/image","/login", "/swagger-ui/**", "/","index.html", "/join","/verify-email", "/verification-code", "/idCheck").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/chatRoom/create").hasRole("PROFESSOR")
+                        .requestMatchers( "/chatRoom").hasRole("PROFESSOR")
                         .requestMatchers("/reIssue").permitAll()
                         .anyRequest().authenticated());
 

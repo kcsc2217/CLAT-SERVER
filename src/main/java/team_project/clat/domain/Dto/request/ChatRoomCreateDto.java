@@ -17,9 +17,13 @@ public class ChatRoomCreateDto {
     @Schema(description = "Course courseId", example = "1")
     private Long courseId;
 
-    public ChatRoomCreateDto(String roomName, Long courseId) {
+    @NotNull
+    private int week;
+
+    public ChatRoomCreateDto(String roomName, Long courseId, int week) {
         this.roomName = roomName;
         this.courseId = courseId;
+        this.week = week;
     }
 
     public ChatRoomCreateDto() {

@@ -18,7 +18,7 @@ public class TokenService {
 
     private final MemberRepository memberRepository;
 
-    public Member   getUsernameFromToken(HttpServletRequest request){
+    public Member getUsernameFromToken(HttpServletRequest request){
         String accessToken = request.getHeader("access");
         String username = jwtUtil.getUsername(accessToken);
 

@@ -3,13 +3,16 @@ package team_project.clat.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.Course;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.CourseHomeDTO;
+import team_project.clat.dto.CustomUserDetails;
 import team_project.clat.dto.MemberMessageDTO;
+import team_project.clat.exception.AccessTokenInvalidException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.repository.MemberRepository;
@@ -34,9 +37,10 @@ public class HomeController {
 
     @GetMapping("")
     public List<CourseHomeDTO> selectCourse(HttpServletRequest request){
-        Member usernameFromToken = tokenService.getUsernameFromToken(request);
 
-        List<Course> courseList = studentCourseService.courseList(usernameFromToken.getId());
+        Member findMember = tokenService.getUsernameFromToken(request);
+
+        List<Course> courseList = studentCourseService.courseList(findMember.getId());
 
        return courseList.stream().map(CourseHomeDTO::new).collect(Collectors.toList());
     }

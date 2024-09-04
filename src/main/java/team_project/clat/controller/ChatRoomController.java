@@ -6,9 +6,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Dto.request.ChatRoomCreateDto;
@@ -17,6 +21,7 @@ import team_project.clat.domain.Dto.response.MessageResponse;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.ChatRoomMessageDTO;
+import team_project.clat.dto.CustomUserDetails;
 import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.dto.RoomKeyRes;
 import team_project.clat.exception.NotFoundException;
@@ -41,18 +46,15 @@ public class ChatRoomController {
     private final CourseService courseService;
 
 
+    @PostMapping(value = "")
+    public CreateMemberResponse createChatRoom(@RequestBody @Valid ChatRoomCreateDto chatRoomCreateDto , @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-    @PostMapping(value = "",consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "create ChatRoom", description = "강의아이디로 채팅방을 만든다.")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "성공"),
-    @ApiResponse(responseCode = "404", description = "해당 강의실 아이디가 존재 하지 않습니다")}
+        Member member = customUserDetails.getMember();//채팅방 생성
 
-    )
-    public CreateMemberResponse createChatRoom(@RequestBody @Valid ChatRoomCreateDto chatRoomCreateDto) { //채팅방 생성
-
+        log.info("usertype ={}", member.getUserType());
         log.info("id ={}", chatRoomCreateDto.getCourseId());
 
-        ChatRoom findChatRoom = chatRoomService.save(chatRoomCreateDto.getRoomName(), chatRoomCreateDto.getCourseId());
+        ChatRoom findChatRoom = chatRoomService.save(chatRoomCreateDto);
 
 
         log.info("채팅방 생성완료");
