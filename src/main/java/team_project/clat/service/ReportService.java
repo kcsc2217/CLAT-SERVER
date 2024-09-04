@@ -1,20 +1,20 @@
 package team_project.clat.service;
 
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.core.userdetails.UserDetails;
-// import team_project.clat.domain.Member;
+import org.springframework.security.access.prepost.PreAuthorize;
+import team_project.clat.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team_project.clat.domain.Member;
 import team_project.clat.domain.Report;
 import team_project.clat.dto.ReportRequestDTO;
 import team_project.clat.exception.GlobalException;
 import team_project.clat.repository.ReportRepository;
 import team_project.clat.type.ErrorCode;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,44 +24,35 @@ public class ReportService {
   @Autowired
   private final ReportRepository reportRepository;
 
-//  @Autowired
-//  private final MemberRepository memberRepository;
-
   @Transactional
-  public ReportRequestDTO createReport(ReportRequestDTO reportDTO) {
+  public ReportRequestDTO createReport(ReportRequestDTO reportDTO, Member member) {
 
     String email = reportDTO.getEmail();
-    Member member = null;
 
-
-  /*  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String username = null;
-
-    if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-      username = userDetails.getUsername();
+    if ((member != null) && (email == null || email.isEmpty())) {
+      if ((email = member.getEmail()) == null) {
+          throw new GlobalException(ErrorCode.NULL_EMAIL_INPUT);
+      }
     }
-
-    Member member = memberRepository.findByUsername(username); // username으로 member 조회
-
-    if (member != null) {
-      email = member.getEmail();
-    }*/
 
     Report report = new Report(
             null,
             email,
             reportDTO.getDescription(),
-            member
+            member,
+            reportDTO.getFilepath()
     );
-
-    if (email == null || email.isEmpty()) {
-      throw new GlobalException(ErrorCode.NULL_EMAIL_INPUT);
-    }
 
 
     return convertToDTO(reportRepository.save(report));
   }
+
+  @PreAuthorize("hasRole('ADMIN')")
+  public List<ReportRequestDTO> getReports() {
+    return reportRepository.findAll().stream()
+          .map(this::convertToDTO)
+            .collect(Collectors.toList()); }
+
 
   @Transactional
   public ReportRequestDTO convertToDTO(Report report) {
@@ -69,6 +60,10 @@ public class ReportService {
     dto.setId(report.getId());
     dto.setEmail(report.getEmail());
     dto.setDescription(report.getDescription());
+    dto.setFilepath(report.getFilepath());
+    if (report.getMember() != null) {
+      dto.setMemberId(report.getMember().getId());
+    }
     return dto;
   }
 }

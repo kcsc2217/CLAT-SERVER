@@ -1,4 +1,4 @@
-package team_project.clat.controller.help.faq;
+package team_project.clat.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
