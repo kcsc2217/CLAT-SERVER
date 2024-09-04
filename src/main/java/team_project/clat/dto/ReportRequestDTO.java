@@ -12,4 +12,5 @@ public class ReportRequestDTO {
   private String email;
   private String description;
   private Long memberId;
+  private String filepath;
 }

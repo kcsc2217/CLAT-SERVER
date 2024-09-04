@@ -20,15 +20,18 @@ public class Report extends BaseEntity {
 
     private String description;
 
+    private String filepath;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public Report(Long id, String email, String description, Member member) {
+    public Report(Long id, String email, String description, Member member, String filepath) {
         this.id = id;
         this.email = email;
         this.description = description;
         addMember(member);
+        this.filepath = filepath;
     }
 
     //연관관계 메서드

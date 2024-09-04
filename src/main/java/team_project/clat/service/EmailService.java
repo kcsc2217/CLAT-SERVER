@@ -1,14 +1,19 @@
 package team_project.clat.service;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import team_project.clat.exception.MailVerifyException;
 import team_project.clat.repository.VerificationCodeRepository;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -61,5 +66,26 @@ public class EmailService {
 
         verificationCodeRepository.toRemove(to);
         verificationCodeRepository.remove(verificationCode);
+    }
+
+    public void sendEmailWithAttachment(String subject, String text, String attachmentPath) throws MessagingException{
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo("clat.supprt@gmail.com");
+            helper.setSubject(subject);
+            helper.setText(text);
+
+            if (attachmentPath != null) {
+                FileSystemResource file = new FileSystemResource(new File(attachmentPath));
+                helper.addAttachment(file.getFilename(), file);
+            }
+
+            mailSender.send(message);
+            log.info("메일 발송이 완료되었습니다.");
+        } catch (MessagingException e) {
+            log.error("메일 발송 중 오류 발생", e);
+        }
     }
 }
