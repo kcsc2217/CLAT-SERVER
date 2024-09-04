@@ -1,7 +1,6 @@
 package team_project.clat.service;
 
 import jakarta.mail.MessagingException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import team_project.clat.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +13,6 @@ import team_project.clat.exception.GlobalException;
 import team_project.clat.repository.ReportRepository;
 import team_project.clat.type.ErrorCode;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,9 +31,11 @@ public class ReportService {
     String email = reportDTO.getEmail();
 
     if ((member != null) && (email == null || email.isEmpty())) {
-      if ((email = member.getEmail()) == null) {
-          throw new GlobalException(ErrorCode.NULL_EMAIL_INPUT);
-      }
+      email = member.getEmail();
+    }
+
+    if (email == null || email.isEmpty()) {
+      throw new GlobalException(ErrorCode.NULL_EMAIL_INPUT);
     }
 
     Report report = new Report(
