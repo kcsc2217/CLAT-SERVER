@@ -1,6 +1,7 @@
 package team_project.clat.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +12,6 @@ import team_project.clat.jwt.JwtUtil;
 import team_project.clat.repository.MemberRepository;
 import team_project.clat.service.ReportService;
 import team_project.clat.dto.ReportRequestDTO;
-
-import java.util.List;
 
 @Tag(name = "report API", description = "report API")
 @Slf4j
@@ -27,13 +26,9 @@ public class ReportController {
 
   private final MemberRepository memberRepository;
 
-  @GetMapping
-  public ResponseEntity<List<ReportRequestDTO>> getReports() {
-    return ResponseEntity.ok(reportService.getReports());
-  }
 
   @PostMapping
-  public ResponseEntity<ReportRequestDTO> createFAQComment(@RequestBody ReportRequestDTO reportRequestDTO, HttpServletRequest request) {
+  public ResponseEntity<ReportRequestDTO> createFAQComment(@RequestBody ReportRequestDTO reportRequestDTO, HttpServletRequest request) throws MessagingException {
     String accessToken = request.getHeader("access");
     Member member = null;
 

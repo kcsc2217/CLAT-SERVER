@@ -1,5 +1,6 @@
 package team_project.clat.service;
 
+import jakarta.mail.MessagingException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import team_project.clat.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,11 @@ public class ReportService {
   @Autowired
   private final ReportRepository reportRepository;
 
+  @Autowired
+  private EmailService emailService;
+
   @Transactional
-  public ReportRequestDTO createReport(ReportRequestDTO reportDTO, Member member) {
+  public ReportRequestDTO createReport(ReportRequestDTO reportDTO, Member member) throws MessagingException{
 
     String email = reportDTO.getEmail();
 
@@ -43,16 +47,23 @@ public class ReportService {
             reportDTO.getFilepath()
     );
 
+    report = reportRepository.save(report);
+    String title = "고객센터 문의입니다.";
 
-    return convertToDTO(reportRepository.save(report));
+    String body = "";
+    if (member != null) {
+      body += "member id: " + member.getId() + "\n";
+    }
+    body +=
+            "답변받을 이메일: " + report.getEmail() + "\n\n" +
+            "문의 내용: " + report.getDescription() + "\n";
+
+    String attachmentPath = report.getFilepath();
+
+    emailService.sendEmailWithAttachment(title, body, attachmentPath);
+
+    return convertToDTO(report);
   }
-
-  @PreAuthorize("hasRole('ADMIN')")
-  public List<ReportRequestDTO> getReports() {
-    return reportRepository.findAll().stream()
-          .map(this::convertToDTO)
-            .collect(Collectors.toList()); }
-
 
   @Transactional
   public ReportRequestDTO convertToDTO(Report report) {
