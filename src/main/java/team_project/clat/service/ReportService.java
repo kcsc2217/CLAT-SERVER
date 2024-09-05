@@ -1,6 +1,7 @@
 package team_project.clat.service;
 
 import jakarta.mail.MessagingException;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import team_project.clat.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import team_project.clat.type.ErrorCode;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Transactional(readOnly = true)
 public class ReportService {
   @Autowired
