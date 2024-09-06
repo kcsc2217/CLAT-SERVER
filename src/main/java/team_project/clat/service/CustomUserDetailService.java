@@ -26,7 +26,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
         log.info("loadUserByUsername: {}", member.getId());
 
-        if(member != null){
+        if(username != null){
             return new CustomUserDetails(member);
         }
 

@@ -28,7 +28,7 @@ public class ChatRoom extends BaseEntity{
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     List<Message> messageList = new ArrayList<>();
 
 

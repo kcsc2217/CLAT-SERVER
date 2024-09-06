@@ -1,6 +1,5 @@
 package team_project.clat.service;
 
-import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +25,11 @@ class ChatRoomServiceTest {
     @Autowired
     private ChatRoomService chatRoomService;
 
-    @Autowired
-    private MessageService messageService;
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
 
-    @Autowired
-    private EntityManager em;
+
 
 
 
