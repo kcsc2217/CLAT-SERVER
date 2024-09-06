@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import team_project.clat.domain.ChatRoom;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
@@ -19,6 +18,9 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     @Query("select distinct cr from ChatRoom cr left join fetch cr.messageList me where cr.id = :chatRoomId")
     Optional<ChatRoom> findFetchByChatRoom(@Param("chatRoomId") Long chatRoomId);
+
+    boolean existsByCourseIdAndWeek(Long courseId, int week);  // ChatRoom 의 외래키인 course_id를 가르킴
+
 
 
 

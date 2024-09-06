@@ -25,14 +25,6 @@ class Student_Course_ServiceTest {
 
 
 
-    @Test
-    public void fetch_join_student_course_Test() throws Exception {
-       //given
-     studentCourseRepository.fetchStudentCourse(1L);
-
-        //when
-       //then
-    }
 
 //    @Test
 //    public void 쿼리_보기() throws Exception {

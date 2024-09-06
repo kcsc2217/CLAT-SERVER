@@ -22,16 +22,19 @@ public class ChatRoom extends BaseEntity{
 
     private int roomKey;
 
+    private int week;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     List<Message> messageList = new ArrayList<>();
 
 
-    public ChatRoom(String roomName, Course course) {
+    public ChatRoom(String roomName,int week ,Course course) {
         this.roomName = roomName;
+        this.week = week;
         addCourse(course);
         randomNumber();
     }

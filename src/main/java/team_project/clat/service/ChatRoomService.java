@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
+import team_project.clat.domain.Dto.request.ChatRoomCreateDto;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
@@ -29,13 +30,15 @@ public class ChatRoomService {
 
 
     @Transactional
-    public ChatRoom save(String roomName, Long courseId) {
+    public ChatRoom save(ChatRoomCreateDto chatRoomCreateDto) {
 
-        Course findCourse = courseRepository.findById(courseId).orElseThrow(() -> new NotFoundException("Course not found")); //강의실 아이디찾기
+        Course findCourse = courseRepository.findById(chatRoomCreateDto.getCourseId()).orElseThrow(() -> new NotFoundException("Course not found")); //강의실 아이디찾기
 
         log.info("수업 찾기 완료");
+        String roomName = chatRoomCreateDto.getRoomName();
+        int week = chatRoomCreateDto.getWeek();
 
-        ChatRoom chatRoom = new ChatRoom(roomName, findCourse);
+        ChatRoom chatRoom = new ChatRoom(roomName, week,  findCourse);
 
         ChatRoom saveChatRoom = chatRoomRepository.save(chatRoom);
         log.info("생성이 되었습니다");
@@ -69,6 +72,16 @@ public class ChatRoomService {
         }
         return false;
     }
+
+
+    public void roomSaveValidation(Long id , int week){
+        Boolean flag = chatRoomRepository.existsByCourseIdAndWeek(id, week);
+
+        if(flag){
+            throw new DuplicateCourseChatRoomException("해당 채팅방은 같은 주차로 이미 방이 생성 되었습니다");
+        }
+    }
+
 
     private void ValidationChatRoom(Long courseId) {
         boolean flag = chatRoomRepository.existsByCourseId(courseId);

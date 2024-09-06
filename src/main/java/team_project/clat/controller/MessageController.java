@@ -2,29 +2,23 @@ package team_project.clat.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import team_project.clat.domain.Dto.request.MessageRequestDto;
 import team_project.clat.domain.Dto.response.MessageResponse;
-import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.CustomUserDetails;
 import team_project.clat.dto.FileImageDTO;
 import team_project.clat.dto.MessageFileRequestDTO;
 import team_project.clat.dto.MessageFileResponseDTO;
-import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.MemberRepository;
 import team_project.clat.service.MessageService;
-import team_project.clat.service.TokenService;
 
-import java.net.http.HttpRequest;
 import java.util.List;
 
 @Controller

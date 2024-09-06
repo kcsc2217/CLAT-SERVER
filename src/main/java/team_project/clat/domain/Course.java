@@ -30,6 +30,8 @@ public class Course {
     @Embedded
     private TimeTable timeTable;
 
+    private String term;
+
 
 
     private String dayOfWeek;    // 요일

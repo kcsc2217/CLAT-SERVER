@@ -21,7 +21,6 @@ import team_project.clat.jwt.LoginFilter;
 import team_project.clat.repository.TokenRepository;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -84,7 +83,7 @@ public class SecurityConfig {
                 .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/v3/api-docs/**","/api/image","/chatRoom/**","/login", "/swagger-ui/**", "/","index.html", "/join","/verify-email", "/verification-code", "/idCheck", "/help/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/chatRoom/create").hasRole("PROFESSOR")
+                        .requestMatchers( "/chatRoom").hasRole("PROFESSOR")
                         .requestMatchers("/reIssue").permitAll()
                         .anyRequest().authenticated());
 
