@@ -27,8 +27,9 @@ public class Message extends BaseEntity{
     @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;
 
-    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
-    List<Memo> memoList = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memo_id")
+    private Memo memo;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,7 +40,7 @@ public class Message extends BaseEntity{
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "answer_id")
     private Answer answer;
 
@@ -47,6 +48,10 @@ public class Message extends BaseEntity{
     public void addChatRoom(ChatRoom chatRoom){
         this.chatRoom=chatRoom;
         chatRoom.getMessageList().add(this);
+    }
+
+    public void addMemo(Memo memo){
+        this.memo=memo;
     }
 
 

@@ -14,4 +14,5 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findAllMessageIds(@Param("messageIds") List<Long> messageIds);
 
 
+
 }

@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class MessageAnswerResponseDTO {
+
+    private Long answerId;
+
     private String answer;
     private Long messageId;
 
@@ -15,6 +18,7 @@ public class MessageAnswerResponseDTO {
     private LocalDateTime timestamp;
 
     public MessageAnswerResponseDTO(Answer answer) {
+        this.answerId = answer.getId();
         this.answer = answer.getAnswer();
         this.messageId = answer.getMessage().getId();
         this.timestamp = answer.getCreatedDate();

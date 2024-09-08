@@ -12,20 +12,20 @@ import team_project.clat.dto.*;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.service.AnswerService;
 import team_project.clat.service.MessageService;
-import team_project.clat.service.TokenService;
 
 import java.util.List;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class AnswerController {
+public class MessageTestController {
 
     private final AnswerService answerService;
 
     private final JwtUtil jwtUtil;
 
     private final MessageService messageService;
+
 
     @PostMapping("/chat/answer")
     public MessageAnswerResponseDTO answerApi(@RequestBody MessageAnswerDTO messageAnswerDTO, HttpServletRequest request){
@@ -53,6 +53,14 @@ public class AnswerController {
         Message message = messageService.saveFileMessage(username, chatRoomId, fileImageDTOList);
 
        return  new MessageFileResponseDTO(message,fileImageDTOList);
+
+    }
+
+    @PostMapping("/chat/memo")
+    public MessageMemoResponseDTO test2(@RequestBody MessageMemoRequestDTO messageMemoRequestDTO){
+        Message message = messageService.saveMemo(messageMemoRequestDTO.getMessageId(), messageMemoRequestDTO.getMemo());
+
+        return new MessageMemoResponseDTO(message);
 
     }
 
