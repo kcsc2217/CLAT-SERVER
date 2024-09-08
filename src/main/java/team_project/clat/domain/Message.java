@@ -39,6 +39,10 @@ public class Message extends BaseEntity{
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_id")
+    private Answer answer;
+
 
     public void addChatRoom(ChatRoom chatRoom){
         this.chatRoom=chatRoom;
@@ -51,6 +55,10 @@ public class Message extends BaseEntity{
         this.images.add(image);
         image.setMessage(this);
 
+    }
+
+    public void addAnswer(Answer answer){
+        this.answer=answer;
     }
 
     // 메세지와 멤버 연관관계 메서드 

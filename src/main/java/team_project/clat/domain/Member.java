@@ -57,6 +57,11 @@ public class Member extends BaseEntity {
     List<Student_course> student_courseList = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    List<Answer> answerList = new ArrayList<>();
+
+
+
 
     public Member(Long id, String name, String username, String nickName, String email, String password, String schoolName, String filePath, int age, Gender gender, UserType userType, Address address) {
         this.id = id;

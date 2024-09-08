@@ -9,14 +9,12 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import team_project.clat.domain.Answer;
 import team_project.clat.domain.Dto.request.MessageRequestDto;
 import team_project.clat.domain.Dto.response.MessageResponse;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.CustomUserDetails;
-import team_project.clat.dto.FileImageDTO;
-import team_project.clat.dto.MessageFileRequestDTO;
-import team_project.clat.dto.MessageFileResponseDTO;
-import team_project.clat.repository.MemberRepository;
+import team_project.clat.dto.*;
+import team_project.clat.service.AnswerService;
 import team_project.clat.service.MessageService;
 
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.List;
 public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final MemberRepository memberRepository;
+    private final AnswerService answerService;
 
     @MessageMapping(value = "/chat/enter")
     @Operation(summary = "채팅방 입장", description = "사용자가 채팅방에 입장하면, STOMP 메시지를 통해 입장 메시지를 브로드캐스트합니다.")
@@ -52,7 +50,7 @@ public class MessageController {
 
     }
 
-    @MessageMapping(value = "/chat/file")
+        @MessageMapping(value = "/chat/file")
     public void messageFile(MessageFileRequestDTO messageFileRequest, SimpMessageHeaderAccessor accessor){
         log.info("파일이 전송되었습니다");
         String username = (String) accessor.getSessionAttributes().get("username");
@@ -61,6 +59,17 @@ public class MessageController {
 
         Message message = messageService.saveFileMessage(username, chatRoomId, fileImageDTOList); //파일 메세지 생성
         simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, new MessageFileResponseDTO(message,fileImageDTOList));
+
+    }
+
+    @MessageMapping(value = "/chat/answer")
+    public void messageAnswer(MessageAnswerDTO messageAnswerDTO, SimpMessageHeaderAccessor accessor){
+        log.info("답글이 전송되었습니다");
+        String username = (String) accessor.getSessionAttributes().get("username");
+
+        Answer answer = answerService.saveAnswer(messageAnswerDTO.getAnswer(), username, messageAnswerDTO.getMessageId());
+
+       simpMessagingTemplate.convertAndSend("/sub/chat/" + messageAnswerDTO.getChatRoomId(), new MessageAnswerResponseDTO(answer) );
 
 
     }

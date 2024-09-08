@@ -81,9 +81,9 @@ public class MessageService {
     }
 
     private List<Image> convertToImages(List<FileImageDTO> fileImageDTOList) {
-        List<Long> imagesId = fileImageDTOList.stream().map(FileImageDTO::getImageId).collect(Collectors.toList());
+        List<Long> imagesId = fileImageDTOList.stream().map(FileImageDTO::getImageId).collect(Collectors.toList()); // 이미지
 
-        List<Image> images = imageRepository.findByIdIn(imagesId);
+        List<Image> images = imageRepository.findByIdIn(imagesId); //이미지 아이디로 묶음 찾기
 
         for(Image image : images){
             log.info(image.getAccessUrl());
