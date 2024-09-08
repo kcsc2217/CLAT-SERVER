@@ -24,19 +24,19 @@ public class Student_Course_Service {
     private final CourseRepository courseRepository;
 
 
-    public List<Course> courseList(Long memberId, String term){
-        List<Student_course> studentCourses = studentCourseRepository.fetchStudentCourseWithoutChatRooms(memberId);
+    public List<Course> courseList(Long memberId, String term){  // course와 chatRoom fetch join 시킴
+        List<Student_course> studentCourses = studentCourseRepository.fetchStudentCourseWithoutChatRooms(memberId); // 멤버 아이디에 맞는 수강 가지고 옴 대신 course를 fetch join
 
         if(studentCourses.isEmpty()){
             throw new NotFoundException("해당 멤버는 듣는 강의가 없습니다");
         }
 
-        List<Long> courseIds = studentCourses.stream()
+        List<Long> courseIds = studentCourses.stream()  //그에 준하는 courseId를 List로 가져옴 -> 즉 해당 멤버의 강의들의 아이디를 가져옴
                 .map(sc -> sc.getCourse().getId())
                 .collect(Collectors.toList());
 
 
-        List<Course> coursesWithChatRooms = courseRepository.fetchCoursesWithChatRooms(courseIds, term);
+        List<Course> coursesWithChatRooms = courseRepository.fetchCoursesWithChatRooms(courseIds, term);  //해당 course를 chatroom을 fetch join  (멤버id에 courseId와 학기 term 을 같이 조회) 맞는 course들을 가져옴
 
         return coursesWithChatRooms;
     }
