@@ -83,4 +83,14 @@ class MessageServiceTest {
         //then
     }
 
+    @Test
+    @Rollback(false)
+    public void 메모_쿼리보기() throws Exception {
+       //given
+        messageService.saveMemo(1L, "Hello World");
+       //when
+
+       //then
+    }
+
 }

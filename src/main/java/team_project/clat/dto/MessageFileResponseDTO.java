@@ -4,6 +4,7 @@ import lombok.Data;
 import team_project.clat.domain.Message;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,7 +15,7 @@ public class MessageFileResponseDTO {
     private String senderName;
 
 
-    private List<String> imageUrl;
+    private List<String> imageUrl = new ArrayList<>();
 
     private LocalDateTime timestamp;
 

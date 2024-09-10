@@ -12,24 +12,15 @@ public class Memo extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MEMO_ID")
+    @Column(name = "memo_id")
     private Long id;
 
     private String Memo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="MESSAGE_ID")
-    private Message message;
 
-
-    public void addMessage(Message message){
-        this.message=message;
-        message.getMemoList().add(this);
-    }
-
-    public Memo(Long id, String memo, Message message) {
-        this.id = id;
+    public Memo(String memo) {
         Memo = memo;
-        this.message = message;
     }
+
+
 }

@@ -8,7 +8,8 @@ import java.util.List;
 
 @Data
 public class CourseHomeDTO {
-    private String courseCode;
+
+    private Long courseId;
 
     private String courseName;
 
@@ -18,22 +19,18 @@ public class CourseHomeDTO {
 
     private String end_date;
 
-    private Long chatRoomId;
+    private List<HomeChatRoomDTO> chatRooms;
+
+
 
     public CourseHomeDTO(Course course) {
-        this.courseCode = course.getCourseCode();
+        this.courseId = course.getId();
         this.courseName = course.getCourseName();
         this.room = course.getRoom();
         this.start_date = course.getTimeTable().getStart_date();
-        List<ChatRoom> chatRoomList = course.getChatRoomList();
-
-        for(ChatRoom chatRoom : chatRoomList) {
-            this.chatRoomId = chatRoom.getId();
-        }
-
+        chatRooms = course.getChatRoomList().stream().map(chatRoom -> new HomeChatRoomDTO(chatRoom.getId(), chatRoom.getWeek())).toList();
         this.end_date = course.getTimeTable().getEnd_date();
     }
-
     public CourseHomeDTO() {
     }
 }

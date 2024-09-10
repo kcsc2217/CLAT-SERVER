@@ -68,6 +68,14 @@ public class ExControllerAdvice {
     }
 
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ProfessorAuthorizationException.class)
+    public RestResponse forBiden(ProfessorAuthorizationException ex){
+        log.error("[exceptionHandle] ex", ex);
+        return new RestResponse("FORBIDDEN", ex.getMessage());
+    }
+
+
 
 
 }

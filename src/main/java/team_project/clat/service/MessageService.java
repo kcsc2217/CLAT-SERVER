@@ -7,11 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team_project.clat.domain.ChatRoom;
-import team_project.clat.domain.Course;
+import team_project.clat.domain.*;
 import team_project.clat.domain.File.Image;
-import team_project.clat.domain.Member;
-import team_project.clat.domain.Message;
 import team_project.clat.dto.FileImageDTO;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.*;
@@ -31,6 +28,8 @@ public class MessageService {
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
     private final EntityManager em;
+    private final MemoRepository memoRepository;
+
 
 
     @Transactional
@@ -74,16 +73,29 @@ public class MessageService {
 
     }
 
+
     public List<Message> memberSelectMessage(Long memberId){
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new NotFoundException("해당 학생이 없습니다"));
 
         return member.getMessageList();
     }
 
-    private List<Image> convertToImages(List<FileImageDTO> fileImageDTOList) {
-        List<Long> imagesId = fileImageDTOList.stream().map(FileImageDTO::getImageId).collect(Collectors.toList());
 
-        List<Image> images = imageRepository.findByIdIn(imagesId);
+    @Transactional  //메모 추가 로직
+    public Message saveMemo(Long messageId, String memo){
+        Message message = messageRepository.findById(messageId).orElseThrow(() -> new NotFoundException("해당 메세지는 없습니다"));
+
+        Memo saveMemo = memoRepository.save(new Memo(memo));
+
+        message.addMemo(saveMemo);
+
+        return message;
+    }
+
+    private List<Image> convertToImages(List<FileImageDTO> fileImageDTOList) {
+        List<Long> imagesId = fileImageDTOList.stream().map(FileImageDTO::getImageId).collect(Collectors.toList()); // 이미지
+
+        List<Image> images = imageRepository.findByIdIn(imagesId); //이미지 아이디로 묶음 찾기
 
         for(Image image : images){
             log.info(image.getAccessUrl());

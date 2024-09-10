@@ -23,10 +23,10 @@ public class StompHandler implements ChannelInterceptor {
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message); // 메세지 헤더에 접근이 가능함
 
         if (accessor.getCommand() == StompCommand.CONNECT) {
-            String token = accessor.getFirstNativeHeader("Authorization");
+            String token = accessor.getFirstNativeHeader("Authorization"); // http에서는 custom 헤더를 사요하고 있지만 stomp는 웹소켓 환경에서 동작하므로 해당 헤더를 알지 못함
 
             if (token == null || token.isEmpty()) {
                 throw new AccessTokenInvalidException("Access token is required.");
