@@ -2,7 +2,11 @@ package team_project.clat.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import team_project.clat.domain.File.Image;
 import team_project.clat.dto.ImageResponseDTO;
 import team_project.clat.dto.TestImageDto;
+import team_project.clat.exception.ImageDownloadFailedException;
 import team_project.clat.repository.ImageRepository;
 
 import java.io.IOException;
@@ -19,6 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class ImageService {
 
     @Value("${aws.s3.bucket.name}")
@@ -65,6 +71,21 @@ public class ImageService {
         return new ImageResponseDTO(findImage.getId(), findImage.getAccessUrl());
 
     }
-    
+
+    @Transactional
+    public byte[] downloadImage(String filePath){
+        String[] split = filePath.split("/chat-service/");
+        String fileName = "chat-service/" + split[1];
+        log.info("{}", fileName);
+
+        S3Object s3Object = amazonS3Client.getObject(bucketName, fileName);
+        S3ObjectInputStream s3ObjectContent = s3Object.getObjectContent();
+
+        try {
+            return IOUtils.toByteArray(s3ObjectContent);
+        } catch (IOException e) {
+            throw new ImageDownloadFailedException("파일 다운로드에 실패하였습니다.");
+        }
+    }
 
 }

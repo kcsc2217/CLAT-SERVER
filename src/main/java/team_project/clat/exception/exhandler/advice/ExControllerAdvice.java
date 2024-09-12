@@ -67,6 +67,12 @@ public class ExControllerAdvice {
         return "file size  exceeds the maximum allowed limit!";
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public CommonResult exImageDownloadHandle(ImageDownloadFailedException e){
+        String errorText = HttpStatus.BAD_REQUEST.value() +" "+ HttpStatus.BAD_REQUEST.getReasonPhrase();
+        return new CommonResult(errorText, e.getMessage());
+    }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ProfessorAuthorizationException.class)
