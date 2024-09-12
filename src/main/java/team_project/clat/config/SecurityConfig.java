@@ -13,11 +13,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import team_project.clat.jwt.JwtFilter;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.jwt.LoginFilter;
+import team_project.clat.jwt.CustomLogoutFilter;
 import team_project.clat.repository.TokenRepository;
 
 import java.util.Arrays;
@@ -81,7 +83,7 @@ public class SecurityConfig {
         //경로별 인가 작업
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**","/api/image","/chatRoom/**","/login", "/swagger-ui/**", "/","index.html", "/join","/verify-email", "/verification-code", "/idCheck", "/help/**", "/api/download").permitAll()
+                        .requestMatchers("/v3/api-docs/**","/api/image","/chatRoom/**","/login", "/swagger-ui/**", "/","index.html", "/join","/verify-email", "/verification-code", "/idCheck", "/help/**", "/api/download","/logout").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers( "/chatRoom").hasRole("PROFESSOR")
                         .requestMatchers("/reIssue").permitAll()
@@ -94,6 +96,7 @@ public class SecurityConfig {
         //AuthenticationManager()와 JWTUtil 인수 전달
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, objectMapper, tokenRepository), UsernamePasswordAuthenticationFilter.class);
 
+        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, tokenRepository), LogoutFilter.class);
 
         //세션 설정
         http.sessionManagement((session) -> session
