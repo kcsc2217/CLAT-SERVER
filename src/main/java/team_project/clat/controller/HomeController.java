@@ -34,6 +34,8 @@ public class HomeController {
     @GetMapping("")
     public List<CourseHomeDTO> selectCourse(HttpServletRequest request, @RequestParam("term") String term){
 
+        log.info("해당 멤버의 수업 조회");
+
         Member findMember = tokenService.getUsernameFromToken(request);
 
         List<Course> courseList = studentCourseService.courseList(findMember.getId(), term);

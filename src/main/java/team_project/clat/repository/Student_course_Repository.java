@@ -12,8 +12,8 @@ import java.util.Optional;
 
 public interface Student_course_Repository extends JpaRepository<Student_course, Long> {
 
-    @Query("SELECT DISTINCT st FROM Student_course st JOIN FETCH st.course c WHERE st.member.id = :memberId")
-    List<Student_course> fetchStudentCourseWithoutChatRooms(@Param("memberId") Long memberId);
+    @Query("SELECT DISTINCT st FROM Student_course st JOIN FETCH st.course c LEFT JOIN FETCH c.chatRoomList  cr WHERE st.member.id = :memberId AND c.term = :term")
+    List<Student_course> fetchStudentCourseWithoutChatRooms(@Param("memberId") Long memberId, @Param("term") String term);
 
 
     @Query("select st from Student_course st where st.member.id = :memberId and st.course.id = :courseId") // 회원이 강의를 듣는지 검증 로직
