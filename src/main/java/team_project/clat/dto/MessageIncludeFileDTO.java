@@ -21,6 +21,10 @@ public class MessageIncludeFileDTO {
 
     private LocalDateTime timestamp;
 
+    private Long answerId;
+
+    private String answer;
+
     public MessageIncludeFileDTO(Message message) {
         this.messageId = message.getId();
 
@@ -33,6 +37,14 @@ public class MessageIncludeFileDTO {
         this.imageUrl = message.getImages().stream().map(image -> image.getAccessUrl()).collect(Collectors.toList());
         this.timestamp = message.getCreatedDate();
         this.message = message.getMessage();
+        if(message.getAnswer() == null){
+            this.answer = "";
+            this.answerId = null;
+        }else{
+            this.answerId = message.getAnswer().getId();
+            this.answer = message.getAnswer().getAnswer();
+        }
+
     }
 
     public MessageIncludeFileDTO() {

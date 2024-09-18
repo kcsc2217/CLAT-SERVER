@@ -24,7 +24,7 @@ public class Student_Course_Service {
     private final CourseRepository courseRepository;
 
 
-    public List<Course> courseList(Long memberId, String term){  // course와 chatRoom fetch join 시킴
+    public List<Course> courseList(Long memberId, String term){  // course와 chatRoom fetch join 시킴   //쿼리 성능 최적화
         List<Student_course> studentCourses = studentCourseRepository.fetchStudentCourseWithoutChatRooms(memberId); // 멤버 아이디에 맞는 수강 가지고 옴 대신 course를 fetch join
 
         if(studentCourses.isEmpty()){

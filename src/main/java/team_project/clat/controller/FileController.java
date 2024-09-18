@@ -32,7 +32,6 @@ public class FileController {
         ValidationFileSize.sizeCheck(testImageDto.getImages());
 
         log.info("파일 컨트롤러 통과 ");
-        log.info("t");
 
     return imageService.saveImages(testImageDto);
 

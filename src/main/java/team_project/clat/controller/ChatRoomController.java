@@ -66,9 +66,8 @@ public class ChatRoomController {
     @PostMapping("/validation")
     public RoomKeyRes validationRoom(@RequestBody RoomKeyReq roomKeyReq, HttpServletRequest request){
 
-        Member findMember = tokenService.getUsernameFromToken(request); // 현재 유저가 해당 강의를 듣고 있는지 검증하기 위해
-
-        validationCourse(roomKeyReq.getChatRoomId(), findMember);  //검증 로직
+       // 현재 유저가 해당 강의를 듣고 있는지 검증하기 위해
+        validationCourse(roomKeyReq.getChatRoomId(), request);  //검증 로직
 
         boolean flag = chatRoomService.validationRoom(roomKeyReq);
 
@@ -76,8 +75,8 @@ public class ChatRoomController {
     }
 
 
-    private void validationCourse(Long chatRoomId, Member findMember) {
-        boolean flag = courseService.existUseMemberCourse(findMember, chatRoomId);
+    private void validationCourse(Long chatRoomId, HttpServletRequest request) {
+        boolean flag = courseService.existUseMemberCourse(request, chatRoomId);
 
         if(!flag){
             throw new NotFoundException("해당 학생은 해당 강의를 듣지 않습니다");

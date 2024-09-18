@@ -111,6 +111,10 @@ public class MessageService {
         return messageRepository.findById(id).orElseThrow(()-> new NotFoundException("해당 메세지는 없습니다"));
     }
 
+    public Message findByWithMemo(Long messageId){
+        return messageRepository.findMessageById(messageId).orElseThrow(()->  new NotFoundException("해당 메세지는 찾을 수 없습니다"));
+    }
+
 
 
 }

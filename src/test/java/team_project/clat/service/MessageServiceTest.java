@@ -93,4 +93,14 @@ class MessageServiceTest {
        //then
     }
 
+    @Test
+    public void 메모_쿼리_보기() throws Exception {
+       //given
+        Message message = messageService.findByWithMemo(3L);
+        //when
+
+       //then
+        System.out.println("message.getMemo().getMemo() = " + message.getMemo().getMemo());
+    }
+
 }
