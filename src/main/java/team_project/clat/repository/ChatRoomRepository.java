@@ -16,7 +16,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query("select distinct cr from ChatRoom cr left join fetch cr.messageList m join fetch cr.course c where cr.id = :chatRoomId")
     Optional<ChatRoom> findFetchByCourseAndMessage(@Param("chatRoomId") Long chatRoomId);
 
-    @Query("select distinct cr from ChatRoom cr left join fetch cr.messageList me left join fetch me.answer where cr.id = :chatRoomId")
+    @Query("select distinct cr from ChatRoom cr left join fetch cr.messageList me where cr.id = :chatRoomId")
     Optional<ChatRoom> findFetchByChatRoom(@Param("chatRoomId") Long chatRoomId);
 
     boolean existsByCourseIdAndWeek(Long courseId, int week);  // ChatRoom 의 외래키인 course_id를 가르킴

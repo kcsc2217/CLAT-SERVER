@@ -56,7 +56,7 @@ public class ChatRoomService {
 
         List<Long> messageIds = chatRoom.getMessageList().stream().map(Message::getId).collect(Collectors.toList());
 
-        List<Message> allMessageIds = messageRepository.findAllMessageIds(messageIds);
+         messageRepository.findAllMessageIds(messageIds); // n+1 문제를 해결하기 위한 fetchjoin
 
         return  chatRoom;
 
