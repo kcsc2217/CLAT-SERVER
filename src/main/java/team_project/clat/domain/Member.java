@@ -47,8 +47,6 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
     List<Report> reportList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Like> likeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     List<Message> messageList= new ArrayList<>();
@@ -59,8 +57,6 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     List<Answer> answerList = new ArrayList<>();
-
-
 
 
     public Member(Long id, String name, String username, String nickName, String email, String password, String schoolName, String filePath, int age, Gender gender, UserType userType, Address address) {
@@ -100,6 +96,4 @@ public class Member extends BaseEntity {
         return member;
     }
 
-    public static class BaseEntity {
-    }
 }
