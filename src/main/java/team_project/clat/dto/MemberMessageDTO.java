@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class MemberMessageDTO {
 
-    private Long member_id;
+    private Long message_id;
     private String message_content;
 
-    public MemberMessageDTO(Long member_id, String message_content) {
-        this.member_id = member_id;
+    public MemberMessageDTO(Long message_id, String message_content) {
+        this.message_id = message_id;
         this.message_content = message_content;
     }
 

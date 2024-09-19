@@ -1,11 +1,8 @@
 package team_project.clat.jwt;
 
 import io.jsonwebtoken.Jwts;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import team_project.clat.domain.Enum.UserType;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;

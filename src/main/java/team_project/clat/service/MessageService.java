@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.*;
 import team_project.clat.domain.File.Image;
 import team_project.clat.dto.FileImageDTO;
+import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.*;
 
@@ -83,13 +84,21 @@ public class MessageService {
 
     @Transactional  //메모 추가 로직
     public Message saveMemo(Long messageId, String memo){
-        Message message = messageRepository.findById(messageId).orElseThrow(() -> new NotFoundException("해당 메세지는 없습니다"));
+        Message message = messageRepository.findMessageByMemberId(messageId).orElseThrow(() -> new NotFoundException("해당 메세지는 없습니다")); //영속성 콘텐츠에 담음
 
-        Memo saveMemo = memoRepository.save(new Memo(memo));
+        validationMemo(message);
 
-        message.addMemo(saveMemo);
+        Memo saveMemo = memoRepository.save(new Memo(memo)); //단방향 매핑
+
+        message.addMemo(saveMemo); // 이때 업데이트 문 나감
 
         return message;
+    }
+
+    private void validationMemo(Message message) {
+        if(message.getMemo() != null){
+            throw new DuplicateException("메모가 이미 존재합니다");
+        }
     }
 
     private List<Image> convertToImages(List<FileImageDTO> fileImageDTOList) {
