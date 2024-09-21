@@ -74,12 +74,12 @@ public class MessageController {
 
     }
 
-    @MessageMapping(value = "/chat/memo")
-    public void messageMemo(MessageMemoRequestDTO messageMemoRequestDTO){
-        Message message = messageService.saveMemo(messageMemoRequestDTO.getMessageId(), messageMemoRequestDTO.getMemo());
-
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + messageMemoRequestDTO.getChatRoomId(), new MessageMemoResponseDTO(message) );
-    }
+//    @MessageMapping(value = "/chat/memo")
+//    public void messageMemo(MessageMemoRequestDTO messageMemoRequestDTO){
+//        Message message = messageService.saveMemo(messageMemoRequestDTO.getMessageId(), messageMemoRequestDTO.getMemo());
+//
+//        simpMessagingTemplate.convertAndSend("/sub/chat/" + messageMemoRequestDTO.getChatRoomId(), new MessageMemoResponseDTO(message) );
+//    }
 
 
 }

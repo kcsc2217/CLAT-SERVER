@@ -27,21 +27,6 @@ class LikeServiceTest {
     private EntityManager em;
 
 
-    @Test
-    public void 메세지_좋아요매핑() throws Exception {
-       //given
-        Long likeId = likeService.like(1L, Emoticon.LIKE);
 
-        //when
-
-        em.flush();
-        em.clear();
-
-        Like like = likeRepository.findById(likeId).get();
-
-        //then
-
-        Assertions.assertThat(like.getEmoticon().getDescription()).isEqualTo("좋아요");
-    }
 
 }

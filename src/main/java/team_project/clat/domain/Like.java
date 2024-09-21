@@ -21,15 +21,23 @@ public class Like {
     @JoinColumn(name = "message_id")
     private Message message;  //양방향 매핑 메세지 삭제시 해당 이모티콘도 같이 삭제
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     @Enumerated(EnumType.STRING)
     private Emoticon emoticon;
 
 
-    public Like( Message message, Emoticon emoticon) {
+    public Like(Member member, Message message, Emoticon emoticon) {
         setMessage(message);
+        setMember(member);
         this.emoticon = emoticon;
     }
 
+    public void setMember(Member member) {
+        this.member = member;
+    }
 
     public void setMessage(Message message){
         this.message = message;
