@@ -2,19 +2,19 @@ package team_project.clat.config.handler;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.messaging.SessionConnectEvent;
 import team_project.clat.exception.AccessTokenInvalidException;
 import team_project.clat.jwt.JwtUtil;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class StompHandler implements ChannelInterceptor {
 
     private final JwtUtil jwtUtil;
@@ -24,6 +24,8 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message); // 메세지 헤더에 접근이 가능함
+
+        log.info("메시지 연결");
 
         if (accessor.getCommand() == StompCommand.CONNECT) {
             String token = accessor.getFirstNativeHeader("Authorization"); // http에서는 custom 헤더를 사요하고 있지만 stomp는 웹소켓 환경에서 동작하므로 해당 헤더를 알지 못함
@@ -37,7 +39,6 @@ public class StompHandler implements ChannelInterceptor {
             }
 
           String username = jwtUtil.getUsername(token);
-            accessor.addNativeHeader("username", username);
             accessor.getSessionAttributes().put("username", username);
             // Optional: Add logging for debugging
             System.out.println("Valid token received: " + token);

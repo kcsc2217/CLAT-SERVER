@@ -7,13 +7,11 @@ public class MessageMemoRequestDTO {
 
     private Long messageId;
 
-    private Long chatRoomId;
 
     private String memo;
 
-    public MessageMemoRequestDTO(Long messageId, Long chatRoomId, String memo) {
+    public MessageMemoRequestDTO(Long messageId,  String memo) {
         this.messageId = messageId;
-        this.chatRoomId = chatRoomId;
         this.memo = memo;
     }
 

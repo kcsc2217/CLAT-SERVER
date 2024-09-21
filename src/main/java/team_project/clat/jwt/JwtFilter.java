@@ -73,7 +73,7 @@ public class JwtFilter extends OncePerRequestFilter {
         log.info("{}",role);
 
         Member member = Member.JwtMemberSet(username, "teampassword", role);
-        CustomUserDetails customUserDetails = new CustomUserDetails(member);
+        CustomUserDetails customUserDetails = new CustomUserDetails(member); // 인증 완료 된 객체
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);

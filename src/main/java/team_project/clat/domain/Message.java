@@ -45,6 +45,10 @@ public class Message extends BaseEntity{
     private Answer answer;
 
 
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
+
+
     public void addChatRoom(ChatRoom chatRoom){
         this.chatRoom=chatRoom;
         chatRoom.getMessageList().add(this);

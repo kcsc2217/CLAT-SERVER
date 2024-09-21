@@ -38,10 +38,10 @@ public class ChatRoomService {
         String roomName = chatRoomCreateDto.getRoomName();
         int week = chatRoomCreateDto.getWeek();
 
-        ChatRoom chatRoom = new ChatRoom(roomName, week,  findCourse);
+        ChatRoom chatRoom = new ChatRoom(roomName, week,  findCourse); // 객체를 생성하면서 연관관계 매핑
 
         ChatRoom saveChatRoom = chatRoomRepository.save(chatRoom);
-        log.info("생성이 되었습니다");
+        log.info("채팅 생성");
         return saveChatRoom;
     }
 
@@ -56,7 +56,7 @@ public class ChatRoomService {
 
         List<Long> messageIds = chatRoom.getMessageList().stream().map(Message::getId).collect(Collectors.toList());
 
-        List<Message> allMessageIds = messageRepository.findAllMessageIds(messageIds);
+         messageRepository.findAllMessageIds(messageIds); // n+1 문제를 해결하기 위한 fetchjoin
 
         return  chatRoom;
 
@@ -75,7 +75,8 @@ public class ChatRoomService {
 
 
     public void roomSaveValidation(Long id , int week){
-        Boolean flag = chatRoomRepository.existsByCourseIdAndWeek(id, week);
+        log.info("같은 주차별 강의가 있는지 체크 로직");
+        Boolean flag = chatRoomRepository.existsByCourseIdAndWeek(id, week); //jpa 내부에서 성능 최적화를 위해 모두 조회하지 않고 limit 1 으로 제한을 둠
 
         if(flag){
             throw new DuplicateCourseChatRoomException("해당 채팅방은 같은 주차로 이미 방이 생성 되었습니다");

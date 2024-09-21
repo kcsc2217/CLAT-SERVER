@@ -1,5 +1,6 @@
 package team_project.clat.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,10 @@ public class CourseService {
     private final MemberRepository memberRepository;
 
     private final Student_course_Repository studentCourseRepository;
+    private final TokenService tokenService;
 
-    public boolean existUseMemberCourse(Member member, Long courseId){
+    public boolean existUseMemberCourse(HttpServletRequest request, Long courseId){
+        Member member = tokenService.getUsernameFromToken(request);
 
         Optional<Student_course> findByStudent_course = studentCourseRepository.findByMemberIdAndCourseId(member.getId(), courseId);
 

@@ -8,7 +8,7 @@ import team_project.clat.domain.Answer;
 import team_project.clat.domain.Enum.UserType;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
-import team_project.clat.exception.DuplicateAnswerException;
+import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.exception.ProfessorAuthorizationException;
 import team_project.clat.repository.AnswerRepository;
@@ -46,7 +46,7 @@ public class AnswerService {
 
     private static void validationMessage(Message message) {
         if(message.getAnswer() != null) {
-            throw new DuplicateAnswerException("해당 답글 이미 존재합니다.");
+            throw new DuplicateException("해당 답글 이미 존재합니다.");
         }
     }
 

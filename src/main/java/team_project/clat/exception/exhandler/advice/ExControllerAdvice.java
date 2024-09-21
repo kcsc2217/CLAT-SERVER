@@ -81,6 +81,14 @@ public class ExControllerAdvice {
         return new RestResponse("FORBIDDEN", ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DuplicateException.class)
+    public RestResponse forBiden(DuplicateException ex){
+        log.error("[exceptionHandle] ex", ex);
+
+        return new RestResponse("BAD", ex.getMessage());
+    }
+
 
 
 
