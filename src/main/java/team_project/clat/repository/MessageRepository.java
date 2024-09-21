@@ -20,6 +20,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("select m from Message m join fetch m.member mem where m.id = :messageId")
     Optional<Message> findMessageByMemberId(@Param("messageId") Long messageId);
 
+    @Query("select m from Message m join fetch m.answer an where m.member.id = :memberId")
+    Optional<List<Message>> findMessageByUsername(@Param("memberId") Long memberId);
+
 
 
 }

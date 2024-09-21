@@ -29,6 +29,8 @@ class MessageServiceTest {
 
     @Autowired
     private EntityManager em;
+    @Autowired
+    private MessageRepository messageRepository;
 
     @Test
     public void 메세지생성() throws Exception {
@@ -84,23 +86,17 @@ class MessageServiceTest {
     }
 
     @Test
-    @Rollback(false)
-    public void 메모_쿼리보기() throws Exception {
+    public void 멤버의_메시지에달린_답글() throws Exception {
        //given
-        messageService.saveMemo(1L, "Hello World");
-       //when
+        List<Message> test = messageService.findByWithAnswer(1L);
 
-       //then
-    }
-
-    @Test
-    public void 메모_쿼리_보기() throws Exception {
-       //given
-        Message message = messageService.findByWithMemo(3L);
         //when
 
        //then
-        System.out.println("message.getMemo().getMemo() = " + message.getMemo().getMemo());
+       for(Message m : test) {
+           System.out.println(m.getAnswer().getAnswer());
+       }
     }
+
 
 }

@@ -15,6 +15,7 @@ import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -95,6 +96,15 @@ public class MessageService {
         return message;
     }
 
+
+    public Message findByWithMemo(Long messageId){
+        return messageRepository.findMessageById(messageId).orElseThrow(()->  new NotFoundException("해당 메세지는 찾을 수 없습니다"));
+    }
+
+    public List<Message> findByWithAnswer(Long memberId){
+     return messageRepository.findMessageByUsername(memberId).orElseThrow(()-> new NotFoundException("해당 멤버의 메시지를 찾을 수 없습니다"));
+    }
+
     private void validationMemo(Message message) {
         if(message.getMemo() != null){
             throw new DuplicateException("메모가 이미 존재합니다");
@@ -114,11 +124,6 @@ public class MessageService {
 
         return images;
 
-    }
-
-
-    public Message findByWithMemo(Long messageId){
-        return messageRepository.findMessageById(messageId).orElseThrow(()->  new NotFoundException("해당 메세지는 찾을 수 없습니다"));
     }
 
 

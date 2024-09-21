@@ -27,7 +27,7 @@ public class LikeService {
     public Long like(Member member, Long messageId, Emoticon emoticon) {
 
         if(likeRepository.existsByMessageIdAndMemberId(messageId, member.getId())) {
-            throw new DuplicateException("해당 회원의 해당 메시지가 이미 존재합니다");
+            throw new DuplicateException("해당 회원의 이모티콘 이미 존재합니다");
         }
         Message message = messageRepository.findById(messageId).orElseThrow(() -> new NotFoundException("해당 메세지는 존재하지 않습니다"));
 

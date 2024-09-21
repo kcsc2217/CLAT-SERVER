@@ -30,4 +30,9 @@ public class TokenService {
         return jwtUtil.getUserType(accessToken);
     }
 
+    public String getUserNameFromToken(HttpServletRequest request){
+        String accessToken = request.getHeader("access");
+        return jwtUtil.getUsername(accessToken);
+    }
+
 }
