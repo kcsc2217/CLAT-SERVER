@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class MessageTestController {
+public class MessageSubController {
 
     private final AnswerService answerService;
 

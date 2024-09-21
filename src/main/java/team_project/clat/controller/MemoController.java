@@ -10,6 +10,8 @@ import team_project.clat.domain.Message;
 import team_project.clat.dto.MemoResponseDTO;
 import team_project.clat.service.MessageService;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -23,5 +25,15 @@ public class MemoController {
         Message message = messageService.findByWithMemo(messageId);
 
         return new MemoResponseDTO(message);
+    }
+
+
+    @GetMapping("/findAll/{chatRoomId}")
+    public List<MemoResponseDTO> memos(@PathVariable Long chatRoomId) {
+
+        List<Message> messageList = messageService.findByWithChatRoomMemo(chatRoomId);
+
+        return messageList.stream().map(message -> new MemoResponseDTO(message)).toList();
+
     }
 }
