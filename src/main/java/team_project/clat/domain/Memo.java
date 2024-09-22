@@ -15,11 +15,16 @@ public class Memo extends BaseEntity {
     @Column(name = "memo_id")
     private Long id;
 
-    private String Memo;
+    private String memoContent;
 
 
     public Memo(String memo) {
-        Memo = memo;
+        memoContent = memo;
+    }
+
+
+    public void  updateMemo(String memoContent){
+        this.memoContent = memoContent;
     }
 
 

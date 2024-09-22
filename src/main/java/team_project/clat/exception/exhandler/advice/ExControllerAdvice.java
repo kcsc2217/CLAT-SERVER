@@ -89,6 +89,13 @@ public class ExControllerAdvice {
         return new RestResponse("BAD", ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(MemberNotAccessException.class)
+    public RestResponse forBiden(MemberNotAccessException ex){
+        log.error("[exceptionHandle] ex", ex);
+        return new RestResponse("UNAUTHORIZED", ex.getMessage());
+    }
+
 
 
 

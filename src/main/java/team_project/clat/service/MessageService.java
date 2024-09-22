@@ -11,6 +11,7 @@ import team_project.clat.domain.*;
 import team_project.clat.domain.File.Image;
 import team_project.clat.dto.FileImageDTO;
 import team_project.clat.exception.DuplicateException;
+import team_project.clat.exception.MemberNotAccessException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.*;
 
@@ -96,6 +97,22 @@ public class MessageService {
         return message;
     }
 
+    @Transactional
+    public Long updateMemo(Long messageId, String memoContent, Member member){
+        Message message = messageRepository.findFetchMemoByMessageId(messageId).orElseThrow(() -> new NotFoundException("해당 메세지는 없습니다")); //영속성 콘텐츠에 담음
+
+        validationAccessMember(member, message);
+
+        Memo memo = message.getMemo();
+
+        memo.updateMemo(memoContent);
+
+
+        return memo.getId();
+
+    }
+
+
 
     public Message findByWithMemo(Long messageId){
         return messageRepository.findMessageById(messageId).orElseThrow(()->  new NotFoundException("해당 메세지는 찾을 수 없습니다"));
@@ -108,6 +125,13 @@ public class MessageService {
     public List<Message> findByWithChatRoomMemo(Long chatRoomId){
         return messageRepository.findByChatRoomId(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방에 대한 메시지를 찾을수 없습니다"));
     }
+
+    private static void validationAccessMember(Member member, Message message) {
+        if(message.getMember().getId() != member.getId()){
+            throw new MemberNotAccessException("해당 멤버의 메모가 아니므로 접근 할 수 없습니다");
+        }
+    }
+
 
     private void validationMemo(Message message) {
         if(message.getMemo() != null){

@@ -15,7 +15,7 @@ public class MemoResponseDTO {
         this.messageId = message.getId();
         if(message.getMemo() != null) {
             this.memoId = message.getMemo().getId();
-            this.memo = message.getMemo().getMemo();
+            this.memo = message.getMemo().getMemoContent();
         }else{
             this.memoId = null;
             this.memo = null;

@@ -5,13 +5,13 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.Member;
+import team_project.clat.domain.Memo;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.FileImageDTO;
 import team_project.clat.repository.MemberRepository;
-import team_project.clat.repository.MessageRepository;
+import team_project.clat.repository.MemoRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +28,11 @@ class MessageServiceTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private EntityManager em;
+    private MemoRepository memoRepository;
+
     @Autowired
-    private MessageRepository messageRepository;
+    private EntityManager em;
+
 
     @Test
     public void 메세지생성() throws Exception {

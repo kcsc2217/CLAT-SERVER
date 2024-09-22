@@ -27,7 +27,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("select m from Message m  join fetch m.memo where m.chatRoom.id = :chatRoomId")
     Optional<List<Message>> findByChatRoomId(@Param("chatRoomId") Long chatRoomId);
 
-
-
+    @Query("select m from Message m  join fetch m.memo  join fetch m.member where m.id = :messageId")
+    Optional<Message> findFetchMemoByMessageId(@Param("messageId") Long messageId);
 
 }
