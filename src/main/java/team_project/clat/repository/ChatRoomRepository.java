@@ -8,7 +8,6 @@ import team_project.clat.domain.ChatRoom;
 import java.util.Optional;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
-    boolean existsByCourseId(Long courseId);
 
     @Query("select distinct cr from ChatRoom cr left join fetch cr.messageList me where cr.course.id = :courseId")
     Optional<ChatRoom> findFetchByMessage(@Param("courseId") Long courseId);

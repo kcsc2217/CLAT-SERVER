@@ -1,18 +1,27 @@
 package team_project.clat.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.ChatRoom;
+import team_project.clat.domain.ChatRoomMember;
 import team_project.clat.domain.Dto.request.ChatRoomCreateDto;
 import team_project.clat.domain.Dto.response.CreateMemberResponse;
+import team_project.clat.domain.Member;
 import team_project.clat.dto.ChatRoomInformationDTO;
 import team_project.clat.dto.ChatRoomMessageDTO;
 import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.dto.RoomKeyRes;
+import team_project.clat.exception.NotFoundException;
+import team_project.clat.repository.ChatRoomMemberRepository;
+import team_project.clat.repository.ChatRoomRepository;
+import team_project.clat.repository.MemberRepository;
+import team_project.clat.service.ChatRoomMemberService;
 import team_project.clat.service.ChatRoomService;
+import team_project.clat.service.TokenService;
 
 @RestController
 @Slf4j
@@ -21,6 +30,11 @@ import team_project.clat.service.ChatRoomService;
 @Tag(name = "ChatRoom", description = "ChatRoomApi") 
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
+
+    private final ChatRoomMemberService chatRoomMemberService;
+
+
+    private final TokenService tokenService;
 
 
 
@@ -46,10 +60,15 @@ public class ChatRoomController {
 
     // 채팅방 검증 로직
     @PostMapping("/validation")
-    public RoomKeyRes validationRoom(@RequestBody RoomKeyReq roomKeyReq){
+    public RoomKeyRes validationRoom(@RequestBody RoomKeyReq roomKeyReq, HttpServletRequest request){
 
-       // 현재 유저가 해당 강의를 듣고 있는지 검증하기 위해
+        // 현재 유저가 해당 강의를 듣고 있는지 검증하기 위해
         boolean flag = chatRoomService.validationRoom(roomKeyReq);
+
+        if(flag){
+            Member findByMember = tokenService.getUsernameFromToken(request);
+          chatRoomMemberService.saveChatRoomMember(roomKeyReq, findByMember);
+        }
 
         return new RoomKeyRes(flag);
     }
