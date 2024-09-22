@@ -19,7 +19,7 @@ public class MessageMemoResponseDTO {
 
     public MessageMemoResponseDTO(Message message) {
         this.memoId = message.getMemo().getId();
-        this.memo = message.getMemo().getMemo();
+        this.memo = message.getMemo().getMemoContent();
         this.messageId = message.getId();
         this.senderName = message.getMember().getName();
         this.timestamp = message.getCreatedDate();
