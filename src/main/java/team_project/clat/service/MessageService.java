@@ -125,8 +125,8 @@ public class MessageService {
      return messageRepository.findMessageByUsername(memberId).orElseThrow(()-> new NotFoundException("해당 멤버의 메시지를 찾을 수 없습니다"));
     }
 
-    public List<Message> findByWithChatRoomMemo(Long chatRoomId){
-        return messageRepository.findByChatRoomId(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방에 대한 메시지를 찾을수 없습니다"));
+    public List<Message> findByWithChatRoomMemo(Long chatRoomId, Long memberId){
+        return messageRepository.findByChatRoomId(chatRoomId, memberId).orElseThrow(() -> new NotFoundException("해당 채팅방에 대한 메시지를 찾을수 없습니다"));
     }
 
     private static void validationAccessMember(Member member, Message message) {

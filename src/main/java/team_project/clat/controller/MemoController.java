@@ -38,9 +38,11 @@ public class MemoController {
 
 
     @GetMapping("/findAll/{chatRoomId}")
-    public List<MemoResponseDTO> memos(@PathVariable Long chatRoomId) {
+    public List<MemoResponseDTO> memos(@PathVariable Long chatRoomId, HttpServletRequest request) {
 
-        List<Message> messageList = messageService.findByWithChatRoomMemo(chatRoomId);
+        Member findByMember = tokenService.getUsernameFromToken(request);
+
+        List<Message> messageList = messageService.findByWithChatRoomMemo(chatRoomId, findByMember.getId());
 
         return messageList.stream().map(message -> new MemoResponseDTO(message)).toList();
 

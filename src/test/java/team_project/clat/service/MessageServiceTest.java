@@ -101,5 +101,19 @@ class MessageServiceTest {
     }
 
 
+    @Test
+    public void 채팅방의_멤버의_메모쿼리보기() throws Exception {
+       //given
+        List<Message> byWithChatRoomMemo = messageService.findByWithChatRoomMemo(1L, 1L);
+
+        //when
+
+       //then
+        for(Message m : byWithChatRoomMemo) {
+            System.out.println(m.getMemo().getMemoContent());
+        }
+    }
+
+
 
 }
