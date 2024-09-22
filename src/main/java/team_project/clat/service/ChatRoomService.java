@@ -83,16 +83,13 @@ public class ChatRoomService {
         }
     }
 
+    public ChatRoom getRoom(Long chatRoomId){
+        log.info("채팅방 정보");
 
-    private void ValidationChatRoom(Long courseId) {
-        boolean flag = chatRoomRepository.existsByCourseId(courseId);
-
-        log.info("강의실 검증부준");
-
-        if(flag == true){
-            throw new DuplicateCourseChatRoomException("해당 강의의 채팅방은 이미 존재합니다");
-        }
+        return chatRoomRepository.findChatRoomById(chatRoomId).orElseThrow(()-> new NotFoundException("해당 채팅방은 없습니다"));
     }
+
+
 
 
 
