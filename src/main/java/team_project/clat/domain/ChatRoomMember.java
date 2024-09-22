@@ -2,14 +2,10 @@ package team_project.clat.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
-
 public class ChatRoomMember {
 
     @Id
@@ -28,7 +24,6 @@ public class ChatRoomMember {
     @JoinColumn(name = "chatRoom_id")
     private ChatRoom chatRoom; //단방향 매핑
 
-    @Builder
     public ChatRoomMember(boolean isPassWorldEnter, ChatRoom chatRoom, Member member) {
         this.isPassWorldEnter = isPassWorldEnter;
         this.chatRoom = chatRoom;
