@@ -21,6 +21,9 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     boolean existsByCourseIdAndWeek(Long courseId, int week);  // ChatRoom 의 외래키인 course_id를 가르킴
 
+    @Query("select cr from ChatRoom cr join fetch cr.course cor where cr.id = :chatRoomId")
+    Optional<ChatRoom> findChatRoomById (@Param("chatRoomId") Long chatRoomId);
+
 
 
 
