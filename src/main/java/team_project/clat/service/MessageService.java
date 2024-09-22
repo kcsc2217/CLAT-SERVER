@@ -114,8 +114,11 @@ public class MessageService {
 
 
 
-    public Message findByWithMemo(Long messageId){
-        return messageRepository.findMessageById(messageId).orElseThrow(()->  new NotFoundException("해당 메세지는 찾을 수 없습니다"));
+    public Message findByWithMemo(Long messageId, Member member){
+        Message message = messageRepository.findMessageById(messageId).orElseThrow(() -> new NotFoundException("해당 메세지는 찾을 수 없습니다"));
+
+        validationAccessMember(member, message);
+        return message;
     }
 
     public List<Message> findByWithAnswer(Long memberId){

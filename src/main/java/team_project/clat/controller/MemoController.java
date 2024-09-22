@@ -28,8 +28,10 @@ public class MemoController {
     private final TokenService tokenService;
 
     @GetMapping("/{messageId}")
-    public MemoResponseDTO memo(@PathVariable Long messageId) {
-        Message message = messageService.findByWithMemo(messageId);
+    public MemoResponseDTO memo(@PathVariable Long messageId, HttpServletRequest request) {
+        Member findByMember = tokenService.getUsernameFromToken(request);
+
+        Message message = messageService.findByWithMemo(messageId, findByMember);
 
         return new MemoResponseDTO(message);
     }
