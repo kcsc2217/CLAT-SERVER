@@ -1,22 +1,23 @@
 package team_project.clat.service;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.FlushModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team_project.clat.domain.*;
+import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.File.Image;
+import team_project.clat.domain.Member;
+import team_project.clat.domain.Memo;
+import team_project.clat.domain.Message;
 import team_project.clat.dto.FileImageDTO;
+import team_project.clat.dto.MessageMemoRequestDTO;
 import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.MemberNotAccessException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -85,12 +86,12 @@ public class MessageService {
 
 
     @Transactional  //메모 추가 로직
-    public Message saveMemo(Long messageId, String memo){
-        Message message = messageRepository.findMessageByMemberId(messageId).orElseThrow(() -> new NotFoundException("해당 메세지는 없습니다")); //영속성 콘텐츠에 담음
+    public Message saveMemo(MessageMemoRequestDTO messageMemoRequestDTO, Long memberId){
+        Message message = messageRepository.findMessageByMemberId(messageMemoRequestDTO.getMessageId()).orElseThrow(() -> new NotFoundException("해당 메세지는 없습니다")); //영속성 콘텐츠에 담음
 
-        validationMemo(message);
+        validationMemo(message, memberId);
 
-        Memo saveMemo = memoRepository.save(new Memo(memo)); //단방향 매핑
+        Memo saveMemo = memoRepository.save(new Memo(messageMemoRequestDTO.getMemo())); //단방향 매핑
 
         message.addMemo(saveMemo); // 이때 업데이트 문 나감
 
@@ -136,9 +137,13 @@ public class MessageService {
     }
 
 
-    private void validationMemo(Message message) {
+    private void validationMemo(Message message, Long memberId) {
         if(message.getMemo() != null){
             throw new DuplicateException("메모가 이미 존재합니다");
+        }
+
+        if(message.getMember().getId() != memberId){
+            throw new IllegalArgumentException("자신의 메시지만 작성 가능합니다.");
         }
     }
 

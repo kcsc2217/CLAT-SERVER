@@ -9,9 +9,6 @@ import java.util.Optional;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
-    @Query("select distinct cr from ChatRoom cr left join fetch cr.messageList me where cr.course.id = :courseId")
-    Optional<ChatRoom> findFetchByMessage(@Param("courseId") Long courseId);
-
     @Query("select distinct cr from ChatRoom cr left join fetch cr.messageList m join fetch cr.course c where cr.id = :chatRoomId")
     Optional<ChatRoom> findFetchByCourseAndMessage(@Param("chatRoomId") Long chatRoomId);
 

@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import team_project.clat.domain.Answer;
+import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.*;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.service.AnswerService;
 import team_project.clat.service.MessageService;
+import team_project.clat.service.TokenService;
 
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class MessageSubController {
     private final JwtUtil jwtUtil;
 
     private final MessageService messageService;
+    private final TokenService tokenService;
 
 
     @PostMapping("/chat/answer")
@@ -57,8 +60,10 @@ public class MessageSubController {
     }
 
     @PostMapping("/chat/memo")
-    public MessageMemoResponseDTO test2(@RequestBody MessageMemoRequestDTO messageMemoRequestDTO){
-        Message message = messageService.saveMemo(messageMemoRequestDTO.getMessageId(), messageMemoRequestDTO.getMemo());
+    public MessageMemoResponseDTO test2(@RequestBody MessageMemoRequestDTO messageMemoRequestDTO, HttpServletRequest request){
+        Member findMember = tokenService.getUsernameFromToken(request);
+
+        Message message = messageService.saveMemo(messageMemoRequestDTO, findMember.getId());
 
         return new MessageMemoResponseDTO(message);
 
