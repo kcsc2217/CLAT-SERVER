@@ -10,13 +10,17 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Dto.request.ChatRoomCreateDto;
 import team_project.clat.domain.Dto.response.CreateMemberResponse;
 import team_project.clat.domain.Member;
+import team_project.clat.domain.Message;
 import team_project.clat.dto.ChatRoomInformationDTO;
 import team_project.clat.dto.ChatRoomMessageDTO;
 import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.dto.RoomKeyRes;
+import team_project.clat.repository.ChatRoomRepository;
 import team_project.clat.service.ChatRoomMemberService;
 import team_project.clat.service.ChatRoomService;
 import team_project.clat.service.TokenService;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -30,6 +34,8 @@ public class ChatRoomController {
 
 
     private final TokenService tokenService;
+
+    private final ChatRoomRepository chatRoomRepository;
 
 
 
@@ -49,6 +55,16 @@ public class ChatRoomController {
     public ChatRoomMessageDTO getFileMessage(@PathVariable Long chatRoomId ){
 
         ChatRoom chatRoom = chatRoomService.findFetchMessageAndImage(chatRoomId);
+
+        return new ChatRoomMessageDTO(chatRoom);
+    }
+
+    @GetMapping("/subQuery/{chatRoomId}")
+    public ChatRoomMessageDTO getSubQueryMessage(@PathVariable Long chatRoomId ){
+
+        List<Message> subQueryFetchMessageAndImage = chatRoomService.findSubQueryFetchMessageAndImage(chatRoomId);
+
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
 
         return new ChatRoomMessageDTO(chatRoom);
     }

@@ -58,6 +58,14 @@ public class ChatRoomService {
 
     }
 
+    // 서브 쿼리를 사용한 조회
+    public List<Message> findSubQueryFetchMessageAndImage(Long chatRoomId){
+        return messageRepository.findSubFetchJoinByMessage(chatRoomId).orElseThrow(()-> new NotFoundException("해당 채팅방에 메시지는 찾을 수 없습니다"));
+    }
+
+
+
+
     private static List<Long> getChatRoomMessageIds(ChatRoom chatRoom) {
         List<Long> messageIds = chatRoom.getMessageList().stream().map(Message::getId).collect(Collectors.toList());
         return messageIds;

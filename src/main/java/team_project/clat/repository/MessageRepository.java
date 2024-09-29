@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-    @Query("select distinct  m from Message m  left join fetch m. member left join fetch m.images left join fetch m.answer an where m.id IN:messageIds")
+    @Query("select distinct  m from Message m join fetch m. member left join fetch m.images left join fetch m.answer an where m.id IN:messageIds")
     List<Message> findAllMessageIds(@Param("messageIds") List<Long> messageIds);
 
     @Query("select m from Message m  join fetch m.memo me where m.id = :messageId")
@@ -20,6 +20,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query("select m from Message m join fetch m.member mem where m.id = :messageId")
     Optional<Message> findMessageByMemberId(@Param("messageId") Long messageId);
+
+    @Query("select m from Message m  join fetch m. member left join fetch m.images left join fetch m.answer an join fetch m.chatRoom where m.id In (" +
+            "select m.id from Message  where m.chatRoom.id = :chatRoomId)")
+    Optional<List<Message>> findSubFetchJoinByMessage(Long chatRoomId);
 
     @Query("select m from Message m join fetch m.answer an where m.member.id = :memberId")
     Optional<List<Message>> findMessageByUsername(@Param("memberId") Long memberId);
