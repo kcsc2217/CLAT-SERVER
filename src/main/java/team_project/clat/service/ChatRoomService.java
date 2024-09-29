@@ -50,12 +50,17 @@ public class ChatRoomService {
     public ChatRoom findFetchMessageAndImage(Long chatRoomId){
         ChatRoom chatRoom = chatRoomRepository.findFetchByChatRoom(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방은 없습니다"));
 
-        List<Long> messageIds = chatRoom.getMessageList().stream().map(Message::getId).collect(Collectors.toList());
+        List<Long> messageIds = getChatRoomMessageIds(chatRoom);
 
-         messageRepository.findAllMessageIds(messageIds); // n+1 문제를 해결하기 위한 fetchjoin
+        messageRepository.findAllMessageIds(messageIds); // n+1 문제를 해결하기 위한 fetchjoin
 
         return  chatRoom;
 
+    }
+
+    private static List<Long> getChatRoomMessageIds(ChatRoom chatRoom) {
+        List<Long> messageIds = chatRoom.getMessageList().stream().map(Message::getId).collect(Collectors.toList());
+        return messageIds;
     }
 
 
