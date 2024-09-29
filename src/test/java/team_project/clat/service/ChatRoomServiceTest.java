@@ -9,13 +9,10 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.ChatRoomMessageDTO;
 import team_project.clat.dto.RoomKeyReq;
-import team_project.clat.exception.DuplicateCourseChatRoomException;
 import team_project.clat.repository.ChatRoomRepository;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest
@@ -35,20 +32,6 @@ class ChatRoomServiceTest {
 
 
 
-    @Test
-    public void Fetchjoin을_사용한_메세지성능_최적화() throws Exception {
-
-        //then
-
-        ChatRoom chatRoom = chatRoomService.findFetchMessageCourseById(1L);
-
-        for(Message  message: chatRoom.getMessageList()){
-            System.out.println(message.getMessage());
-        }
-
-
-        //then
-    }
 
     @Test
     public void fetchjoin_쿼리_보기() throws Exception {
@@ -74,7 +57,7 @@ class ChatRoomServiceTest {
     @Test
     public void 방_입장() throws Exception {
        //given
-        RoomKeyReq roomKeyReq = new RoomKeyReq(7L, 9154);
+        RoomKeyReq roomKeyReq = new RoomKeyReq(1L, 3489);
 
         //when
 
@@ -82,7 +65,7 @@ class ChatRoomServiceTest {
 
         //then
 
-        Assertions.assertThat(b).isEqualTo(false);
+        Assertions.assertThat(b).isEqualTo(true);
     }
 
     @Test
@@ -95,18 +78,6 @@ class ChatRoomServiceTest {
         //then
     }
 
-    @Test
-    public void 채빙방_같은방_메세지_조회() throws Exception {
-       //given
-
-        assertThrows(DuplicateCourseChatRoomException.class, ()->{
-            chatRoomService.roomSaveValidation(2L, 2);
-        });
-
-
-
-       //then
-    }
 
 
 

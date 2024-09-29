@@ -96,6 +96,15 @@ public class ExControllerAdvice {
         return new RestResponse("UNAUTHORIZED", ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnAuthorizationException.class)
+    public RestResponse forBiden(UnAuthorizationException ex){
+        log.error("[exceptionHandle] ex", ex);
+        return new RestResponse("UNAUTHORIZED", ex.getMessage());
+    }
+
+
+
 
 
 
