@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.MessageMemoRequestDTO;
+import team_project.clat.exception.UnAuthorizationException;
 import team_project.clat.repository.MemberRepository;
 
 import java.util.List;
@@ -72,7 +73,7 @@ class MessageServiceTest {
     public void 메모_검증() throws Exception {
 
        //then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        Assertions.assertThrows(UnAuthorizationException.class, () -> {
             messageService.saveMemo(new MessageMemoRequestDTO(7L, "안녕"),1L);
         });
     }

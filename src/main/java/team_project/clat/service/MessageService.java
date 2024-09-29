@@ -15,6 +15,7 @@ import team_project.clat.dto.MessageMemoRequestDTO;
 import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.MemberNotAccessException;
 import team_project.clat.exception.NotFoundException;
+import team_project.clat.exception.UnAuthorizationException;
 import team_project.clat.repository.*;
 
 import java.util.List;
@@ -143,7 +144,7 @@ public class MessageService {
         }
 
         if(message.getMember().getId() != memberId){
-            throw new IllegalArgumentException("자신의 메시지만 작성 가능합니다.");
+            throw new UnAuthorizationException("자신의 메시지만 작성 가능합니다.");
         }
     }
 
