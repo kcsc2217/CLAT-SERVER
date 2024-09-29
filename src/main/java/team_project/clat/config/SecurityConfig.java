@@ -96,7 +96,7 @@ public class SecurityConfig {
         //AuthenticationManager()와 JWTUtil 인수 전달
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, objectMapper, tokenRepository), UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, tokenRepository), LogoutFilter.class);
+        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, tokenRepository, objectMapper), LogoutFilter.class);
 
         //세션 설정
         http.sessionManagement((session) -> session

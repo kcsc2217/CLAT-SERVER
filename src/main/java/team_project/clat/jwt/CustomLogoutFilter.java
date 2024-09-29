@@ -1,5 +1,6 @@
 package team_project.clat.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
+import team_project.clat.dto.CommonResult;
 import team_project.clat.repository.TokenRepository;
 
 import java.io.IOException;
@@ -21,6 +23,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
     private final JwtUtil jwtUtil;
     private final TokenRepository tokenRepository;
+    private final ObjectMapper objectMapper;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -102,8 +105,17 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         response.addCookie(cookie);
         response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json"); // 응답 형식 설정
+        response.setCharacterEncoding("UTF-8");
 
-        filterChain.doFilter(request, response);
+        CommonResult commonResult = new CommonResult("200 OK", "로그아웃이 완료되었습니다.");
+
+        // CommonResult 객체를 JSON으로 직렬화
+        String jsonResponse = objectMapper.writeValueAsString(commonResult);
+
+        // 응답 본문에 JSON 작성
+        response.getWriter().write(jsonResponse);
+        //filterChain.doFilter(request, response);
     }
 }
 
