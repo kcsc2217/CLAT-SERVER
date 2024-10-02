@@ -13,4 +13,5 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     List<Like> findByMessageId(@Param("messageId") Long messageId);
 
     boolean existsByMessageIdAndMemberId(Long messageId, Long memberId);
+
 }

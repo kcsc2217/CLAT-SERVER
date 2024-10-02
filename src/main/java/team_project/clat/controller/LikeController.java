@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.Like;
 import team_project.clat.domain.Member;
 import team_project.clat.dto.LikeRequestDTO;
@@ -25,7 +22,7 @@ import java.util.List;
 public class LikeController{
 
     private final LikeService likeService;
-    private final LikeRepository likeRepository;
+
     private final TokenService tokenService;
 
     @PostMapping()
@@ -36,10 +33,16 @@ public class LikeController{
         Member findByMember = tokenService.getUsernameFromToken(request);  //멤버 찾음
         likeService.like(findByMember,likeRequestDTO.getMessageId(), likeRequestDTO.getEmoticon());
 
-        List<Like> findLikeLists = likeRepository.findByMessageId(likeRequestDTO.getMessageId());
+        LikeResponseDTO likes = likeService.getLikes(likeRequestDTO.getMessageId());
 
-        return new LikeResponseDTO(findLikeLists);
-
+        return likes;
     }
+
+    @GetMapping("/{messageId}")
+    public LikeResponseDTO getLike(@PathVariable Long messageId){
+
+        return likeService.getLikes(messageId);
+    }
+
 
 }
