@@ -18,6 +18,7 @@ import team_project.clat.dto.RoomKeyRes;
 import team_project.clat.repository.ChatRoomRepository;
 import team_project.clat.service.ChatRoomMemberService;
 import team_project.clat.service.ChatRoomService;
+import team_project.clat.service.MessageService;
 import team_project.clat.service.TokenService;
 
 import java.util.List;
@@ -32,12 +33,12 @@ public class ChatRoomController {
 
     private final ChatRoomMemberService chatRoomMemberService;
 
+    private final MessageService messageService;
+
 
     private final TokenService tokenService;
 
     private final ChatRoomRepository chatRoomRepository;
-
-
 
     @PostMapping(value = "")
     public CreateMemberResponse createChatRoom(@RequestBody @Valid ChatRoomCreateDto chatRoomCreateDto) {
@@ -62,11 +63,17 @@ public class ChatRoomController {
     @GetMapping("/subQuery/{chatRoomId}")
     public ChatRoomMessageDTO getSubQueryMessage(@PathVariable Long chatRoomId ){
 
-        List<Message> subQueryFetchMessageAndImage = chatRoomService.findSubQueryFetchMessageAndImage(chatRoomId);
+        List<Message> subQueryFetchMessageAndImage = messageService.findSubQueryFetchMessageAndImage(chatRoomId);
 
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
 
         return new ChatRoomMessageDTO(chatRoom);
+    }
+
+    @GetMapping("/queryUpdate/{chatRoomId}")
+    public ChatRoomMessageDTO queryUpdateMessage(@PathVariable Long chatRoomId ){
+
+       return  messageService.findUpgradeQueryByFetchMessageAndImage(chatRoomId);
     }
 
     // 채팅방 검증 로직

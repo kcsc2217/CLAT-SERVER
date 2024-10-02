@@ -78,19 +78,7 @@ class ChatRoomServiceTest {
         //then
     }
 
-    @Test
-    public void 채팅방_서브쿼리_쿼리보기() throws Exception {
-       //given
-        List<Message> subQueryFetchMessageAndImage = chatRoomService.findSubQueryFetchMessageAndImage(2L);
 
-        //when
-
-        for(Message message : subQueryFetchMessageAndImage){
-            System.out.println(message.getMessage());
-        }
-
-       //then
-    }
 
 
 

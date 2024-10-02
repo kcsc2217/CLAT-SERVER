@@ -58,10 +58,7 @@ public class ChatRoomService {
 
     }
 
-    // 서브 쿼리를 사용한 조회
-    public List<Message> findSubQueryFetchMessageAndImage(Long chatRoomId){
-        return messageRepository.findSubFetchJoinByMessage(chatRoomId).orElseThrow(()-> new NotFoundException("해당 채팅방에 메시지는 찾을 수 없습니다"));
-    }
+
 
 
 
