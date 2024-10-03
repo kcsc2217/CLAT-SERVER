@@ -17,6 +17,7 @@ import java.util.List;
 @Slf4j
 @Transactional(readOnly = true)
 public class FAQItemService {
+
   private final FAQItemRepository faqItemRepository;
 
   public List<FAQItem> getFAQItems() {
