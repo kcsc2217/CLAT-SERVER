@@ -2,7 +2,7 @@ package team_project.clat.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import team_project.clat.type.ErrorCode;
+import team_project.clat.exception.type.ErrorCode;
 
 @Getter
 @AllArgsConstructor

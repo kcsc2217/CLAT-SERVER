@@ -16,11 +16,4 @@ public class LoginController {
         return new ResponseEntity<>(commonResult, HttpStatus.OK);
     }
 
-
-    @GetMapping("/pathcheck")
-    public void  pathCheck(){   
-        System.out.println("체크 ");
-    }
-
-
 }

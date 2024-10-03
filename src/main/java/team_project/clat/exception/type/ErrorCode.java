@@ -1,4 +1,4 @@
-package team_project.clat.type;
+package team_project.clat.exception.type;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

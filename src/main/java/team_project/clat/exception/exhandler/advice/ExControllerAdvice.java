@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import team_project.clat.domain.Dto.response.RestResponse;
+import team_project.clat.dto.Dto.response.RestResponse;
 import team_project.clat.dto.CommonResult;
 import team_project.clat.exception.*;
 
