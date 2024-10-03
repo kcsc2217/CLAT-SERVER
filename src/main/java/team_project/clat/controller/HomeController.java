@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import team_project.clat.domain.Course;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.CourseHomeDTO;
-import team_project.clat.dto.MemberAnswerDTO;
-import team_project.clat.dto.MemberMessageDTO;
+import team_project.clat.dto.response.CourseHomeResDTO;
+import team_project.clat.dto.response.MemberAnswerResDTO;
+import team_project.clat.dto.response.MemberMessageResDTO;
 import team_project.clat.service.MessageService;
 import team_project.clat.service.Student_Course_Service;
 import team_project.clat.service.TokenService;
@@ -28,40 +28,33 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     private final Student_Course_Service studentCourseService;
-
     private final TokenService tokenService;
     private final MessageService messageService;
 
     @GetMapping("")
-    public List<CourseHomeDTO> selectCourse(HttpServletRequest request, @RequestParam("term") String term){
+    public List<CourseHomeResDTO> selectCourse(HttpServletRequest request, @RequestParam("term") String term){
 
         log.info("해당 멤버의 수업 조회");
 
         Member findMember = tokenService.getUsernameFromToken(request);
 
-        List<Course> courseList = studentCourseService.courseList(findMember.getId(), term);
-
-       return courseList.stream().map(CourseHomeDTO::new).collect(Collectors.toList());
+        return  studentCourseService.courseList(findMember.getId(), term);
     }
 
 
     @GetMapping("/messages")
-    public List<MemberMessageDTO> memberSelectMessage(HttpServletRequest request){
+    public List<MemberMessageResDTO> memberSelectMessage(HttpServletRequest request){
         Member findMember = tokenService.getUsernameFromToken(request);
-        List<Message> messages = messageService.memberSelectMessage(findMember.getId());
 
-        return messages.stream().map(message -> new MemberMessageDTO(message.getId(), message.getMessage())).collect(Collectors.toList());
-
+        return messageService.memberSelectMessage(findMember.getId());
     }
 
     @GetMapping("/answer")
-    public List<MemberAnswerDTO> memberSelectAnswer(HttpServletRequest request){
+    public List<MemberAnswerResDTO> memberSelectAnswer(HttpServletRequest request){
 
         Member usernameFromToken = tokenService.getUsernameFromToken(request);
 
-        List<Message> findByMessage = messageService.findByWithAnswer(usernameFromToken.getId());
-
-     return  findByMessage.stream().map(f -> new MemberAnswerDTO(f.getId(), f.getAnswer().getAnswer())).collect(Collectors.toList());
+        return messageService.findByWithAnswer(usernameFromToken.getId());
     }
 
 

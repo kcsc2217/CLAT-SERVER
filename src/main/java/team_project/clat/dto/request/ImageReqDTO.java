@@ -1,4 +1,4 @@
-package team_project.clat.dto;
+package team_project.clat.dto.request;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class TestImageDto {
+public class ImageReqDTO {
     List<MultipartFile> images = new ArrayList<>();
 
-    public TestImageDto(List<MultipartFile> images) {
+    public ImageReqDTO(List<MultipartFile> images) {
         this.images = images;
     }
 
-    public TestImageDto() {
+    public ImageReqDTO() {
     }
 }

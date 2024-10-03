@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Memo;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.MemoRequestDTO;
-import team_project.clat.dto.MemoResponseDTO;
-import team_project.clat.dto.MemoUpdateDTO;
+import team_project.clat.dto.request.MemoReqDTO;
+import team_project.clat.dto.response.MemoResDTO;
+import team_project.clat.dto.request.MessageReqDTO;
+import team_project.clat.dto.response.MemoUpdateResDTO;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.MemoRepository;
 import team_project.clat.service.MessageService;
@@ -28,28 +29,24 @@ public class MemoController {
     private final TokenService tokenService;
 
     @GetMapping("/{messageId}")
-    public MemoResponseDTO memo(@PathVariable Long messageId, HttpServletRequest request) {
+    public MemoResDTO memo(@PathVariable Long messageId, HttpServletRequest request) {
         Member findByMember = tokenService.getUsernameFromToken(request);
 
-        Message message = messageService.findByWithMemo(messageId, findByMember);
-
-        return new MemoResponseDTO(message);
+       return messageService.findByWithMemo(messageId, findByMember);
     }
 
 
     @GetMapping("/findAll/{chatRoomId}")
-    public List<MemoResponseDTO> memos(@PathVariable Long chatRoomId, HttpServletRequest request) {
+    public List<MemoResDTO> memos(@PathVariable Long chatRoomId, HttpServletRequest request) {
 
         Member findByMember = tokenService.getUsernameFromToken(request);
 
-        List<Message> messageList = messageService.findByWithChatRoomMemo(chatRoomId, findByMember.getId());
-
-        return messageList.stream().map(message -> new MemoResponseDTO(message)).toList();
+        return messageService.findByWithChatRoomMemo(chatRoomId, findByMember.getId());
 
     }
 
     @PutMapping
-    public MemoUpdateDTO updateMemo(@RequestBody MemoRequestDTO memoRequestDTO, HttpServletRequest request){
+    public MemoUpdateResDTO updateMemo(@RequestBody MemoReqDTO memoRequestDTO, HttpServletRequest request){
 
         Member findByMember = tokenService.getUsernameFromToken(request);
 
@@ -57,7 +54,7 @@ public class MemoController {
 
         Memo memo = memoRepository.findById(id).orElseThrow(() -> new NotFoundException("해당 메모는 없습니다"));
 
-        return new MemoUpdateDTO(memo);
+        return new MemoUpdateResDTO(memo);
     }
 
 }

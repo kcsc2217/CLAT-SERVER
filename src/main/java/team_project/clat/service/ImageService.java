@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import team_project.clat.domain.Image;
-import team_project.clat.dto.ImageResponseDTO;
-import team_project.clat.dto.TestImageDto;
+import team_project.clat.dto.response.ImageResDTO;
+import team_project.clat.dto.request.ImageReqDTO;
 import team_project.clat.exception.ImageDownloadFailedException;
 import team_project.clat.repository.ImageRepository;
 
@@ -34,12 +34,12 @@ public class ImageService {
     private final ImageRepository imageRepository;
 
     @Transactional
-    public List<ImageResponseDTO> saveImages(TestImageDto testImageDto){
+    public List<ImageResDTO> saveImages(ImageReqDTO testImageDto){
 
-        List<ImageResponseDTO> list = new ArrayList<>();
+        List<ImageResDTO> list = new ArrayList<>();
 
         for( MultipartFile multipartFile: testImageDto.getImages()){
-            ImageResponseDTO imageResponseDTO = saveImage(multipartFile);
+            ImageResDTO imageResponseDTO = saveImage(multipartFile);
             list.add(imageResponseDTO);
         }
     return list;
@@ -47,7 +47,7 @@ public class ImageService {
 
 
     @Transactional
-    public ImageResponseDTO saveImage(MultipartFile multipartFile){
+    public ImageResDTO saveImage(MultipartFile multipartFile){
         String originalFilename = multipartFile.getOriginalFilename(); //파일 원래 이름
 
         Image image = new Image(originalFilename); // 이미지 객체생성
@@ -68,7 +68,7 @@ public class ImageService {
 
         Image findImage = imageRepository.save(image);
 
-        return new ImageResponseDTO(findImage.getId(), findImage.getAccessUrl());
+        return new ImageResDTO(findImage.getId(), findImage.getAccessUrl());
 
     }
 

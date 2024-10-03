@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Schema(description = "강의실 만드는 DTO")
-public class ChatRoomCreateDto {
+public class ChatRoomCreateReqDTO {
 
     @NotEmpty
     @Schema(description = "ChatRoom roomName", example = "운영체제1-1방")
@@ -21,12 +21,12 @@ public class ChatRoomCreateDto {
     @Min(1)
     private int week;
 
-    public ChatRoomCreateDto(String roomName, Long courseId, int week) {
+    public ChatRoomCreateReqDTO(String roomName, Long courseId, int week) {
         this.roomName = roomName;
         this.courseId = courseId;
         this.week = week;
     }
 
-    public ChatRoomCreateDto() {
+    public ChatRoomCreateReqDTO() {
     }
 }

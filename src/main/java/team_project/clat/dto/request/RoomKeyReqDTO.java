@@ -1,19 +1,19 @@
-package team_project.clat.dto;
+package team_project.clat.dto.request;
 
 import lombok.Data;
 
 @Data
-public class RoomKeyReq {
+public class RoomKeyReqDTO {
 
     private Long chatRoomId;
 
     private int roomKey;
 
-    public RoomKeyReq(Long chatRoomId, int roomKey) {
+    public RoomKeyReqDTO(Long chatRoomId, int roomKey) {
         this.chatRoomId = chatRoomId;
         this.roomKey = roomKey;
     }
 
-    public RoomKeyReq() {
+    public RoomKeyReqDTO() {
     }
 }

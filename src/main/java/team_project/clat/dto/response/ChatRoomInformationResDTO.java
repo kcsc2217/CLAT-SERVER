@@ -1,4 +1,4 @@
-package team_project.clat.dto;
+package team_project.clat.dto.response;
 
 import lombok.Data;
 import team_project.clat.domain.ChatRoom;
@@ -6,7 +6,7 @@ import team_project.clat.domain.ChatRoom;
 import java.time.LocalDateTime;
 
 @Data
-public class ChatRoomInformationDTO {
+public class ChatRoomInformationResDTO {
 
     private String courseName;
     private String chatRoomName;
@@ -15,7 +15,7 @@ public class ChatRoomInformationDTO {
     private int week;
 
 
-    public ChatRoomInformationDTO(ChatRoom chatRoom) {
+    public ChatRoomInformationResDTO(ChatRoom chatRoom) {
         this.courseName = chatRoom.getCourse().getCourseName();
         this.chatRoomName = chatRoom.getRoomName();
         this.creationTime = chatRoom.getCreatedDate();
@@ -23,6 +23,6 @@ public class ChatRoomInformationDTO {
         this.week = chatRoom.getWeek();
     }
 
-    public ChatRoomInformationDTO() {
+    public ChatRoomInformationResDTO() {
     }
 }
