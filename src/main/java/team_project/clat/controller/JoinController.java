@@ -21,6 +21,7 @@ import team_project.clat.domain.Token;
 import team_project.clat.dto.response.CommonResultResDTO;
 import team_project.clat.dto.request.EmailReqDTO;
 import team_project.clat.dto.request.JoinReqDTO;
+import team_project.clat.dto.response.JoinResDTO;
 import team_project.clat.dto.response.JoinResultResDTO;
 import team_project.clat.repository.TokenRepository;
 import team_project.clat.service.EmailService;
@@ -40,8 +41,6 @@ public class JoinController {
 
     private final JoinService joinService;
     private final EmailService emailService;
-    private final JwtUtil jwtUtil;
-    private final TokenRepository tokenRepository;
 
     @PostMapping("/idCheck")
     public ResponseEntity<CommonResultResDTO> isDuplicateUsername(@RequestBody JoinReqDTO joinReqDTO){
@@ -70,41 +69,24 @@ public class JoinController {
                                                     @RequestPart MultipartFile file,
                                                     HttpServletResponse response) throws IOException {
 
-        log.info("{},{},{},{}", joinReqDTO.getName(), joinReqDTO.getSchoolName(), joinReqDTO.getUserType(), joinReqDTO.getUsername());
-
         if(bindingResult.hasErrors()){
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
             CommonResultResDTO commonResultResDTO = new CommonResultResDTO("400 BAD_REQUEST", errorMessage);
             return new ResponseEntity<>(commonResultResDTO, HttpStatus.BAD_REQUEST);
         }
 
-        String fileDir = "/home/ubuntu/upload/";
-        String fullPath = null;
-        if(!file.isEmpty()){
-            fullPath = fileDir + file.getOriginalFilename();
-            log.info("파일 저장 fullPath={}", fullPath);
-            file.transferTo(new File(fullPath));
+        JoinResDTO joinResDTO = joinService.joinProcess(joinReqDTO, file);
+        if(joinResDTO==null){
+            CommonResultResDTO commonResultResDTO = new CommonResultResDTO("409 Conflict", "중복된 ID가 존재합니다.");
+            return new ResponseEntity<>(commonResultResDTO, HttpStatus.CONFLICT);
         }
 
-        joinService.joinProcess(joinReqDTO, fullPath);
-
-        String username = joinReqDTO.getUsername();
-        String role = joinReqDTO.getUserType().getDescription();
-
-        //토큰 생성
-        String access = jwtUtil.createJwt("access", username, role, 600000L);
-        String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
-
-        Token token = new Token(username, refresh, 86400000L);
-        tokenRepository.save(token);
-
         //응답 설정
-        response.setHeader("access", access);
-        response.setHeader(HttpHeaders.SET_COOKIE, createCookie("refresh", refresh).toString());
+        response.setHeader("access", joinResDTO.getAccess());
+        response.setHeader(HttpHeaders.SET_COOKIE, createCookie("refresh", joinResDTO.getRefresh()).toString());
         response.setStatus(HttpStatus.OK.value());
 
-        JoinResultResDTO joinResultResDTO = new JoinResultResDTO("200 OK", "회원가입이 완료되었습니다.", joinReqDTO.getName());
-        return new ResponseEntity<>(joinResultResDTO, HttpStatus.OK);
+        return new ResponseEntity<>(joinResDTO.getJoinResultResDTO(), HttpStatus.OK);
     }
 
     private ResponseCookie createCookie(String key, String value) {
@@ -118,11 +100,5 @@ public class JoinController {
                 .sameSite("None")
                 .build();
 
-        /*Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);*/
-        //return cookie;
     }
 }
