@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
-import team_project.clat.dto.Dto.request.ChatRoomCreateDto;
+import team_project.clat.dto.request.ChatRoomCreateDto;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
