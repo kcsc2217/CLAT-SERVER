@@ -1,4 +1,4 @@
-package team_project.clat.domain.Dto.response;
+package team_project.clat.dto.Dto.response;
 
 import lombok.Data;
 import team_project.clat.domain.ChatRoom;

@@ -1,4 +1,4 @@
-package team_project.clat.domain.File;
+package team_project.clat.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

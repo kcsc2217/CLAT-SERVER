@@ -1,4 +1,4 @@
-package team_project.clat.domain.response;
+package team_project.clat.dto.Dto.response;
 
 public record ErrorResponse (
         String title,

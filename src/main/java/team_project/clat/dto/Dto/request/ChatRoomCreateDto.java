@@ -1,4 +1,4 @@
-package team_project.clat.domain.Dto.request;
+package team_project.clat.dto.Dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;

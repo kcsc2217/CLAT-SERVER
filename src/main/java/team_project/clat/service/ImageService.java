@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import team_project.clat.domain.File.Image;
+import team_project.clat.domain.Image;
 import team_project.clat.dto.ImageResponseDTO;
 import team_project.clat.dto.TestImageDto;
 import team_project.clat.exception.ImageDownloadFailedException;

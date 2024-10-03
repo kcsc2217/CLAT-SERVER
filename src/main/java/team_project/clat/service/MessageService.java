@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
-import team_project.clat.domain.File.Image;
+import team_project.clat.domain.Image;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Memo;
 import team_project.clat.domain.Message;

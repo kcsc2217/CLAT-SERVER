@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import team_project.clat.domain.File.Image;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

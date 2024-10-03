@@ -12,7 +12,7 @@ import team_project.clat.domain.Report;
 import team_project.clat.dto.ReportRequestDTO;
 import team_project.clat.exception.GlobalException;
 import team_project.clat.repository.ReportRepository;
-import team_project.clat.type.ErrorCode;
+import team_project.clat.exception.type.ErrorCode;
 
 
 @Service

@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.FAQItem;
 import team_project.clat.exception.GlobalException;
 import team_project.clat.repository.FAQItemRepository;
-import team_project.clat.type.ErrorCode;
+import team_project.clat.exception.type.ErrorCode;
 
 import java.util.List;
 

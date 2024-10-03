@@ -1,4 +1,4 @@
-package team_project.clat.domain.Dto.request;
+package team_project.clat.dto.Dto.request;
 
 import lombok.Data;
 
