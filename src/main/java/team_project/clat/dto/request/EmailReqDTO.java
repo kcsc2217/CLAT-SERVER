@@ -1,8 +1,8 @@
-package team_project.clat.dto;
+package team_project.clat.dto.request;
 
 import lombok.Getter;
 
-public class EmailRequest {
+public class EmailReqDTO {
     @Getter
     public static class EmailForVerificationRequest {
         private String email;

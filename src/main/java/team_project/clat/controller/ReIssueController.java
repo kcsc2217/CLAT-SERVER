@@ -13,11 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import team_project.clat.domain.Enum.UserType;
 import team_project.clat.domain.Token;
-import team_project.clat.dto.CommonResult;
+import team_project.clat.dto.response.CommonResultResDTO;
+import team_project.clat.dto.response.ReissueResDTO;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.repository.TokenRepository;
+import team_project.clat.service.ReIssueService;
 
 import java.util.Optional;
 
@@ -27,81 +28,19 @@ import java.util.Optional;
 @Slf4j
 public class ReIssueController {
 
-    private final JwtUtil jwtUtil;
-    private final TokenRepository tokenRepository;
+    private final ReIssueService reIssueService;
 
     @PostMapping("/reIssue")
-    public ResponseEntity<CommonResult> reIssue(HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity<CommonResultResDTO> reIssue(HttpServletRequest request, HttpServletResponse response){
 
+        ReissueResDTO reissueResDTO = reIssueService.tokenReissue(request);
 
-        //get refresh token
-        String refresh = null;
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-
-            if (cookie.getName().equals("refresh")) {
-
-                refresh = cookie.getValue();
-            }
-        }
-        if (refresh == null) {
-
-            //response status code
-            CommonResult commonResult = new CommonResult("400 bad_request", "refresh token null.");
-            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
-        }
-        //expired check
-        try {
-            jwtUtil.isExpired(refresh);
-        } catch (ExpiredJwtException e) {
-
-            //response status code
-            CommonResult commonResult = new CommonResult("400 bad_request", "refresh token expired.");
-            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
-        }
-        // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
-        String category = jwtUtil.getCategory(refresh);
-
-        if (!category.equals("refresh")) {
-
-            //response status code
-            CommonResult commonResult = new CommonResult("400 bad_request", "invalid refresh token.");
-            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
-
-        }
-        
-
-        String username = jwtUtil.getUsername(refresh);
-        String userType = jwtUtil.getUserType(refresh);
-
-        boolean isExist = tokenRepository.existsById(username);
-        if(!isExist){
-            CommonResult commonResult = new CommonResult("400 bad_request", "invalid refresh token.");
-            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
+        if(reissueResDTO.getNewAccess()!=null) {
+            response.setHeader("access", reissueResDTO.getNewAccess());
+            response.setHeader(HttpHeaders.SET_COOKIE, createCookie("refresh", reissueResDTO.getNewRefresh()).toString());
         }
 
-        Optional<Token> byId = tokenRepository.findById(username);
-        Token token = byId.get();
-        log.info("=======기존 refresh : {}========",token.getRefreshToken());
-
-
-        //make new JWT
-        String newAccess = jwtUtil.createJwt("access", username, userType , 600000L);
-        String newRefresh = jwtUtil.createJwt("refresh", username, userType, 86400000L);
-
-        tokenRepository.deleteById(username);
-        Token refreshToken = new Token(username, newRefresh, 86400000L);
-        log.info("=======재발급 refresh : {}========",refreshToken.getRefreshToken());
-        tokenRepository.save(refreshToken);
-
-
-        //response
-        response.setHeader("access", newAccess);
-        //response.addCookie(createCookie("refresh", newRefresh));
-        response.setHeader(HttpHeaders.SET_COOKIE, createCookie("refresh", newRefresh).toString());
-
-        CommonResult commonResult = new CommonResult("200 OK", "토큰 재발급이 완료되었습니다..");
-        return new ResponseEntity<>(commonResult, HttpStatus.OK);
+        return new ResponseEntity<>(reissueResDTO.getCommonResultResDTO(), reissueResDTO.getHttpStatus());
 
     }
 
@@ -116,11 +55,5 @@ public class ReIssueController {
                 .sameSite("None")
                 .build();
 
-        /*Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);*/
-        //return cookie;
     }
 }
