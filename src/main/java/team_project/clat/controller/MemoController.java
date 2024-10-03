@@ -10,6 +10,7 @@ import team_project.clat.domain.Message;
 import team_project.clat.dto.request.MemoReqDTO;
 import team_project.clat.dto.response.MemoResDTO;
 import team_project.clat.dto.request.MessageReqDTO;
+import team_project.clat.dto.response.MemoUpdateResDTO;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.MemoRepository;
 import team_project.clat.service.MessageService;
@@ -31,9 +32,7 @@ public class MemoController {
     public MemoResDTO memo(@PathVariable Long messageId, HttpServletRequest request) {
         Member findByMember = tokenService.getUsernameFromToken(request);
 
-        Message message = messageService.findByWithMemo(messageId, findByMember);
-
-        return new MemoResDTO(message);
+       return messageService.findByWithMemo(messageId, findByMember);
     }
 
 
@@ -42,14 +41,12 @@ public class MemoController {
 
         Member findByMember = tokenService.getUsernameFromToken(request);
 
-        List<Message> messageList = messageService.findByWithChatRoomMemo(chatRoomId, findByMember.getId());
-
-        return messageList.stream().map(message -> new MemoResDTO(message)).toList();
+        return messageService.findByWithChatRoomMemo(chatRoomId, findByMember.getId());
 
     }
 
     @PutMapping
-    public MessageReqDTO.MemoUpdateReqDTO updateMemo(@RequestBody MemoReqDTO memoRequestDTO, HttpServletRequest request){
+    public MemoUpdateResDTO updateMemo(@RequestBody MemoReqDTO memoRequestDTO, HttpServletRequest request){
 
         Member findByMember = tokenService.getUsernameFromToken(request);
 
@@ -57,7 +54,7 @@ public class MemoController {
 
         Memo memo = memoRepository.findById(id).orElseThrow(() -> new NotFoundException("해당 메모는 없습니다"));
 
-        return new MessageReqDTO.MemoUpdateReqDTO(memo);
+        return new MemoUpdateResDTO(memo);
     }
 
 }

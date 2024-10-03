@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     private final Student_Course_Service studentCourseService;
-
     private final TokenService tokenService;
     private final MessageService messageService;
 
@@ -39,19 +38,15 @@ public class HomeController {
 
         Member findMember = tokenService.getUsernameFromToken(request);
 
-        List<Course> courseList = studentCourseService.courseList(findMember.getId(), term);
-
-       return courseList.stream().map(CourseHomeResDTO::new).collect(Collectors.toList());
+        return  studentCourseService.courseList(findMember.getId(), term);
     }
 
 
     @GetMapping("/messages")
     public List<MemberMessageResDTO> memberSelectMessage(HttpServletRequest request){
         Member findMember = tokenService.getUsernameFromToken(request);
-        List<Message> messages = messageService.memberSelectMessage(findMember.getId());
 
-        return messages.stream().map(message -> new MemberMessageResDTO(message.getId(), message.getMessage())).collect(Collectors.toList());
-
+        return messageService.memberSelectMessage(findMember.getId());
     }
 
     @GetMapping("/answer")
@@ -59,9 +54,7 @@ public class HomeController {
 
         Member usernameFromToken = tokenService.getUsernameFromToken(request);
 
-        List<Message> findByMessage = messageService.findByWithAnswer(usernameFromToken.getId());
-
-     return  findByMessage.stream().map(f -> new MemberAnswerResDTO(f.getId(), f.getAnswer().getAnswer())).collect(Collectors.toList());
+        return messageService.findByWithAnswer(usernameFromToken.getId());
     }
 
 

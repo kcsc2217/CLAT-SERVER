@@ -10,9 +10,7 @@ import team_project.clat.domain.Image;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Memo;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.response.ChatRoomMessageResDTO;
-import team_project.clat.dto.response.FileImageResDTO;
-import team_project.clat.dto.response.MessageFileResDTO;
+import team_project.clat.dto.response.*;
 import team_project.clat.dto.request.MessageMemoReqDTO;
 import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.MemberNotAccessException;
@@ -81,10 +79,13 @@ public class MessageService {
     }
 
 
-    public List<Message> memberSelectMessage(Long memberId){
+    public List<MemberMessageResDTO> memberSelectMessage(Long memberId){
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new NotFoundException("해당 학생이 없습니다"));
 
-        return member.getMessageList();
+        List<Message> messageList = member.getMessageList();
+
+        return messageList.stream().map(MemberMessageResDTO::new).toList();
+
     }
 
 
@@ -138,19 +139,23 @@ public class MessageService {
 
 
 
-    public Message findByWithMemo(Long messageId, Member member){
+    public MemoResDTO findByWithMemo(Long messageId, Member member){
         Message message = messageRepository.findMessageById(messageId).orElseThrow(() -> new NotFoundException("해당 메세지는 찾을 수 없습니다"));
 
         validationAccessMember(member, message);
-        return message;
+        return new MemoResDTO(message);
     }
 
-    public List<Message> findByWithAnswer(Long memberId){
-     return messageRepository.findMessageByUsername(memberId).orElseThrow(()-> new NotFoundException("해당 멤버의 메시지를 찾을 수 없습니다"));
+    public List<MemberAnswerResDTO> findByWithAnswer(Long memberId){
+        List<Message> messages = messageRepository.findMessageByUsername(memberId).orElseThrow(() -> new NotFoundException("해당 멤버의 메시지를 찾을 수 없습니다"));
+
+        return messages.stream().map(MemberAnswerResDTO::new).toList();
     }
 
-    public List<Message> findByWithChatRoomMemo(Long chatRoomId, Long memberId){
-        return messageRepository.findByChatRoomId(chatRoomId, memberId).orElseThrow(() -> new NotFoundException("해당 채팅방에 대한 메시지를 찾을수 없습니다"));
+    public List<MemoResDTO> findByWithChatRoomMemo(Long chatRoomId, Long memberId){
+        List<Message> messages = messageRepository.findByChatRoomId(chatRoomId, memberId).orElseThrow(() -> new NotFoundException("해당 채팅방에 대한 메시지를 찾을수 없습니다"));
+
+        return messages.stream().map(MemoResDTO::new).toList();
     }
 
     private static void validationAccessMember(Member member, Message message) {

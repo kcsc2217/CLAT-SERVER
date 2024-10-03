@@ -46,7 +46,6 @@ public class ChatRoomController {
         chatRoomService.roomSaveValidation(chatRoomCreateDto.getCourseId(), chatRoomCreateDto.getWeek()); // 똑같은 주차의 강의가 있는지 검증 로직 있으면 예외 처리
         ChatRoom findChatRoom = chatRoomService.save(chatRoomCreateDto);
 
-
         log.info("채팅방 생성완료");
 
         return new CreateMemberResponse(findChatRoom);
@@ -55,9 +54,8 @@ public class ChatRoomController {
     @GetMapping("/{chatRoomId}") // 채팅방 이름과 채팅방 메세지 조회
     public ChatRoomMessageResDTO getFileMessage(@PathVariable Long chatRoomId ){
 
-        ChatRoom chatRoom = chatRoomService.findFetchMessageAndImage(chatRoomId);
+        return chatRoomService.findFetchMessageAndImage(chatRoomId);
 
-        return new ChatRoomMessageResDTO(chatRoom);
     }
 
     @GetMapping("/subQuery/{chatRoomId}")
@@ -83,19 +81,23 @@ public class ChatRoomController {
         // 현재 유저가 해당 강의를 듣고 있는지 검증하기 위해
         boolean flag = chatRoomService.validationRoom(roomKeyReq);
 
-        if(flag){
-            Member findByMember = tokenService.getUsernameFromToken(request);
-          chatRoomMemberService.saveChatRoomMember(roomKeyReq, findByMember);
-        }
+        saveChatRoomMember(roomKeyReq, request, flag);
 
         return new RoomKeyResDTO(flag);
     }
 
+
+
     @GetMapping("/api/{chatRoomId}")
     public ChatRoomInformationResDTO getChatRoom(@PathVariable("chatRoomId") Long chatRoomId){
-        ChatRoom room = chatRoomService.getRoom(chatRoomId);
-        return new ChatRoomInformationResDTO(room);
+        return chatRoomService.getRoom(chatRoomId);
+    }
 
+    private void saveChatRoomMember(RoomKeyReqDTO roomKeyReq, HttpServletRequest request, boolean flag) {
+        if(flag){ // 채팅방에 대한
+            Member findByMember = tokenService.getUsernameFromToken(request);
+            chatRoomMemberService.saveChatRoomMember(roomKeyReq, findByMember);
+        }
     }
 
 

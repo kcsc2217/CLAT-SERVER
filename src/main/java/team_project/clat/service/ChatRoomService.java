@@ -9,6 +9,8 @@ import team_project.clat.domain.Course;
 import team_project.clat.dto.request.ChatRoomCreateReqDTO;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.request.RoomKeyReqDTO;
+import team_project.clat.dto.response.ChatRoomInformationResDTO;
+import team_project.clat.dto.response.ChatRoomMessageResDTO;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.ChatRoomRepository;
@@ -46,14 +48,14 @@ public class ChatRoomService {
     }
 
 
-    public ChatRoom findFetchMessageAndImage(Long chatRoomId){
+    public ChatRoomMessageResDTO findFetchMessageAndImage(Long chatRoomId){
         ChatRoom chatRoom = chatRoomRepository.findFetchByChatRoom(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방은 없습니다"));
 
         List<Long> messageIds = getChatRoomMessageIds(chatRoom);
 
         messageRepository.findAllMessageIds(messageIds); // n+1 문제를 해결하기 위한 fetchjoin
 
-        return  chatRoom;
+        return  new ChatRoomMessageResDTO(chatRoom);
 
     }
 
@@ -88,10 +90,12 @@ public class ChatRoomService {
         }
     }
 
-    public ChatRoom getRoom(Long chatRoomId){
+    public ChatRoomInformationResDTO getRoom(Long chatRoomId){
         log.info("채팅방 정보");
 
-        return chatRoomRepository.findChatRoomById(chatRoomId).orElseThrow(()-> new NotFoundException("해당 채팅방은 없습니다"));
+        ChatRoom chatRoom = chatRoomRepository.findChatRoomById(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방은 없습니다"));
+
+        return new ChatRoomInformationResDTO(chatRoom);
     }
 
 

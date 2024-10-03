@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team_project.clat.domain.Answer;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.request.MessageAnswerReqDTO;
 import team_project.clat.dto.request.MessageFileReqDTO;
 import team_project.clat.dto.request.MessageMemoReqDTO;
 import team_project.clat.dto.request.MessageReqDTO;
@@ -37,13 +38,12 @@ public class MessageSubController {
 
 
     @PostMapping("/chat/answer")
-    public MessageAnswerResDTO answerApi(@RequestBody MessageReqDTO.MessageAnswerReqDTO messageAnswerDTO, HttpServletRequest request){
+    public MessageAnswerResDTO answerApi(@RequestBody MessageAnswerReqDTO messageAnswerDTO, HttpServletRequest request){
         log.info("답글 컨트롤러");
         String accessToken = request.getHeader("access");
         String username = jwtUtil.getUsername(accessToken);
 
         Answer answer = answerService.saveAnswer(messageAnswerDTO.getAnswer(), username, messageAnswerDTO.getMessageId());
-
 
 
         return new MessageAnswerResDTO(answer);

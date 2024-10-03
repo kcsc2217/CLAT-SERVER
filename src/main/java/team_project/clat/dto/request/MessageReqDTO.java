@@ -18,40 +18,6 @@ public class MessageReqDTO {
     public MessageReqDTO() {
     }
 
-    @Data
-    public static class MessageAnswerReqDTO {
-        private Long messageId;
-
-        private Long chatRoomId;
-
-        private String answer;
-
-        public MessageAnswerReqDTO(Long messageId, Long chatRoomId, String answer) {
-            this.messageId = messageId;
-            this.chatRoomId = chatRoomId;
-            this.answer = answer;
-        }
-
-        public MessageAnswerReqDTO() {
-        }
-    }
-
-    @Data
-    public static class MemoUpdateReqDTO {
+ }
 
 
-        private Long memoId;
-
-        private String updateMemoContent;
-
-        public MemoUpdateReqDTO(Memo memo) {
-            this.memoId = memo.getId();
-            this.updateMemoContent = memo.getMemoContent();
-
-        }
-
-        public MemoUpdateReqDTO() {
-
-        }
-    }
-}

@@ -1,23 +1,21 @@
 package team_project.clat.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import team_project.clat.domain.Answer;
+import team_project.clat.domain.Message;
+import team_project.clat.dto.request.MessageAnswerReqDTO;
 import team_project.clat.dto.request.MessageFileReqDTO;
 import team_project.clat.dto.request.MessageReqDTO;
 import team_project.clat.dto.response.FileImageResDTO;
 import team_project.clat.dto.response.MessageAnswerResDTO;
 import team_project.clat.dto.response.MessageFileIncludedRespDTO;
 import team_project.clat.dto.response.MessageResDTO;
-import team_project.clat.domain.Message;
-import team_project.clat.dto.*;
 import team_project.clat.service.AnswerService;
 import team_project.clat.service.MessageService;
 
@@ -31,15 +29,6 @@ public class MessageController {
     private final MessageService messageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final AnswerService answerService;
-
-    @MessageMapping(value = "/chat/enter")
-    @Operation(summary = "채팅방 입장", description = "사용자가 채팅방에 입장하면, STOMP 메시지를 통해 입장 메시지를 브로드캐스트합니다.")
-    public void enter(MessageReqDTO messageRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){
-//        Member member = customUserDetails.getMember();
-//        messageRequestDto.setMessage(member.getUsername() + "님이 채팅방에 입장하셨습니다.");
-//        simpMessagingTemplate.convertAndSend("/sub/chat/" + messageRequestDto.getCourseId(), messageRequestDto);  // 해당 채팅방으로 메세지 전송
-
-    }
 
     @MessageMapping(value = "/chat/message")
     public void message(MessageReqDTO messageRequestDto, SimpMessageHeaderAccessor accessor){ // 강의 아이디로 채팅 구독
@@ -67,7 +56,7 @@ public class MessageController {
     }
 
     @MessageMapping(value = "/chat/answer")
-    public void messageAnswer(MessageReqDTO.MessageAnswerReqDTO messageAnswerDTO, SimpMessageHeaderAccessor accessor){
+    public void messageAnswer(MessageAnswerReqDTO messageAnswerDTO, SimpMessageHeaderAccessor accessor){
         log.info("답글이 전송되었습니다");
         String username = (String) accessor.getSessionAttributes().get("username");
 
@@ -77,13 +66,6 @@ public class MessageController {
 
 
     }
-
-//    @MessageMapping(value = "/chat/memo")
-//    public void messageMemo(MessageMemoRequestDTO messageMemoRequestDTO){
-//        Message message = messageService.saveMemo(messageMemoRequestDTO.getMessageId(), messageMemoRequestDTO.getMemo());
-//
-//        simpMessagingTemplate.convertAndSend("/sub/chat/" + messageMemoRequestDTO.getChatRoomId(), new MessageMemoResponseDTO(message) );
-//    }
 
 
 }

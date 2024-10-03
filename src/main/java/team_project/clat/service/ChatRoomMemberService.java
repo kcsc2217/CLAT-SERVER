@@ -7,6 +7,7 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.ChatRoomMember;
 import team_project.clat.domain.Member;
 import team_project.clat.dto.request.RoomKeyReqDTO;
+import team_project.clat.dto.response.ChatRoomMemberResDTO;
 import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.ChatRoomMemberRepository;
@@ -34,4 +35,15 @@ public class ChatRoomMemberService {
         chatRoomMemberRepository.save(new ChatRoomMember(true, findBychatRoom, member));
 
     }
+
+    public ChatRoomMemberResDTO existMemberInChatRoom(Long chatRoomId, Long memberId){
+        boolean flag = chatRoomMemberRepository.existsByChatRoomIdAndMemberId(chatRoomId, memberId);
+
+        return new ChatRoomMemberResDTO(flag);
+    }
+
+
+
+
+
 }

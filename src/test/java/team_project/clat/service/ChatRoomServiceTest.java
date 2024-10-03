@@ -27,12 +27,6 @@ class ChatRoomServiceTest {
     private ChatRoomRepository chatRoomRepository;
 
 
-
-
-
-
-
-
     @Test
     public void fetchjoin_쿼리_보기() throws Exception {
        //given

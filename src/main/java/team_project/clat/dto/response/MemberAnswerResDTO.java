@@ -1,6 +1,7 @@
 package team_project.clat.dto.response;
 
 import lombok.Data;
+import team_project.clat.domain.Message;
 
 @Data
 public class MemberAnswerResDTO {
@@ -9,9 +10,9 @@ public class MemberAnswerResDTO {
 
     private String answer;
 
-    public MemberAnswerResDTO(Long messageId, String answer) {
-        this.messageId = messageId;
-        this.answer = answer;
+    public MemberAnswerResDTO(Message message) {
+        this.messageId = message.getId();
+        this.answer = message.getAnswer().getAnswer();
     }
 
     public MemberAnswerResDTO() {
