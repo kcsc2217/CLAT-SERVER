@@ -6,8 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
-import team_project.clat.domain.Enum.Gender;
 import team_project.clat.domain.Enum.UserType;
 
 import java.util.ArrayList;
@@ -30,18 +28,10 @@ public class Member extends BaseEntity {
     private String password;
     private String schoolName;
     private String filePath;
-    private int age;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
 
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    @Embedded
-    private Address address;
-
-    private String nickName;
 
     // 신고하기 와 양방향 맵핑
     @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL, orphanRemoval = true)
@@ -59,19 +49,15 @@ public class Member extends BaseEntity {
     List<Answer> answerList = new ArrayList<>();
 
 
-    public Member(Long id, String name, String username, String nickName, String email, String password, String schoolName, String filePath, int age, Gender gender, UserType userType, Address address) {
+    public Member(Long id, String name, String username, String email, String password, String schoolName, String filePath, UserType userType) {
         this.id = id;
         this.name = name;
         this.username = username;
-        this.nickName = nickName;
         this.email = email;
         this.password = password;
         this.schoolName = schoolName;
         this.filePath = filePath;
-        this.age = age;
-        this.gender = gender;
         this.userType = userType;
-        this.address = address;
     }
 
     public static Member memberSet(String name, String username, String password, String schoolName, UserType userType, String filePath){
