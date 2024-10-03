@@ -10,7 +10,9 @@ import team_project.clat.domain.File.Image;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Memo;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.ChatRoomMessageDTO;
 import team_project.clat.dto.FileImageDTO;
+import team_project.clat.dto.MessageIncludeFileDTO;
 import team_project.clat.dto.MessageMemoRequestDTO;
 import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.MemberNotAccessException;
@@ -112,6 +114,26 @@ public class MessageService {
 
         return memo.getId();
 
+    }
+
+
+    // 서브 쿼리를 사용한 조회
+    public List<Message> findSubQueryFetchMessageAndImage(Long chatRoomId){
+        return messageRepository.findSubFetchJoinByMessage(chatRoomId).orElseThrow(()-> new NotFoundException("해당 채팅방에 메시지는 찾을 수 없습니다"));
+    }
+
+
+    // 채팅방 전체 메시지 페치조인 쿼리 개선
+    public ChatRoomMessageDTO findUpgradeQueryByFetchMessageAndImage(Long chatRoomId){
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new NotFoundException("채팅방을 찾을 수 없습니다"));
+
+        ChatRoomMessageDTO chatRoomMessageDTO = new ChatRoomMessageDTO(chatRoom.getRoomName());
+
+        List<Message> messages = messageRepository.findQueryUpdateByChatRoomId(chatRoomId).orElseThrow(() -> new NotFoundException("채팅방을 찾을 수 없습니다"));
+
+        chatRoomMessageDTO.setMessageFileResponseDTOS(messages.stream().map(MessageIncludeFileDTO::new).collect(Collectors.toList()));
+
+        return chatRoomMessageDTO;
     }
 
 

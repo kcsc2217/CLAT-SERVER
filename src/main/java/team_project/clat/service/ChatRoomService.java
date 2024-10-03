@@ -58,6 +58,11 @@ public class ChatRoomService {
 
     }
 
+
+
+
+
+
     private static List<Long> getChatRoomMessageIds(ChatRoom chatRoom) {
         List<Long> messageIds = chatRoom.getMessageList().stream().map(Message::getId).collect(Collectors.toList());
         return messageIds;

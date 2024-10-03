@@ -10,13 +10,18 @@ import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Dto.request.ChatRoomCreateDto;
 import team_project.clat.domain.Dto.response.CreateMemberResponse;
 import team_project.clat.domain.Member;
+import team_project.clat.domain.Message;
 import team_project.clat.dto.ChatRoomInformationDTO;
 import team_project.clat.dto.ChatRoomMessageDTO;
 import team_project.clat.dto.RoomKeyReq;
 import team_project.clat.dto.RoomKeyRes;
+import team_project.clat.repository.ChatRoomRepository;
 import team_project.clat.service.ChatRoomMemberService;
 import team_project.clat.service.ChatRoomService;
+import team_project.clat.service.MessageService;
 import team_project.clat.service.TokenService;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -28,10 +33,12 @@ public class ChatRoomController {
 
     private final ChatRoomMemberService chatRoomMemberService;
 
+    private final MessageService messageService;
+
 
     private final TokenService tokenService;
 
-
+    private final ChatRoomRepository chatRoomRepository;
 
     @PostMapping(value = "")
     public CreateMemberResponse createChatRoom(@RequestBody @Valid ChatRoomCreateDto chatRoomCreateDto) {
@@ -51,6 +58,22 @@ public class ChatRoomController {
         ChatRoom chatRoom = chatRoomService.findFetchMessageAndImage(chatRoomId);
 
         return new ChatRoomMessageDTO(chatRoom);
+    }
+
+    @GetMapping("/subQuery/{chatRoomId}")
+    public ChatRoomMessageDTO getSubQueryMessage(@PathVariable Long chatRoomId ){
+
+        List<Message> subQueryFetchMessageAndImage = messageService.findSubQueryFetchMessageAndImage(chatRoomId);
+
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
+
+        return new ChatRoomMessageDTO(chatRoom);
+    }
+
+    @GetMapping("/queryUpdate/{chatRoomId}")
+    public ChatRoomMessageDTO queryUpdateMessage(@PathVariable Long chatRoomId ){
+
+       return  messageService.findUpgradeQueryByFetchMessageAndImage(chatRoomId);
     }
 
     // 채팅방 검증 로직
