@@ -1,4 +1,4 @@
-package team_project.clat.dto.Dto.response;
+package team_project.clat.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

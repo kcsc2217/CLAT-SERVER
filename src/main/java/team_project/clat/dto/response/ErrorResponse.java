@@ -1,4 +1,4 @@
-package team_project.clat.dto.Dto.response;
+package team_project.clat.dto.response;
 
 public record ErrorResponse (
         String title,
