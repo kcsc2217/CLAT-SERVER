@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
-import team_project.clat.dto.CommonResult;
+import team_project.clat.dto.response.CommonResultResDTO;
 import team_project.clat.repository.TokenRepository;
 
 import java.io.IOException;
@@ -108,10 +108,10 @@ public class CustomLogoutFilter extends GenericFilterBean {
         response.setContentType("application/json"); // 응답 형식 설정
         response.setCharacterEncoding("UTF-8");
 
-        CommonResult commonResult = new CommonResult("200 OK", "로그아웃이 완료되었습니다.");
+        CommonResultResDTO commonResultResDTO = new CommonResultResDTO("200 OK", "로그아웃이 완료되었습니다.");
 
         // CommonResult 객체를 JSON으로 직렬화
-        String jsonResponse = objectMapper.writeValueAsString(commonResult);
+        String jsonResponse = objectMapper.writeValueAsString(commonResultResDTO);
 
         // 응답 본문에 JSON 작성
         response.getWriter().write(jsonResponse);

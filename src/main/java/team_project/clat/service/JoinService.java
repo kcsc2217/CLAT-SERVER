@@ -8,8 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import team_project.clat.domain.Enum.UserType;
 import team_project.clat.domain.Member;
-import team_project.clat.dto.CommonResult;
-import team_project.clat.dto.JoinDto;
+import team_project.clat.dto.response.CommonResultResDTO;
+import team_project.clat.dto.request.JoinReqDTO;
 import team_project.clat.repository.MemberRepository;
 
 @Service
@@ -21,23 +21,23 @@ public class JoinService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-    public ResponseEntity<CommonResult> existsByUsername(JoinDto joinDto) {
-        if(memberRepository.existsByUsername(joinDto.getUsername())){
-            CommonResult commonResult = new CommonResult("409 Conflict", "중복된 ID가 존재합니다.");
-            return new ResponseEntity<>(commonResult, HttpStatus.CONFLICT);
+    public ResponseEntity<CommonResultResDTO> existsByUsername(JoinReqDTO joinReqDTO) {
+        if(memberRepository.existsByUsername(joinReqDTO.getUsername())){
+            CommonResultResDTO commonResultResDTO = new CommonResultResDTO("409 Conflict", "중복된 ID가 존재합니다.");
+            return new ResponseEntity<>(commonResultResDTO, HttpStatus.CONFLICT);
         }else {
-            CommonResult commonResult = new CommonResult("200 OK", "사용가능한 ID 입니다.");
-            return new ResponseEntity<>(commonResult, HttpStatus.OK);
+            CommonResultResDTO commonResultResDTO = new CommonResultResDTO("200 OK", "사용가능한 ID 입니다.");
+            return new ResponseEntity<>(commonResultResDTO, HttpStatus.OK);
         }
     }
 
-    public void joinProcess(JoinDto joinDto, String filePath){
+    public void joinProcess(JoinReqDTO joinReqDTO, String filePath){
 
-        String username = joinDto.getUsername();
-        String password = joinDto.getPassword();
-        String name = joinDto.getName();
-        String schoolName = joinDto.getSchoolName();
-        UserType userType = joinDto.getUserType();
+        String username = joinReqDTO.getUsername();
+        String password = joinReqDTO.getPassword();
+        String name = joinReqDTO.getName();
+        String schoolName = joinReqDTO.getSchoolName();
+        UserType userType = joinReqDTO.getUserType();
 
         Boolean isExist = memberRepository.existsByUsername(username);
 

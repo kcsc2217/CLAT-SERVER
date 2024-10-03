@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import team_project.clat.dto.response.RestResponse;
-import team_project.clat.dto.CommonResult;
+import team_project.clat.dto.response.CommonResultResDTO;
 import team_project.clat.exception.*;
 
 @Slf4j
@@ -17,9 +17,9 @@ public class ExControllerAdvice {
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
-    public CommonResult exHandle(MailVerifyException e){
+    public CommonResultResDTO exHandle(MailVerifyException e){
         String errorText = HttpStatus.CONFLICT.value() +" "+ HttpStatus.CONFLICT.getReasonPhrase();
-        return new CommonResult(errorText, e.getMessage());
+        return new CommonResultResDTO(errorText, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -69,9 +69,9 @@ public class ExControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
-    public CommonResult exImageDownloadHandle(ImageDownloadFailedException e){
+    public CommonResultResDTO exImageDownloadHandle(ImageDownloadFailedException e){
         String errorText = HttpStatus.BAD_REQUEST.value() +" "+ HttpStatus.BAD_REQUEST.getReasonPhrase();
-        return new CommonResult(errorText, e.getMessage());
+        return new CommonResultResDTO(errorText, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)

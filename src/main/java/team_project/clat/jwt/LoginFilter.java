@@ -19,8 +19,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StreamUtils;
 import team_project.clat.domain.Token;
-import team_project.clat.dto.CommonResult;
-import team_project.clat.dto.LoginDto;
+import team_project.clat.dto.response.CommonResultResDTO;
+import team_project.clat.dto.request.LoginReqDTO;
 import team_project.clat.repository.TokenRepository;
 
 import java.io.IOException;
@@ -42,20 +42,20 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //String username = obtainUsername(request);
         //String password = obtainPassword(request);
 
-        LoginDto loginDTO = new LoginDto();
+        LoginReqDTO loginReqDTO = new LoginReqDTO();
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             ServletInputStream inputStream = request.getInputStream();
             String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-            loginDTO = objectMapper.readValue(messageBody, LoginDto.class);
+            loginReqDTO = objectMapper.readValue(messageBody, LoginReqDTO.class);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        String username = loginDTO.getUsername();
-        String password = loginDTO.getPassword();
+        String username = loginReqDTO.getUsername();
+        String password = loginReqDTO.getPassword();
 
         log.info("username : {}", username);
 
@@ -99,10 +99,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             response.setContentType("application/json"); // 응답 형식 설정
             response.setCharacterEncoding("UTF-8");
 
-            CommonResult commonResult = new CommonResult("409 Conflict", "올바르지않은 아이디 또는 비밀번호 입니다.");
+            CommonResultResDTO commonResultResDTO = new CommonResultResDTO("409 Conflict", "올바르지않은 아이디 또는 비밀번호 입니다.");
 
             // CommonResult 객체를 JSON으로 직렬화
-            String jsonResponse = objectMapper.writeValueAsString(commonResult);
+            String jsonResponse = objectMapper.writeValueAsString(commonResultResDTO);
 
             // 응답 본문에 JSON 작성
             response.getWriter().write(jsonResponse);

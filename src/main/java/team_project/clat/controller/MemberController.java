@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.Member;
-import team_project.clat.dto.MemberDto;
+import team_project.clat.dto.request.MemberReqDTO;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.repository.MemberRepository;
 
@@ -20,15 +20,15 @@ public class MemberController {
     private final MemberRepository memberRepository;
 
     @GetMapping("/members")
-    public ResponseEntity<MemberDto> findMember(HttpServletRequest request){
+    public ResponseEntity<MemberReqDTO> findMember(HttpServletRequest request){
         String accessToken = request.getHeader("access");
         String username = jwtUtil.getUsername(accessToken);
         String userType = jwtUtil.getUserType(accessToken);
 
         Member findMember = memberRepository.findByUsername(username);
 
-        MemberDto memberDto = new MemberDto(username, findMember.getName(), findMember.getSchoolName(), userType);
+        MemberReqDTO memberReqDTO = new MemberReqDTO(username, findMember.getName(), findMember.getSchoolName(), userType);
 
-        return new ResponseEntity<>(memberDto, HttpStatus.OK);
+        return new ResponseEntity<>(memberReqDTO, HttpStatus.OK);
     }
 }

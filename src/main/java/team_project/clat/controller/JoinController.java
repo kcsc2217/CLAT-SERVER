@@ -1,6 +1,5 @@
 package team_project.clat.controller;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +18,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import team_project.clat.domain.Token;
+import team_project.clat.dto.response.CommonResultResDTO;
+import team_project.clat.dto.request.EmailReqDTO;
+import team_project.clat.dto.request.JoinReqDTO;
+import team_project.clat.dto.response.JoinResultResDTO;
 import team_project.clat.repository.TokenRepository;
 import team_project.clat.service.EmailService;
 import team_project.clat.service.JoinService;
 
-import team_project.clat.dto.*;
 import team_project.clat.jwt.JwtUtil;
 
 import java.io.File;
@@ -42,38 +44,38 @@ public class JoinController {
     private final TokenRepository tokenRepository;
 
     @PostMapping("/idCheck")
-    public ResponseEntity<CommonResult> isDuplicateUsername(@RequestBody JoinDto joinDto){
-        return joinService.existsByUsername(joinDto);
+    public ResponseEntity<CommonResultResDTO> isDuplicateUsername(@RequestBody JoinReqDTO joinReqDTO){
+        return joinService.existsByUsername(joinReqDTO);
     }
 
     @PostMapping("/verify-email")
-    public ResponseEntity<CommonResult> getEmailForVerification(@RequestBody EmailRequest.EmailForVerificationRequest request){
+    public ResponseEntity<CommonResultResDTO> getEmailForVerification(@RequestBody EmailReqDTO.EmailForVerificationRequest request){
         LocalDateTime requestedAt = LocalDateTime.now();
         emailService.sendSimpleVerificationMail(request.getEmail(), requestedAt);
-        CommonResult commonResult = new CommonResult("200 OK", "메일이 발송되었습니다.");
-        return new ResponseEntity<>(commonResult, HttpStatus.OK);
+        CommonResultResDTO commonResultResDTO = new CommonResultResDTO("200 OK", "메일이 발송되었습니다.");
+        return new ResponseEntity<>(commonResultResDTO, HttpStatus.OK);
     }
 
     @PostMapping("/verification-code")
-    public ResponseEntity<CommonResult> verificationByCode(@RequestBody EmailRequest.VerificationCodeRequest request) {
+    public ResponseEntity<CommonResultResDTO> verificationByCode(@RequestBody EmailReqDTO.VerificationCodeRequest request) {
         LocalDateTime requestedAt = LocalDateTime.now();
         emailService.verifyCode(request.getEmail(), request.getCode(), requestedAt);
-        CommonResult commonResult = new CommonResult("200 OK", "인증이 완료되었습니다.");
-        return new ResponseEntity<>(commonResult, HttpStatus.OK);
+        CommonResultResDTO commonResultResDTO = new CommonResultResDTO("200 OK", "인증이 완료되었습니다.");
+        return new ResponseEntity<>(commonResultResDTO, HttpStatus.OK);
     }
 
     @PostMapping("/join")
-    public ResponseEntity<?> joinProcess(@Valid @RequestPart JoinDto joinDto,
+    public ResponseEntity<?> joinProcess(@Valid @RequestPart JoinReqDTO joinReqDTO,
                                                     BindingResult bindingResult,
                                                     @RequestPart MultipartFile file,
                                                     HttpServletResponse response) throws IOException {
 
-        log.info("{},{},{},{}",joinDto.getName(),joinDto.getSchoolName(),joinDto.getUserType(),joinDto.getUsername());
+        log.info("{},{},{},{}", joinReqDTO.getName(), joinReqDTO.getSchoolName(), joinReqDTO.getUserType(), joinReqDTO.getUsername());
 
         if(bindingResult.hasErrors()){
             String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-            CommonResult commonResult = new CommonResult("400 BAD_REQUEST", errorMessage);
-            return new ResponseEntity<>(commonResult, HttpStatus.BAD_REQUEST);
+            CommonResultResDTO commonResultResDTO = new CommonResultResDTO("400 BAD_REQUEST", errorMessage);
+            return new ResponseEntity<>(commonResultResDTO, HttpStatus.BAD_REQUEST);
         }
 
         String fileDir = "/home/ubuntu/upload/";
@@ -84,10 +86,10 @@ public class JoinController {
             file.transferTo(new File(fullPath));
         }
 
-        joinService.joinProcess(joinDto, fullPath);
+        joinService.joinProcess(joinReqDTO, fullPath);
 
-        String username = joinDto.getUsername();
-        String role = joinDto.getUserType().getDescription();
+        String username = joinReqDTO.getUsername();
+        String role = joinReqDTO.getUserType().getDescription();
 
         //토큰 생성
         String access = jwtUtil.createJwt("access", username, role, 600000L);
@@ -101,8 +103,8 @@ public class JoinController {
         response.setHeader(HttpHeaders.SET_COOKIE, createCookie("refresh", refresh).toString());
         response.setStatus(HttpStatus.OK.value());
 
-        JoinResult joinResult = new JoinResult("200 OK", "회원가입이 완료되었습니다.", joinDto.getName());
-        return new ResponseEntity<>(joinResult, HttpStatus.OK);
+        JoinResultResDTO joinResultResDTO = new JoinResultResDTO("200 OK", "회원가입이 완료되었습니다.", joinReqDTO.getName());
+        return new ResponseEntity<>(joinResultResDTO, HttpStatus.OK);
     }
 
     private ResponseCookie createCookie(String key, String value) {
