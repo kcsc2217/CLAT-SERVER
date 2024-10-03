@@ -7,14 +7,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.ChatRoom;
-import team_project.clat.dto.request.ChatRoomCreateDto;
+import team_project.clat.dto.request.ChatRoomCreateReqDTO;
 import team_project.clat.dto.response.CreateMemberResponse;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.ChatRoomInformationDTO;
-import team_project.clat.dto.ChatRoomMessageDTO;
-import team_project.clat.dto.RoomKeyReq;
-import team_project.clat.dto.RoomKeyRes;
+import team_project.clat.dto.response.ChatRoomInformationResDTO;
+import team_project.clat.dto.response.ChatRoomMessageResDTO;
+import team_project.clat.dto.request.RoomKeyReqDTO;
+import team_project.clat.dto.response.RoomKeyResDTO;
 import team_project.clat.repository.ChatRoomRepository;
 import team_project.clat.service.ChatRoomMemberService;
 import team_project.clat.service.ChatRoomService;
@@ -40,8 +40,8 @@ public class ChatRoomController {
 
     private final ChatRoomRepository chatRoomRepository;
 
-    @PostMapping(value = "")
-    public CreateMemberResponse createChatRoom(@RequestBody @Valid ChatRoomCreateDto chatRoomCreateDto) {
+    @PostMapping(value = "") //채팅방 생성
+    public CreateMemberResponse createChatRoom(@RequestBody @Valid ChatRoomCreateReqDTO chatRoomCreateDto) {
 
         chatRoomService.roomSaveValidation(chatRoomCreateDto.getCourseId(), chatRoomCreateDto.getWeek()); // 똑같은 주차의 강의가 있는지 검증 로직 있으면 예외 처리
         ChatRoom findChatRoom = chatRoomService.save(chatRoomCreateDto);
@@ -53,32 +53,32 @@ public class ChatRoomController {
     }
 
     @GetMapping("/{chatRoomId}") // 채팅방 이름과 채팅방 메세지 조회
-    public ChatRoomMessageDTO getFileMessage(@PathVariable Long chatRoomId ){
+    public ChatRoomMessageResDTO getFileMessage(@PathVariable Long chatRoomId ){
 
         ChatRoom chatRoom = chatRoomService.findFetchMessageAndImage(chatRoomId);
 
-        return new ChatRoomMessageDTO(chatRoom);
+        return new ChatRoomMessageResDTO(chatRoom);
     }
 
     @GetMapping("/subQuery/{chatRoomId}")
-    public ChatRoomMessageDTO getSubQueryMessage(@PathVariable Long chatRoomId ){
+    public ChatRoomMessageResDTO getSubQueryMessage(@PathVariable Long chatRoomId ){
 
         List<Message> subQueryFetchMessageAndImage = messageService.findSubQueryFetchMessageAndImage(chatRoomId);
 
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
 
-        return new ChatRoomMessageDTO(chatRoom);
+        return new ChatRoomMessageResDTO(chatRoom);
     }
 
     @GetMapping("/queryUpdate/{chatRoomId}")
-    public ChatRoomMessageDTO queryUpdateMessage(@PathVariable Long chatRoomId ){
+    public ChatRoomMessageResDTO queryUpdateMessage(@PathVariable Long chatRoomId ){
 
        return  messageService.findUpgradeQueryByFetchMessageAndImage(chatRoomId);
     }
 
     // 채팅방 검증 로직
     @PostMapping("/validation")
-    public RoomKeyRes validationRoom(@RequestBody RoomKeyReq roomKeyReq, HttpServletRequest request){
+    public RoomKeyResDTO validationRoom(@RequestBody RoomKeyReqDTO roomKeyReq, HttpServletRequest request){
 
         // 현재 유저가 해당 강의를 듣고 있는지 검증하기 위해
         boolean flag = chatRoomService.validationRoom(roomKeyReq);
@@ -88,13 +88,13 @@ public class ChatRoomController {
           chatRoomMemberService.saveChatRoomMember(roomKeyReq, findByMember);
         }
 
-        return new RoomKeyRes(flag);
+        return new RoomKeyResDTO(flag);
     }
 
     @GetMapping("/api/{chatRoomId}")
-    public ChatRoomInformationDTO getChatRoom(@PathVariable("chatRoomId") Long chatRoomId){
+    public ChatRoomInformationResDTO getChatRoom(@PathVariable("chatRoomId") Long chatRoomId){
         ChatRoom room = chatRoomService.getRoom(chatRoomId);
-        return new ChatRoomInformationDTO(room);
+        return new ChatRoomInformationResDTO(room);
 
     }
 

@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.MessageMemoRequestDTO;
+import team_project.clat.dto.request.MessageMemoReqDTO;
 import team_project.clat.exception.UnAuthorizationException;
 import team_project.clat.repository.MemberRepository;
 
@@ -74,7 +74,7 @@ class MessageServiceTest {
 
        //then
         Assertions.assertThrows(UnAuthorizationException.class, () -> {
-            messageService.saveMemo(new MessageMemoRequestDTO(7L, "안녕"),1L);
+            messageService.saveMemo(new MessageMemoReqDTO(7L, "안녕"),1L);
         });
     }
 

@@ -1,4 +1,4 @@
-package team_project.clat.dto;
+package team_project.clat.dto.response;
 
 import lombok.Data;
 import team_project.clat.domain.Message;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class MessageFileResponseDTO {
+public class MessageFileIncludedRespDTO {
 
     private Long messageId;
 
@@ -19,15 +19,15 @@ public class MessageFileResponseDTO {
 
     private LocalDateTime timestamp;
 
-    public MessageFileResponseDTO(Message message, List<FileImageDTO> fileImageDTOList) {
+    public MessageFileIncludedRespDTO(Message message, List<FileImageResDTO> fileImageDTOList) {
         this.messageId = message.getId();
         this.senderName = message.getMember().getUsername();
-        for(FileImageDTO fileImageDTO : fileImageDTOList){
+        for(FileImageResDTO fileImageDTO : fileImageDTOList){
             this.imageUrl.add(fileImageDTO.getImageURL());
         }
         this.timestamp = message.getCreatedDate();
     }
 
-    public MessageFileResponseDTO() {
+    public MessageFileIncludedRespDTO() {
     }
 }

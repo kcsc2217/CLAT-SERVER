@@ -1,4 +1,4 @@
-package team_project.clat.dto;
+package team_project.clat.dto.response;
 
 import lombok.Data;
 import team_project.clat.domain.Message;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class MessageIncludeFileDTO {
+public class MessageFileResDTO {
 
     private Long messageId;
 
@@ -25,7 +25,7 @@ public class MessageIncludeFileDTO {
 
     private String answer;
 
-    public MessageIncludeFileDTO(Message message) {
+    public MessageFileResDTO(Message message) {
         this.messageId = message.getId();
 
         if(message.getMember() == null){
@@ -47,6 +47,6 @@ public class MessageIncludeFileDTO {
 
     }
 
-    public MessageIncludeFileDTO() {
+    public MessageFileResDTO() {
     }
 }

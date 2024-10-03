@@ -1,4 +1,4 @@
-package team_project.clat.dto;
+package team_project.clat.dto.response;
 
 import lombok.Data;
 import team_project.clat.domain.Message;
@@ -6,7 +6,7 @@ import team_project.clat.domain.Message;
 import java.time.LocalDateTime;
 
 @Data
-public class MessageMemoResponseDTO {
+public class MessageMemoResDTO {
 
     private Long memoId;
 
@@ -17,7 +17,7 @@ public class MessageMemoResponseDTO {
 
     private LocalDateTime timestamp;
 
-    public MessageMemoResponseDTO(Message message) {
+    public MessageMemoResDTO(Message message) {
         this.memoId = message.getMemo().getId();
         this.memo = message.getMemo().getMemoContent();
         this.messageId = message.getId();
@@ -25,6 +25,6 @@ public class MessageMemoResponseDTO {
         this.timestamp = message.getCreatedDate();
     }
 
-    public MessageMemoResponseDTO() {
+    public MessageMemoResDTO() {
     }
 }

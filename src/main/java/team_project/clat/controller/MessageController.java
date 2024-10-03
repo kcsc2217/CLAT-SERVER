@@ -10,8 +10,12 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import team_project.clat.domain.Answer;
-import team_project.clat.dto.request.MessageRequestDto;
-import team_project.clat.dto.response.MessageResponse;
+import team_project.clat.dto.request.MessageFileReqDTO;
+import team_project.clat.dto.request.MessageReqDTO;
+import team_project.clat.dto.response.FileImageResDTO;
+import team_project.clat.dto.response.MessageAnswerResDTO;
+import team_project.clat.dto.response.MessageFileIncludedRespDTO;
+import team_project.clat.dto.response.MessageResDTO;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.*;
 import team_project.clat.service.AnswerService;
@@ -30,7 +34,7 @@ public class MessageController {
 
     @MessageMapping(value = "/chat/enter")
     @Operation(summary = "채팅방 입장", description = "사용자가 채팅방에 입장하면, STOMP 메시지를 통해 입장 메시지를 브로드캐스트합니다.")
-    public void enter(MessageRequestDto messageRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+    public void enter(MessageReqDTO messageRequestDto, @AuthenticationPrincipal CustomUserDetails customUserDetails){
 //        Member member = customUserDetails.getMember();
 //        messageRequestDto.setMessage(member.getUsername() + "님이 채팅방에 입장하셨습니다.");
 //        simpMessagingTemplate.convertAndSend("/sub/chat/" + messageRequestDto.getCourseId(), messageRequestDto);  // 해당 채팅방으로 메세지 전송
@@ -38,7 +42,7 @@ public class MessageController {
     }
 
     @MessageMapping(value = "/chat/message")
-    public void message(MessageRequestDto messageRequestDto, SimpMessageHeaderAccessor accessor){ // 강의 아이디로 채팅 구독
+    public void message(MessageReqDTO messageRequestDto, SimpMessageHeaderAccessor accessor){ // 강의 아이디로 채팅 구독
         log.info("메세지가 수신됐습니다");
 
         String username = (String) accessor.getSessionAttributes().get("username");
@@ -46,30 +50,30 @@ public class MessageController {
         Long chatRoomId = messageRequestDto.getChatRoomId();
         String message = messageRequestDto.getMessage();
         Message findMessage = messageService.saveMessage(username, chatRoomId, message);
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, new MessageResponse(findMessage));
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, new MessageResDTO(findMessage));
 
     }
 
         @MessageMapping(value = "/chat/file")
-    public void messageFile(MessageFileRequestDTO messageFileRequest, SimpMessageHeaderAccessor accessor){
+    public void messageFile(MessageFileReqDTO messageFileRequest, SimpMessageHeaderAccessor accessor){
         log.info("파일이 전송되었습니다");
         String username = (String) accessor.getSessionAttributes().get("username");
         Long chatRoomId = messageFileRequest.getChatRoomId();
-        List<FileImageDTO> fileImageDTOList = messageFileRequest.getFileImageDTOList();
+        List<FileImageResDTO> fileImageDTOList = messageFileRequest.getFileImageDTOList();
 
         Message message = messageService.saveFileMessage(username, chatRoomId, fileImageDTOList); //파일 메세지 생성
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, new MessageFileResponseDTO(message,fileImageDTOList));
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + chatRoomId, new MessageFileIncludedRespDTO(message,fileImageDTOList));
 
     }
 
     @MessageMapping(value = "/chat/answer")
-    public void messageAnswer(MessageAnswerDTO messageAnswerDTO, SimpMessageHeaderAccessor accessor){
+    public void messageAnswer(MessageReqDTO.MessageAnswerReqDTO messageAnswerDTO, SimpMessageHeaderAccessor accessor){
         log.info("답글이 전송되었습니다");
         String username = (String) accessor.getSessionAttributes().get("username");
 
         Answer answer = answerService.saveAnswer(messageAnswerDTO.getAnswer(), username, messageAnswerDTO.getMessageId());
 
-       simpMessagingTemplate.convertAndSend("/sub/chat/" + messageAnswerDTO.getChatRoomId(), new MessageAnswerResponseDTO(answer) );
+       simpMessagingTemplate.convertAndSend("/sub/chat/" + messageAnswerDTO.getChatRoomId(), new MessageAnswerResDTO(answer) );
 
 
     }

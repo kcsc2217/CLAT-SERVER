@@ -8,7 +8,7 @@ import team_project.clat.domain.Enum.Emoticon;
 import team_project.clat.domain.Like;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.LikeResponseDTO;
+import team_project.clat.dto.response.LikeResDTO;
 import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.LikeRepository;
@@ -40,11 +40,11 @@ public class LikeService {
     }
 
 
-    public LikeResponseDTO getLikes(Long messageId){
+    public LikeResDTO getLikes(Long messageId){
 
         List<Like> fetchByMessage = likeRepository.findByMessageId(messageId);
 
-        return new LikeResponseDTO(fetchByMessage);
+        return new LikeResDTO(fetchByMessage);
 
     }
 

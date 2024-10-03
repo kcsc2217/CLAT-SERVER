@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
-import team_project.clat.dto.request.ChatRoomCreateDto;
+import team_project.clat.dto.request.ChatRoomCreateReqDTO;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.RoomKeyReq;
+import team_project.clat.dto.request.RoomKeyReqDTO;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.ChatRoomRepository;
@@ -30,7 +30,7 @@ public class ChatRoomService {
 
 
     @Transactional
-    public ChatRoom save(ChatRoomCreateDto chatRoomCreateDto) {
+    public ChatRoom save(ChatRoomCreateReqDTO chatRoomCreateDto) {
 
         Course findCourse = courseRepository.findById(chatRoomCreateDto.getCourseId()).orElseThrow(() -> new NotFoundException("Course not found")); //강의실 아이디찾기
 
@@ -69,7 +69,7 @@ public class ChatRoomService {
 
 
     // 채팅방 검증 로직
-    public boolean validationRoom(RoomKeyReq roomKeyReq){
+    public boolean validationRoom(RoomKeyReqDTO roomKeyReq){
         ChatRoom findChatRoom = chatRoomRepository.findById(roomKeyReq.getChatRoomId()).orElseThrow(() -> new NotFoundException("해당 채팅방은 없습니다"));
 
         if(roomKeyReq !=null && roomKeyReq.getRoomKey() == findChatRoom.getRoomKey()){

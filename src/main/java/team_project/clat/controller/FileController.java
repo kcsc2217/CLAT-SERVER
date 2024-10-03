@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.File.ValidationFileSize;
-import team_project.clat.dto.ImageResponseDTO;
-import team_project.clat.dto.TestImageDto;
+import team_project.clat.dto.response.ImageResDTO;
+import team_project.clat.dto.request.ImageReqDTO;
 import team_project.clat.service.ImageService;
 
 import java.nio.charset.StandardCharsets;
@@ -27,7 +26,7 @@ public class FileController {
 
     @PostMapping("/image")
     @ResponseStatus(HttpStatus.OK)
-    public List<ImageResponseDTO> saveImage(@ModelAttribute TestImageDto testImageDto){
+    public List<ImageResDTO> saveImage(@ModelAttribute ImageReqDTO testImageDto){
 
         ValidationFileSize.sizeCheck(testImageDto.getImages());
 

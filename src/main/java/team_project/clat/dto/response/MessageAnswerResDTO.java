@@ -1,4 +1,4 @@
-package team_project.clat.dto;
+package team_project.clat.dto.response;
 
 import lombok.Data;
 import team_project.clat.domain.Answer;
@@ -6,7 +6,7 @@ import team_project.clat.domain.Answer;
 import java.time.LocalDateTime;
 
 @Data
-public class MessageAnswerResponseDTO {
+public class MessageAnswerResDTO {
 
     private Long answerId;
 
@@ -17,7 +17,7 @@ public class MessageAnswerResponseDTO {
 
     private LocalDateTime timestamp;
 
-    public MessageAnswerResponseDTO(Answer answer) {
+    public MessageAnswerResDTO(Answer answer) {
         this.answerId = answer.getId();
         this.answer = answer.getAnswer();
         this.messageId = answer.getMessage().getId();
@@ -25,6 +25,6 @@ public class MessageAnswerResponseDTO {
         this.senderName = answer.getMember().getName();
     }
 
-    public MessageAnswerResponseDTO() {
+    public MessageAnswerResDTO() {
     }
 }

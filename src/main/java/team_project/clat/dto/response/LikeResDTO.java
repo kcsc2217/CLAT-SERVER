@@ -1,4 +1,4 @@
-package team_project.clat.dto;
+package team_project.clat.dto.response;
 
 import lombok.Data;
 import team_project.clat.domain.Enum.Emoticon;
@@ -7,18 +7,18 @@ import team_project.clat.domain.Like;
 import java.util.List;
 
 @Data
-public class LikeResponseDTO {
+public class LikeResDTO {
 
     private int heartCount = 0;
     private int sadCount = 0;
     private int likeCount = 0;
 
 
-    public LikeResponseDTO(List<Like> likeList) {
+    public LikeResDTO(List<Like> likeList) {
         emotionCount(likeList);
     }
 
-    public LikeResponseDTO() {
+    public LikeResDTO() {
     }
 
     private void emotionCount(List<Like> likeList) {

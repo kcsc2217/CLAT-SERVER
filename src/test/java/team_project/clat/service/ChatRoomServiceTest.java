@@ -7,8 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.ChatRoomMessageDTO;
-import team_project.clat.dto.RoomKeyReq;
+import team_project.clat.dto.response.ChatRoomMessageResDTO;
+import team_project.clat.dto.request.RoomKeyReqDTO;
 import team_project.clat.repository.ChatRoomRepository;
 
 import java.util.List;
@@ -57,7 +57,7 @@ class ChatRoomServiceTest {
     @Test
     public void 방_입장() throws Exception {
        //given
-        RoomKeyReq roomKeyReq = new RoomKeyReq(1L, 3489);
+        RoomKeyReqDTO roomKeyReq = new RoomKeyReqDTO(1L, 3489);
 
         //when
 
@@ -74,7 +74,7 @@ class ChatRoomServiceTest {
         ChatRoom chatRoom = chatRoomService.findFetchMessageAndImage(1L);
         //when
 
-        ChatRoomMessageDTO chatRoomMessageDTO = new ChatRoomMessageDTO(chatRoom);
+        ChatRoomMessageResDTO chatRoomMessageDTO = new ChatRoomMessageResDTO(chatRoom);
         //then
     }
 

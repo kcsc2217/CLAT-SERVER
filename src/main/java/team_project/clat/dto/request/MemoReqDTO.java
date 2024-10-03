@@ -1,19 +1,19 @@
-package team_project.clat.dto;
+package team_project.clat.dto.request;
 
 import lombok.Data;
 
 @Data
-public class MemoRequestDTO {
+public class MemoReqDTO {
 
     private Long messageId;
 
     private String memoContent;
 
-    public MemoRequestDTO(Long messageId, String memoContent) {
+    public MemoReqDTO(Long messageId, String memoContent) {
         this.messageId = messageId;
         this.memoContent = memoContent;
     }
 
-    public MemoRequestDTO() {
+    public MemoReqDTO() {
     }
 }
