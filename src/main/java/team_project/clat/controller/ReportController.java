@@ -11,7 +11,7 @@ import team_project.clat.domain.Member;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.repository.MemberRepository;
 import team_project.clat.service.ReportService;
-import team_project.clat.dto.ReportRequestDTO;
+import team_project.clat.dto.request.ReportReqDTO;
 
 @Tag(name = "report API", description = "report API")
 @Slf4j
@@ -28,7 +28,7 @@ public class ReportController {
 
 
   @PostMapping
-  public ResponseEntity<ReportRequestDTO> createFAQComment(@RequestBody ReportRequestDTO reportRequestDTO, HttpServletRequest request) throws MessagingException {
+  public ResponseEntity<ReportReqDTO> createFAQComment(@RequestBody ReportReqDTO reportRequestDTO, HttpServletRequest request) throws MessagingException {
     String accessToken = request.getHeader("access");
     Member member = null;
 

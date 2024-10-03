@@ -103,9 +103,11 @@ public class ExControllerAdvice {
         return new RestResponse("UNAUTHORIZED", ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(GlobalException.class)
+    public RestResponse handleGlobalException(GlobalException ex) {
+        log.error("[exceptionHandle] ex", ex);
 
-
-
-
-
+        return new RestResponse(ex.getErrorCode().toString(), ex.getErrorCode().getDescription());
+    }
 }

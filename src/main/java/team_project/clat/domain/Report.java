@@ -34,7 +34,7 @@ public class Report extends BaseEntity {
         this.filepath = filepath;
     }
 
-    //연관관계 메서드
+    // 연관 관계 메서드
     public void addMember(@Nullable Member member){
         if (member != null) {
             this.member = member;
