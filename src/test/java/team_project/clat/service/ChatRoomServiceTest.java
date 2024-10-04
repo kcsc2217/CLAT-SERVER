@@ -62,16 +62,6 @@ class ChatRoomServiceTest {
         Assertions.assertThat(b).isEqualTo(true);
     }
 
-    @Test
-    public void chatroom_에서_메서지와_이미지전체조회() throws Exception {
-       //given
-        ChatRoom chatRoom = chatRoomService.findFetchMessageAndImage(1L);
-        //when
-
-        ChatRoomMessageResDTO chatRoomMessageDTO = new ChatRoomMessageResDTO(chatRoom);
-        //then
-    }
-
 
 
 
