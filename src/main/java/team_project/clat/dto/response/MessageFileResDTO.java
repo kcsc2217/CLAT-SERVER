@@ -25,6 +25,8 @@ public class MessageFileResDTO {
 
     private String answer;
 
+    private LikeResDTO likeResDTO;
+
     public MessageFileResDTO(Message message) {
         this.messageId = message.getId();
 
@@ -45,7 +47,10 @@ public class MessageFileResDTO {
             this.answer = message.getAnswer().getAnswer();
         }
 
+        likeResDTO = new LikeResDTO(message.getLikes());
+
     }
+
 
     public MessageFileResDTO() {
     }
