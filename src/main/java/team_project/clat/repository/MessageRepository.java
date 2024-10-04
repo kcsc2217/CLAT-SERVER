@@ -37,4 +37,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("select m from Message m join fetch m.member left join fetch m.images left join fetch m.answer an where m.chatRoom.id = :chatRoomId")
     Optional<List<Message>> findQueryUpdateByChatRoomId(Long chatRoomId);
 
+    @Query("select distinct m from Message m left join fetch m.likes where m.id IN:messageIds")
+    List<Message> findLikeByAllMessagesByIds(@Param("messageIds") List<Long> messageIds);
+
 }

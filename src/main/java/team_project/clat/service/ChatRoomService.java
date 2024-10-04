@@ -55,7 +55,9 @@ public class ChatRoomService {
 
         messageRepository.findAllMessageIds(messageIds); // n+1 문제를 해결하기 위한 fetchjoin
 
-        return  new ChatRoomMessageResDTO(chatRoom);
+        messageRepository.findLikeByAllMessagesByIds(messageIds);
+
+        return new ChatRoomMessageResDTO(chatRoom);
 
     }
 
