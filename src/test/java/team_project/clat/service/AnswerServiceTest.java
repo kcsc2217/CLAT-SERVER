@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.Answer;
-import team_project.clat.repository.AnswerRepository;
 
 @SpringBootTest
 @Transactional

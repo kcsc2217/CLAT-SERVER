@@ -57,13 +57,6 @@ public class Message extends BaseEntity{
     }
 
 
-    // 이미지와 연관관계 메서드
-    public void addImages(Image image){
-        this.images.add(image);
-        image.setMessage(this);
-
-    }
-
     public void addAnswer(Answer answer){
         this.answer=answer;
     }
@@ -75,14 +68,15 @@ public class Message extends BaseEntity{
     }
 
 
-    public Message(String message, ChatRoom chatRoom, Member member) {
+    public Message(String message, ChatRoom chatRoom, Member member) { // 일반 메시지 생성 생성자
         this.message = message;
+
         addChatRoom(chatRoom);
         addMember(member);
 
     }
 
-    public Message(Member member, ChatRoom chatRoom, List<Image> images){
+    public Message(Member member, ChatRoom chatRoom, List<Image> images){  //파일 메시지 생성 생성자
         addMember(member);
         addChatRoom(chatRoom);
         this.images = images;
