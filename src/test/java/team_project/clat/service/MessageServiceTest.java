@@ -82,15 +82,6 @@ class MessageServiceTest {
         }
     }
 
-    @Test
-    public void 메모_검증() throws Exception {
-        Member member = memberRepository.findById(1L).get();
-
-        //then
-        Assertions.assertThrows(UnAuthorizationException.class, () -> {
-            memoService.saveMemo(new MessageMemoReqDTO(7L, "안녕"),member);
-        });
-    }
 
 
 

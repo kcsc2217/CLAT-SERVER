@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.Member;
-import team_project.clat.dto.response.MessageBookMarkResDTO;
+import team_project.clat.dto.response.BookMarkSaveDTO;
+import team_project.clat.dto.response.MessageBookMarkDTO;
 import team_project.clat.service.BookMarkService;
 import team_project.clat.service.TokenService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,10 +24,19 @@ public class BookMarkController {
 
 
     @PostMapping("/{messageId}")
-    public MessageBookMarkResDTO createBookMark(@PathVariable Long messageId, HttpServletRequest request) {
+    public BookMarkSaveDTO createBookMark(@PathVariable Long messageId, HttpServletRequest request) {
         Member findMember = tokenService.getUsernameFromToken(request);
 
+        log.info("북마크 등록");
        return bookMarkService.markBook(messageId, findMember);
     }
 
+    @GetMapping()
+    public List<MessageBookMarkDTO> findAllBookMarks(HttpServletRequest request) {
+        Member findMember = tokenService.getUsernameFromToken(request);
+        log.info("북마크 메시지들 조회");
+
+        return bookMarkService.findAll(findMember);
+
+    }
 }
