@@ -1,19 +1,25 @@
 package team_project.clat.service;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.Member;
+import team_project.clat.domain.Memo;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.request.MessageMemoReqDTO;
 import team_project.clat.dto.response.MemberAnswerResDTO;
 import team_project.clat.dto.response.MemoResDTO;
 import team_project.clat.exception.UnAuthorizationException;
 import team_project.clat.repository.MemberRepository;
+import team_project.clat.repository.MemoRepository;
+import team_project.clat.repository.MessageRepository;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -24,8 +30,14 @@ class MessageServiceTest {
     private MessageService messageService;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemoService memoService;
 
+    @Autowired
+    private EntityManager em;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private MessageRepository messageRepository;
 
 
     @Test
@@ -60,7 +72,7 @@ class MessageServiceTest {
     @Test
     public void 채팅방의_멤버의_메모쿼리보기() throws Exception {
        //given
-        List<MemoResDTO> byWithChatRoomMemo = messageService.findByWithChatRoomMemo(1L, 1L);
+        List<MemoResDTO> byWithChatRoomMemo = memoService.findByWithChatRoomMemo(1L, 1L);
 
         //when
 
@@ -72,12 +84,14 @@ class MessageServiceTest {
 
     @Test
     public void 메모_검증() throws Exception {
+        Member member = memberRepository.findById(1L).get();
 
-       //then
+        //then
         Assertions.assertThrows(UnAuthorizationException.class, () -> {
-            messageService.saveMemo(new MessageMemoReqDTO(7L, "안녕"),1L);
+            memoService.saveMemo(new MessageMemoReqDTO(7L, "안녕"),member);
         });
     }
+
 
 
 

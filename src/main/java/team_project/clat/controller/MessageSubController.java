@@ -3,20 +3,16 @@ package team_project.clat.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.Answer;
 import team_project.clat.domain.Member;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.request.MessageAnswerReqDTO;
 import team_project.clat.dto.request.MessageFileReqDTO;
-import team_project.clat.dto.request.MessageMemoReqDTO;
-import team_project.clat.dto.request.MessageReqDTO;
 import team_project.clat.dto.response.FileImageResDTO;
 import team_project.clat.dto.response.MessageAnswerResDTO;
+import team_project.clat.dto.response.MessageBookMarkResDTO;
 import team_project.clat.dto.response.MessageFileIncludedRespDTO;
-import team_project.clat.dto.response.MessageMemoResDTO;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.service.AnswerService;
 import team_project.clat.service.MessageService;
@@ -65,14 +61,5 @@ public class MessageSubController {
 
     }
 
-    @PostMapping("/chat/memo")
-    public MessageMemoResDTO test2(@RequestBody MessageMemoReqDTO messageMemoRequestDTO, HttpServletRequest request){
-        Member findMember = tokenService.getUsernameFromToken(request);
-
-        Message message = messageService.saveMemo(messageMemoRequestDTO, findMember.getId());
-
-        return new MessageMemoResDTO(message);
-
-    }
 
 }
