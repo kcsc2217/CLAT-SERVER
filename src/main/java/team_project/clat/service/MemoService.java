@@ -13,7 +13,6 @@ import team_project.clat.dto.response.MessageMemoResDTO;
 import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.MemberNotAccessException;
 import team_project.clat.exception.NotFoundException;
-import team_project.clat.exception.UnAuthorizationException;
 import team_project.clat.repository.MemoRepository;
 import team_project.clat.repository.MessageRepository;
 

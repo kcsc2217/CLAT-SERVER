@@ -12,11 +12,11 @@ public class ChatRoomMessageResDTO {
 
     private String roomName;
 
-    private List<MessageFileResDTO>  messageFileResponseDTOS;
+    private List<MessageListResDTO>  messageFileResponseDTOS;
 
     public ChatRoomMessageResDTO(ChatRoom chatRoom) {
         this.roomName = chatRoom.getRoomName();
-        this.messageFileResponseDTOS = chatRoom.getMessageList().stream().map(MessageFileResDTO::new).collect(Collectors.toList());
+        this.messageFileResponseDTOS = chatRoom.getMessageList().stream().map(MessageListResDTO::new).collect(Collectors.toList());
     }
 
     public ChatRoomMessageResDTO(String roomName) {

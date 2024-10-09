@@ -4,12 +4,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import team_project.clat.domain.Message;
+import team_project.clat.repository.querydsl.MessageRepositoryCustom;
 
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
-public interface MessageRepository extends JpaRepository<Message, Long> {
+public interface MessageRepository extends JpaRepository<Message, Long> , MessageRepositoryCustom {
 
     @Query("select distinct  m from Message m join fetch m. member left join fetch m.images left join fetch m.answer an where m.id IN:messageIds")
     List<Message> findAllMessageIds(@Param("messageIds") List<Long> messageIds);

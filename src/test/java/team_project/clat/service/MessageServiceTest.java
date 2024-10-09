@@ -1,25 +1,20 @@
 package team_project.clat.service;
 
-import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.Member;
-import team_project.clat.domain.Memo;
 import team_project.clat.domain.Message;
-import team_project.clat.dto.request.MessageMemoReqDTO;
 import team_project.clat.dto.response.MemberAnswerResDTO;
 import team_project.clat.dto.response.MemoResDTO;
-import team_project.clat.exception.UnAuthorizationException;
+import team_project.clat.dto.response.PageNationMessageResDTO;
 import team_project.clat.repository.MemberRepository;
-import team_project.clat.repository.MemoRepository;
-import team_project.clat.repository.MessageRepository;
 
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -33,11 +28,8 @@ class MessageServiceTest {
     private MemoService memoService;
 
     @Autowired
-    private EntityManager em;
-    @Autowired
     private MemberRepository memberRepository;
-    @Autowired
-    private MessageRepository messageRepository;
+
 
 
     @Test
@@ -81,6 +73,28 @@ class MessageServiceTest {
             System.out.println(memoResDTO.getMemo());
         }
     }
+
+
+    @Test
+    @DisplayName("메시지 무한스크롤 구현")
+    public void pageNationMessage() throws Exception {
+       //given
+        PageRequest pageRequest = PageRequest.of(1, 10);
+
+
+       //when
+        Slice<PageNationMessageResDTO> findPage = messageService.findByPageNationMessageList(1L, pageRequest);
+
+        //then
+
+        for (PageNationMessageResDTO pageNationMessageResDTO : findPage) {
+
+            System.out.println( pageNationMessageResDTO.getMessage());
+        }
+
+
+    }
+
 
 
 
