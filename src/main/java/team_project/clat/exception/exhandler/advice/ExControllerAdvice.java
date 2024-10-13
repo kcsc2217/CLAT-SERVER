@@ -110,4 +110,11 @@ public class ExControllerAdvice {
 
         return new RestResponse(ex.getErrorCode().toString(), ex.getErrorCode().getDescription());
     }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler
+    public CommonResultResDTO usernameJoinExHandle(UsernameDataIntegrityViolationException e){
+        String errorText = HttpStatus.CONFLICT.value() +" "+ HttpStatus.CONFLICT.getReasonPhrase();
+        return new CommonResultResDTO(errorText, e.getMessage());
+    }
 }
