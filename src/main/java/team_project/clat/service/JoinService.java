@@ -3,12 +3,14 @@ package team_project.clat.service;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import team_project.clat.domain.Enum.UserType;
 import team_project.clat.domain.Member;
@@ -17,6 +19,7 @@ import team_project.clat.dto.response.CommonResultResDTO;
 import team_project.clat.dto.request.JoinReqDTO;
 import team_project.clat.dto.response.JoinResDTO;
 import team_project.clat.dto.response.JoinResultResDTO;
+import team_project.clat.exception.UsernameDataIntegrityViolationException;
 import team_project.clat.jwt.JwtUtil;
 import team_project.clat.repository.MemberRepository;
 import team_project.clat.repository.TokenRepository;
@@ -27,6 +30,7 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class JoinService {
 
     private final MemberRepository memberRepository;
@@ -67,7 +71,12 @@ public class JoinService {
 
         Member member = Member.memberSet(name, username, bCryptPasswordEncoder.encode(password), schoolName, userType, fullPath);
 
-        memberRepository.save(member);
+        try {
+            memberRepository.save(member);
+        }catch (DataIntegrityViolationException e){
+            throw new UsernameDataIntegrityViolationException("중복된 ID가 존재합니다.");
+        }
+
 
         //토큰 생성
         String access = jwtUtil.createJwt("access", username, userType.getDescription(), 600000L);
