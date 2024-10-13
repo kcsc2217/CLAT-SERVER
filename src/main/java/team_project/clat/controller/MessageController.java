@@ -32,9 +32,16 @@ public class MessageController {
 
     private final MessageService messageService;
 
-    @GetMapping("/{chatRoomId}")
-    public Slice<PageNationMessageResDTO> getMessages(@PathVariable Long chatRoomId, Pageable pageable) {
-        return messageService.findByPageNationMessageList(chatRoomId, pageable);
+    @GetMapping()
+    public Slice<PageNationMessageResDTO> getMessages(@RequestParam  Long chatRoomId,
+                                                      @RequestParam(value = "messageId", required = false) Long messageId, Pageable pageable) {
+        return messageService.findNoOffSetByPageNationMessageList(chatRoomId,messageId ,pageable);
+    }
+
+    @GetMapping(("/offset"))
+    public Slice<PageNationMessageResDTO> getMessages(@RequestParam  Long chatRoomId,
+                                                        Pageable pageable) {
+        return messageService.findOffSetByPageNationMessageList(chatRoomId,pageable);
     }
 
 

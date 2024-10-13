@@ -111,11 +111,15 @@ public class MessageService {
         return messages.stream().map(MemberAnswerResDTO::new).toList();
     }
 
-    //페이지 네이션 처리한 메시지
-    public Slice<PageNationMessageResDTO> findByPageNationMessageList(Long chatRoomId, Pageable pageable){
-       return  messageRepository.findSliceByMessageAndChatRoom(chatRoomId, pageable);
+    //페이지 네이션  Nooffset 처리한 메시지
+    public Slice<PageNationMessageResDTO> findNoOffSetByPageNationMessageList(Long chatRoomId, Long messageId,  Pageable pageable){
+       return  messageRepository.findSliceNooOffSetByMessageAndChatRoom(chatRoomId, messageId,pageable);
     }
 
+
+    public Slice<PageNationMessageResDTO> findOffSetByPageNationMessageList(Long chatRoomId, Pageable pageable){
+        return  messageRepository.findSliceOffSetByMessageAndChatRoom(chatRoomId, pageable);
+    }
 
 
     private List<Image> convertToImages(List<FileImageResDTO> fileImageDTOList) {

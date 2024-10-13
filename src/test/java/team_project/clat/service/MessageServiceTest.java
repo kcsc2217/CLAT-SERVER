@@ -83,7 +83,7 @@ class MessageServiceTest {
 
 
        //when
-        Slice<PageNationMessageResDTO> findPage = messageService.findByPageNationMessageList(1L, pageRequest);
+        Slice<PageNationMessageResDTO> findPage = messageService.findNoOffSetByPageNationMessageList(1L,null ,pageRequest);
 
         //then
 
