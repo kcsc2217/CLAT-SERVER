@@ -2,12 +2,14 @@ package team_project.clat.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import team_project.clat.domain.Enum.UserType;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class JoinReqDTO {
 
     @NotBlank(message = "이름은 필수 입력값입니다.")
