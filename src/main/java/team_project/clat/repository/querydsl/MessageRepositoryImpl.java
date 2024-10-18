@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.lettuce.core.pubsub.PubSubOutput.Type.message;
 import static team_project.clat.domain.QAnswer.answer1;
 import static team_project.clat.domain.QMember.member;
 import static team_project.clat.domain.QMessage.message1;
