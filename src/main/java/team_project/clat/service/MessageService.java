@@ -3,19 +3,17 @@ package team_project.clat.service;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Image;
 import team_project.clat.domain.Member;
-import team_project.clat.domain.Memo;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.response.*;
-import team_project.clat.dto.request.MessageMemoReqDTO;
-import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.MemberNotAccessException;
 import team_project.clat.exception.NotFoundException;
-import team_project.clat.exception.UnAuthorizationException;
 import team_project.clat.repository.*;
 
 import java.util.List;
@@ -102,7 +100,7 @@ public class MessageService {
 
         List<Message> messages = messageRepository.findQueryUpdateByChatRoomId(chatRoomId).orElseThrow(() -> new NotFoundException("채팅방을 찾을 수 없습니다"));
 
-        chatRoomMessageDTO.setMessageFileResponseDTOS(messages.stream().map(MessageFileResDTO::new).collect(Collectors.toList()));
+        chatRoomMessageDTO.setMessageFileResponseDTOS(messages.stream().map(MessageListResDTO::new).collect(Collectors.toList()));
 
         return chatRoomMessageDTO;
     }
@@ -113,6 +111,15 @@ public class MessageService {
         return messages.stream().map(MemberAnswerResDTO::new).toList();
     }
 
+    //페이지 네이션  Nooffset 처리한 메시지
+    public Slice<PageNationMessageResDTO> findNoOffSetByPageNationMessageList(Long chatRoomId, Long messageId,  Pageable pageable){
+       return  messageRepository.findSliceNooOffSetByMessageAndChatRoom(chatRoomId, messageId,pageable);
+    }
+
+
+    public Slice<PageNationMessageResDTO> findOffSetByPageNationMessageList(Long chatRoomId, Pageable pageable){
+        return  messageRepository.findSliceOffSetByMessageAndChatRoom(chatRoomId, pageable);
+    }
 
 
     private List<Image> convertToImages(List<FileImageResDTO> fileImageDTOList) {

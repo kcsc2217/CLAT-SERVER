@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class MessageFileResDTO {
+public class MessageListResDTO {
 
     private Long messageId;
 
@@ -27,7 +27,7 @@ public class MessageFileResDTO {
 
     private LikeResDTO likeResDTO;
 
-    public MessageFileResDTO(Message message) {
+    public MessageListResDTO(Message message) {
         this.messageId = message.getId();
 
         if(message.getMember() == null){
@@ -52,6 +52,6 @@ public class MessageFileResDTO {
     }
 
 
-    public MessageFileResDTO() {
+    public MessageListResDTO() {
     }
 }
