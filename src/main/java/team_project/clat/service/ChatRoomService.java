@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Course;
-import team_project.clat.dto.request.ChatRoomCreateReqDTO;
 import team_project.clat.domain.Message;
+import team_project.clat.dto.request.ChatRoomCreateReqDTO;
 import team_project.clat.dto.request.RoomKeyReqDTO;
 import team_project.clat.dto.response.ChatRoomInformationResDTO;
-import team_project.clat.dto.response.ChatRoomMessageResDTO;
 import team_project.clat.exception.DuplicateCourseChatRoomException;
 import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.ChatRoomRepository;
@@ -28,7 +27,6 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final CourseRepository courseRepository;
-    private final MessageRepository messageRepository;
 
 
     @Transactional
@@ -46,25 +44,6 @@ public class ChatRoomService {
         log.info("채팅 생성");
         return saveChatRoom;
     }
-
-
-    public ChatRoomMessageResDTO findFetchMessageAndImage(Long chatRoomId){
-        ChatRoom chatRoom = chatRoomRepository.findFetchByChatRoom(chatRoomId).orElseThrow(() -> new NotFoundException("해당 채팅방은 없습니다"));
-
-        List<Long> messageIds = getChatRoomMessageIds(chatRoom);
-
-        messageRepository.findAllMessageIds(messageIds); // n+1 문제를 해결하기 위한 fetchjoin
-
-        messageRepository.findLikeByAllMessagesByIds(messageIds);
-
-        return new ChatRoomMessageResDTO(chatRoom);
-
-    }
-
-
-
-
-
 
     private static List<Long> getChatRoomMessageIds(ChatRoom chatRoom) {
         List<Long> messageIds = chatRoom.getMessageList().stream().map(Message::getId).collect(Collectors.toList());
