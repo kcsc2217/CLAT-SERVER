@@ -16,7 +16,7 @@
 
 ## 📚CLAT 서비스
 
-> **웹툰 서비스** <br><br>
+> **CLASS + CHATTING = CLAT 서비스** <br><br>
 > 교수와 학생간의 실시간 문의 및 채팅 서비스. <br>
 > STOMP 실시간 소켓 통신을 기반으로한 채팅 서비스 제공 <br>
 > 시큐리티/Json Web Token 기반의 로그인 서비스 제공 <br><br>
