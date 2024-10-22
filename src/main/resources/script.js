@@ -16,7 +16,7 @@ export let options = {
 
 export default function () {
     // 메시지 조회 API 호출
-    let res = http.get('http://host.docker.internal:8080/chat?chatRoomId=30&size=30&messageId=70290');
+    let res = http.get('http://host.docker.internal:8080/chat?chatRoomId=30&size=30&messageId=147539');
 
     // 응답 상태 확인
     check(res, {

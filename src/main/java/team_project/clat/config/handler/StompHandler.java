@@ -19,22 +19,35 @@ public class StompHandler implements ChannelInterceptor {
 
     private final JwtUtil jwtUtil;
 
-
-
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message); // 메세지 헤더에 접근이 가능함
+
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+
+        // STOMP 헤더를 직접 출력
+        log.info("STOMP Command: {}", accessor.getCommand());
+
+        // 각 헤더 키와 값을 출력
+        log.info("Headers: {}", accessor.getSessionAttributes());
 
         log.info("메시지 연결");
 
-        if (accessor.getCommand() == StompCommand.CONNECT) {
-            String token = accessor.getFirstNativeHeader("Authorization"); // http에서는 custom 헤더를 사요하고 있지만 stomp는 웹소켓 환경에서 동작하므로 해당 헤더를 알지 못함
+        // 모든 헤더 키와 값을 출FUR
+
+        String token = accessor.getFirstNativeHeader("Authorization");
+
+        log.info("토근 값 = {}", token);
+
+        if (StompCommand.CONNECTED.equals(accessor.getCommand()) || StompCommand.SEND.equals(accessor.getCommand())) {
+            // http에서는 custom 헤더를 사요하고 있지만 stomp는 웹소켓 환경에서 동작하므로 해당 헤더를 알지 못함
 
             if (token == null || token.isEmpty()) {
+                log.info("토큰이 없습니다");
                 throw new AccessTokenInvalidException("Access token is required.");
             }
 
             if (jwtUtil.isExpired(token)) {
+                log.info("토큰이 만료되었습니다");
                 throw new AccessTokenInvalidException("Access token has expired.");
             }
 
@@ -42,6 +55,9 @@ public class StompHandler implements ChannelInterceptor {
             accessor.getSessionAttributes().put("username", username);
             // Optional: Add logging for debugging
             System.out.println("Valid token received: " + token);
+        }
+        else {
+            log.info("Received command: " + accessor.getCommand()); // 다른 명령어 처리 로깅
         }
 
         return message;
