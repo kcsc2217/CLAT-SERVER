@@ -28,7 +28,7 @@ public class StompHandler implements ChannelInterceptor {
         log.info("STOMP Command: {}", accessor.getCommand());
 
         // 각 헤더 키와 값을 출력
-        log.info("Headers: {}", accessor.getSessionAttributes());
+        log.info("Headers: {}", message.getHeaders());
 
         log.info("메시지 연결");
 
@@ -54,6 +54,7 @@ public class StompHandler implements ChannelInterceptor {
           String username = jwtUtil.getUsername(token);
             accessor.getSessionAttributes().put("username", username);
             // Optional: Add logging for debugging
+            log.info("username = {}", username);
             System.out.println("Valid token received: " + token);
         }
         else {
