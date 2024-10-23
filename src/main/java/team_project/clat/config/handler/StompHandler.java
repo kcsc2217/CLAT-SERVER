@@ -38,7 +38,7 @@ public class StompHandler implements ChannelInterceptor {
 
         log.info("토근 값 = {}", token);
 
-        if ( StompCommand.SEND.equals(accessor.getCommand())) {
+        if (StompCommand.CONNECT.equals(accessor.getCommand()) || StompCommand.SEND.equals(accessor.getCommand())) {
             // http에서는 custom 헤더를 사요하고 있지만 stomp는 웹소켓 환경에서 동작하므로 해당 헤더를 알지 못함
 
             if (token == null || token.isEmpty()) {
@@ -55,7 +55,7 @@ public class StompHandler implements ChannelInterceptor {
             accessor.getSessionAttributes().put("username", username);
             // Optional: Add logging for debugging
             log.info("username = {}", username);
-            System.out.println("Valid token received: " + token);
+                System.out.println("Valid token received: " + token);
         }
         else {
             log.info("Received command: " + accessor.getCommand()); // 다른 명령어 처리 로깅
