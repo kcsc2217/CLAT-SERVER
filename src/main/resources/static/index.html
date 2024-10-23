@@ -73,7 +73,7 @@
     <div id="messages"></div>
     <div id="input-container">
         <input type="text" id="message" placeholder="Your Message">
-        <button onclick="sendMessage()">Send</button>
+        <button onclick="window.sendMessage()">Send</button>
     </div>
 </div>
 
@@ -91,7 +91,7 @@
         var chatRoomId = 1; // Chat room ID
 
         const headers = {
-            'Authorization': token, // 여기에서 헤더에 토큰 추가// 하트비트 설정
+            Authorization: token, // 여기에서 헤더에 토큰 추가// 하트비트 설정
         };
 // Connect to STOMP
         stompClient.connect(
