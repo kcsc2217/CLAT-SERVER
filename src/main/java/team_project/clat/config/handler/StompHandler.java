@@ -63,12 +63,5 @@ public class StompHandler implements ChannelInterceptor {
 
         return message;
     }
-//
-//    @EventListener(SessionConnectEvent.class)
-//    public void onApplicationEvent(SessionConnectEvent event) {
-//        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
-//            accessor.getSessionAttributes().put("username", username);
-//
-//    }
 
 }
