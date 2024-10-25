@@ -10,6 +10,8 @@ import team_project.clat.dto.response.LikeResDTO;
 import team_project.clat.service.LikeService;
 import team_project.clat.service.TokenService;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -21,20 +23,18 @@ public class LikeController{
     private final TokenService tokenService;
 
     @PostMapping()
-    public LikeResDTO saveLike(@RequestBody LikeReqDTO likeRequestDTO, HttpServletRequest request){
+    public List<LikeResDTO> saveLike(@RequestBody LikeReqDTO likeRequestDTO, HttpServletRequest request){
 
         log.info("이모티콘");
 
         Member findByMember = tokenService.getUsernameFromToken(request);  //멤버 찾음
         likeService.like(findByMember,likeRequestDTO.getMessageId(), likeRequestDTO.getEmoticon());
 
-        LikeResDTO likes = likeService.getLikes(likeRequestDTO.getMessageId());
-
-        return likes;
+        return likeService.getLikes(likeRequestDTO.getMessageId());
     }
 
     @GetMapping("/{messageId}")
-    public LikeResDTO getLike(@PathVariable Long messageId){
+    public List<LikeResDTO> getLike(@PathVariable Long messageId){
 
         return likeService.getLikes(messageId);
     }

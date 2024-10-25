@@ -9,10 +9,13 @@ import org.springframework.data.domain.SliceImpl;
 import team_project.clat.domain.Message;
 import team_project.clat.domain.QAnswer;
 import team_project.clat.domain.QMessage;
+import team_project.clat.dto.response.LikeResDTO;
 import team_project.clat.dto.response.PageNationMessageResDTO;
+import team_project.clat.repository.LikeRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static team_project.clat.domain.QAnswer.answer1;
@@ -24,8 +27,11 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
 
-    public MessageRepositoryImpl(EntityManager em) {
+    private final LikeRepository likeRepository;
+
+    public MessageRepositoryImpl(EntityManager em, LikeRepository likeRepository) {
         this.queryFactory = new JPAQueryFactory(em);
+        this.likeRepository = likeRepository;
     }
 
     @Override
@@ -44,8 +50,20 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom{
                 .orderBy(message.createdDate.desc())
                 .fetch();
 
+        List<Long> longs = result.stream().map(Message::getId).toList();
 
-        List<PageNationMessageResDTO> list = result.stream().map(PageNationMessageResDTO::new).collect(Collectors.toList());
+        Map<Long, List<LikeResDTO>> qslLikes = likeRepository.findByQslLikes(longs);
+
+
+        List<PageNationMessageResDTO> list = result.stream().map(message3 -> {
+            Long findByMessageId = message3.getId();
+
+            List<LikeResDTO> likeResDTOS = qslLikes.getOrDefault(findByMessageId, Collections.emptyList());
+
+            return new PageNationMessageResDTO(message3, likeResDTOS);
+
+        }).collect(Collectors.toList());
+
 
 
         boolean hasNext = false;
@@ -77,7 +95,19 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom{
                 .orderBy(message1.createdDate.desc())
                 .fetch();
 
-        List<PageNationMessageResDTO> list = result.stream().map(PageNationMessageResDTO::new).collect(Collectors.toList());
+        List<Long> longs = result.stream().map(Message::getId).toList();
+
+        Map<Long, List<LikeResDTO>> qslLikes = likeRepository.findByQslLikes(longs);
+
+
+        List<PageNationMessageResDTO> list = result.stream().map(message3 -> {
+            Long findByMessageId = message3.getId();
+
+            List<LikeResDTO> likeResDTOS = qslLikes.getOrDefault(findByMessageId, Collections.emptyList());
+
+            return new PageNationMessageResDTO(message3, likeResDTOS);
+
+        }).collect(Collectors.toList());
 
 
         boolean hasNext = false;

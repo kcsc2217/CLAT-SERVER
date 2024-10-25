@@ -29,7 +29,6 @@ public class ChatRoomMessageResDTO {
 
     private String answer;
 
-    private LikeResDTO likeResDTO;
 
     public ChatRoomMessageResDTO(Message message) {
 
@@ -45,7 +44,6 @@ public class ChatRoomMessageResDTO {
         this.answer =  Optional.ofNullable(message.getAnswer())
                 .map(Answer::getAnswer)
                 .orElse(null);
-        this.likeResDTO =  new LikeResDTO(message.getLikes());
     }
 
     public ChatRoomMessageResDTO(String roomName) {
