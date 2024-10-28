@@ -8,6 +8,7 @@ import team_project.clat.domain.Message;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,9 +31,11 @@ public class PageNationMessageResDTO {
 
     private String answer;
 
-    private LikeResDTO likeResDTO;
+    private List<LikeResDTO> likeResDTOS;
 
-    public PageNationMessageResDTO(Message message) {
+
+
+    public PageNationMessageResDTO(Message message, List<LikeResDTO> likeResDTOS) {
         this.messageId = message.getId();
         this.senderName = message.getMember().getName();
         this.message = message.getMessage();
@@ -45,6 +48,10 @@ public class PageNationMessageResDTO {
         this.answer =  Optional.ofNullable(message.getAnswer())
                         .map(Answer::getAnswer)
                         .orElse(null);
-        this.likeResDTO =  new LikeResDTO(message.getLikes());
+
+        this.likeResDTOS = likeResDTOS;
+
     }
+
+
 }
