@@ -39,7 +39,6 @@
 │   └──  회원 북마크 목록
 │   
 │
-
 ├── 실시간 채팅
 │   ├── STOMP 기반의 실시간 소켓 통신
 │   ├── S3 연동을 통한 채팅방 파일 업로드, 다운로드
@@ -169,7 +168,7 @@
 
 ## 📂 ERD
 
-<img width="1693" alt="image" src="">
+<img width="1693" alt="image" src="https://github.com/user-attachments/assets/f0482b99-ab9c-451a-8e0a-a637fac0e93a">
 
 <br><br>
 
