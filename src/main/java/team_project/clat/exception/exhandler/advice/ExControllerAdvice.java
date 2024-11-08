@@ -117,4 +117,11 @@ public class ExControllerAdvice {
         String errorText = HttpStatus.CONFLICT.value() +" "+ HttpStatus.CONFLICT.getReasonPhrase();
         return new CommonResultResDTO(errorText, e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(RefreshTokenNotFound.class)
+    public CommonResultResDTO refreshTokenNotFoundExHandle(RefreshTokenNotFound e){
+        String errorText = HttpStatus.UNAUTHORIZED.value() +" "+ HttpStatus.UNAUTHORIZED.getReasonPhrase();
+        return new CommonResultResDTO(errorText, e.getMessage());
+    }
 }
