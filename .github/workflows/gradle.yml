@@ -46,37 +46,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
   
-      - name: Start SSH agent and add key
-        run: |
-          # SSH 에이전트를 시작하고 환경 변수에 추가
-          eval $(ssh-agent -s)
-          
-          # SSH 디렉터리가 없으면 생성
-          mkdir -p ~/.ssh
-          
-          # GitHub Secrets에서 가져온 SSH 키를 ~/.ssh/id_rsa로 저장
-          echo "$KEY" | tr -d '\r' > ~/.ssh/id_rsa
-          
-          # SSH 키 파일에 권한 설정
-          chmod 600 ~/.ssh/id_rsa
-          
-          # SSH 에이전트에 키 추가
-          ssh-add ~/.ssh/id_rsa
-        env:
-          KEY: ${{ secrets.EC2_SSH_KEY }}  # GitHub Secrets에서 SSH 키 가져오기
-  
-      - name: Deploy to EC2
-        env:
-          HOST: ${{ secrets.EC2_HOST }}
-          USERNAME: ubuntu
-        run: |
-          # SSH 키를 사용하여 EC2에 배포
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USERNAME@$HOST << 'EOF'
-            # EC2에서 실행할 명령어
-            cd /path/to/your/app
-            git pull origin develop  # develop 브랜치로 pull
+      - name: Deploy to EC2 using SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}  # SSH 키
+          port: 22  # 기본 포트는 22입니다. EC2 인스턴스의 포트가 다르면 변경하세요.
+          script: |
+            git pull origin develop
             ./gradlew bootRun
-          EOF
 
 
 
