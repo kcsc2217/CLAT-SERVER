@@ -47,6 +47,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
+    - name: Add SSH key to agent
+      run: |
+        echo "$KEY" | tr -d '\r' | ssh-add -
+      env:
+        KEY: ${{ secrets.EC2_SSH_KEY }}  # GitHub Secrets에서 SSH 키 가져오기
+        
 
     - name: Deploy to EC2
       env:
