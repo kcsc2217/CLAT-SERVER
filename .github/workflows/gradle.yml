@@ -47,8 +47,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Add SSH key to agent
+    - name: Start SSH agent and add key
       run: |
+        # SSH 에이전트를 시작하고 환경 변수에 추가
+        eval $(ssh-agent -s)
         echo "$KEY" | tr -d '\r' | ssh-add -
       env:
         KEY: ${{ secrets.EC2_SSH_KEY }}  # GitHub Secrets에서 SSH 키 가져오기
