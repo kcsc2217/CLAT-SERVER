@@ -54,27 +54,32 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            # 1. PM2 설치 (이미 설치된 경우에는 건너뛰기)
-            if ! command -v pm2 &> /dev/null
-            then
-              echo "PM2 not found, installing..."
-              sudo npm install pm2@latest -g
-            else
-              echo "PM2 is already installed"
-            fi
-
-            # 2. 최신 코드로 Git Pull (서브모듈 포함)
+            # Node.js 환경 설치 (npm 설치)
+            sudo apt update
+            sudo apt install -y nodejs npm
+            sudo npm install -g pm2
+          
+            # Git 서브모듈을 SSH로 클론
+            git submodule update --init --recursive --depth 1 --config core.sshCommand="ssh -i ${secrets.EC2_SSH_KEY}"
+          
+            # PM2 프로세스 종료
+            pm2 stop all || true
+          
+            # 프로젝트 디렉토리로 이동
             cd /home/ubuntu/CLAT-SERVER
+            
+            # 최신 코드로 Git Pull (서브모듈 포함)
             git pull origin develop --recurse-submodules
+          
+            # 의존성 설치 및 빌드
+            npm ci && node_modules/mecab-ya/bin/install-mecab ko
+            
+            # 애플리케이션 시작
+            pm2 start /home/ubuntu/CLAT-SERVER/build/libs/clat-0.0.1-SNAPSHOT.jar --name clat-0.0.1-SNAPSHOT
+            
+            # 프로세스 상태 저장
+            pm2 save
 
-            # 3. 기존 PM2 프로세스 종료
-            pm2 stop clat || true   # PM2로 관리 중인 프로세스를 종료
-
-            # 4. 애플리케이션 실행 (PM2로 백그라운드에서 실행)
-            pm2 start /home/ubuntu/CLAT-SERVER/build/libs/clat-0.0.1-SNAPSHOT.jar --name clat --no-daemon
-
-            # 5. PM2로 실행 중인 프로세스 확인
-            pm2 list
 
 
 
