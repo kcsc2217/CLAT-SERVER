@@ -54,24 +54,27 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-              # PM2 프로세스 종료
-              pm2 stop all || true
-              pm2 save
-              
-              # 프로젝트 디렉토리로 이동
-              cd /home/ubuntu/CLAT-SERVER
-              
-              # 최신 코드로 Git Pull (서브모듈 포함)
-              git pull origin develop --recurse-submodules
-              
-              # 의존성 설치 및 빌드
-              npm ci && node_modules/mecab-ya/bin/install-mecab ko
-              
-              # Java 애플리케이션 실행 (pm2로 관리)
-              pm2 start java -- -jar /home/ubuntu/CLAT-SERVER/build/libs/clat-0.0.1-SNAPSHOT.jar --name clat-0.0.1-SNAPSHOT
-              
-              # 프로세스 상태 저장
-              pm2 save
+            # Git 서브모듈을 SSH로 업데이트
+            git submodule update --init --recursive --depth 1 --config core.sshCommand="ssh -i ${EC2_SSH_KEY}"
+          
+            # PM2 프로세스 종료 (애플리케이션이 이미 실행 중이라면 종료)
+            pm2 stop all || true
+          
+            # 프로젝트 디렉토리로 이동
+            cd /home/ubuntu/CLAT-SERVER
+          
+            # 최신 코드로 Git Pull (서브모듈 포함)
+            git pull origin develop --recurse-submodules
+          
+            # 의존성 설치 및 빌드 (npm ci와 mecab 설치)
+            npm ci && node_modules/mecab-ya/bin/install-mecab ko
+          
+            # Java 애플리케이션 시작 (새로 시작하는 방법)
+            pm2 start /home/ubuntu/CLAT-SERVER/build/libs/clat-0.0.1-SNAPSHOT.jar --name clat-0.0.1-SNAPSHOT || true
+          
+            # 프로세스 상태 저장 (새로운 프로세스를 PM2에 저장)
+            pm2 save
+
 
 
 
