@@ -51,7 +51,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}  # SSH 키
+          key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
             # 1. 기존 실행 중인 프로세스를 종료
@@ -61,11 +61,12 @@ jobs:
             cd /home/ubuntu/CLAT-SERVER
             git pull origin develop --recurse-submodules
       
-            # 3. 애플리케이션 실행 (백그라운드에서)
+            # 3. 애플리케이션 실행 (백그라운드에서, 로그 출력 파일을 명시적으로 지정)
             nohup java -jar /home/ubuntu/CLAT-SERVER/build/libs/clat-0.0.1-SNAPSHOT.jar > /home/ubuntu/clat.log 2>&1 &
       
             # 4. 프로세스가 제대로 실행 중인지 확인
             ps aux | grep 'java -jar clat-0.0.1-SNAPSHOT.jar'
+
 
 
 
