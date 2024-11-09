@@ -60,14 +60,19 @@ jobs:
             git pull origin develop
             echo "Git pull completed."
             
-            echo "Killing any existing java process..."
-            pkill -f 'java -jar clat-0.0.1-SNAPSHOT.jar' || true  # 기존 프로세스 종료
+            echo "Killing any existing java processes..."
+            ps aux | grep 'java' | grep -v grep | awk '{print $2}' | xargs kill -9 || true  # 기존 모든 Java 프로세스 종료
             
             echo "Starting new Java process..."
             nohup java -jar clat-0.0.1-SNAPSHOT.jar > /home/ubuntu/clat.log 2>&1 &  # 백그라운드에서 새로운 프로세스 시작
+            sleep 5  # 잠시 대기하여 프로세스가 시작되도록 함
+            
+            echo "Checking if the Java process is running..."
+            ps aux | grep 'java -jar clat-0.0.1-SNAPSHOT.jar'  # 실행 중인 Java 프로세스 확인
             
             echo "Deployment completed."
             exit 0  # SSH 세션 종료 방지
+
 
 
 
