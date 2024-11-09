@@ -56,6 +56,13 @@ jobs:
           script: |
             cd /home/ubuntu/CLAT-SERVER
             git pull origin develop
+            # 기존 프로세스를 종료 (예: Spring Boot 애플리케이션)
+            pid=$(ps aux | grep 'java' | grep 'jar' | awk '{print $2}')
+            if [ -n "$pid" ]; then
+              kill -9 $pid
+              echo "Terminated existing process with PID $pid"
+            fi
+            # 새로운 Spring Boot 애플리케이션 시작
             ./gradlew bootRun
 
 
