@@ -54,6 +54,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}  # SSH 키
           port: 22  # 기본 포트는 22입니다. EC2 인스턴스의 포트가 다르면 변경하세요.
           script: |
+            cd /CLAT-SERVER
             git pull origin develop
             ./gradlew bootRun
 
