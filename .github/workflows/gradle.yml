@@ -24,7 +24,6 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582  # v4.0.0
 
@@ -47,20 +46,34 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-        
+    - name: Start SSH agent and add key
+      run: |
+        # SSH 에이전트를 시작하고 환경 변수에 추가
+        eval $(ssh-agent -s)
+        # GitHub Secrets에서 가져온 SSH 키를 ~/.ssh/id_rsa로 저장
+        echo "$KEY" | tr -d '\r' > ~/.ssh/id_rsa
+        # SSH 키 파일에 권한 설정
+        chmod 600 ~/.ssh/id_rsa
+        # SSH 에이전트에 키 추가
+        ssh-add ~/.ssh/id_rsa
+      env:
+        KEY: ${{ secrets.EC2_SSH_KEY }}  # GitHub Secrets에서 SSH 키 가져오기
 
     - name: Deploy to EC2
       env:
         HOST: ${{ secrets.EC2_HOST }}
         USERNAME: ubuntu
-        KEY: ${{ secrets.EC2_SSH_KEY }}
       run: |
-        ssh -o StrictHostKeyChecking=no -i $KEY $USERNAME@$HOST << 'EOF'
+        # SSH 키를 사용하여 EC2에 배포
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USERNAME@$HOST << 'EOF'
           # EC2에서 실행할 명령어
           cd /path/to/your/app
           git pull origin develop  # develop 브랜치로 pull
           ./gradlew bootRun
         EOF
+
+
+
 
 
   
