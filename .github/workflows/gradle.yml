@@ -67,7 +67,16 @@ jobs:
   
       - name: Deploy to EC2
         env:
-          HOST: ${{ secrets.EC2_
+          HOST: ${{ secrets.EC2_HOST }}
+          USERNAME: ubuntu
+        run: |
+          # SSH 키를 사용하여 EC2에 배포
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USERNAME@$HOST << 'EOF'
+            # EC2에서 실행할 명령어
+            cd /path/to/your/app
+            git pull origin develop  # develop 브랜치로 pull
+            ./gradlew bootRun
+          EOF
 
 
 
