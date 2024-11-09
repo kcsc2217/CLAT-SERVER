@@ -54,24 +54,26 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}  # SSH 키
           port: 22  # 기본 포트는 22입니다. EC2 인스턴스의 포트가 다르면 변경하세요.
           script: |
-            set -e  # 스크립트 실행 중 오류 발생 시 즉시 종료
+            # 프로젝트 디렉토리로 이동
             cd /home/ubuntu/CLAT-SERVER
-            echo "Running git pull..."
+            
+            # 최신 코드로 업데이트
             git pull origin develop
-            echo "Git pull completed."
+      
+            # Gradle 빌드
+            ./gradlew build
+      
+            # 빌드된 JAR 파일 위치로 이동
+            cd build/libs
+      
+            # 기존 프로세스 종료 (이미 실행 중이라면)
+            pkill -f 'java -jar clat-0.0.1-SNAPSHOT.jar' || true
+      
+            # 애플리케이션 실행 (백그라운드에서)
+            nohup java -jar clat-0.0.1-SNAPSHOT.jar > /home/ubuntu/clat.log 2>&1 &
             
-            echo "Killing any existing java processes..."
-            ps aux | grep 'java' | grep -v grep | awk '{print $2}' | xargs kill -9 || true  # 기존 모든 Java 프로세스 종료
-            
-            echo "Starting new Java process..."
-            nohup java -jar clat-0.0.1-SNAPSHOT.jar > /home/ubuntu/clat.log 2>&1 &  # 백그라운드에서 새로운 프로세스 시작
-            sleep 5  # 잠시 대기하여 프로세스가 시작되도록 함
-            
-            echo "Checking if the Java process is running..."
-            ps aux | grep 'java -jar clat-0.0.1-SNAPSHOT.jar'  # 실행 중인 Java 프로세스 확인
-            
-            echo "Deployment completed."
-            exit 0  # SSH 세션 종료 방지
+            # 프로세스 상태 확인 (선택 사항)
+            ps aux | grep 'java -jar clat-0.0.1-SNAPSHOT.jar'
 
 
 
