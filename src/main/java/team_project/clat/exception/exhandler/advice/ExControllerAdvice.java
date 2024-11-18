@@ -124,4 +124,11 @@ public class ExControllerAdvice {
         String errorText = HttpStatus.UNAUTHORIZED.value() +" "+ HttpStatus.UNAUTHORIZED.getReasonPhrase();
         return new CommonResultResDTO(errorText, e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundException.class)
+    public CommonResultResDTO userNotFoundExceptionExHandle(UserNotFoundException e){
+        String errorText = HttpStatus.NOT_FOUND.value() +" "+ HttpStatus.NOT_FOUND.getReasonPhrase();
+        return new CommonResultResDTO(errorText, e.getMessage());
+    }
 }
