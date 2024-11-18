@@ -87,7 +87,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers( "/chatRoom").hasRole("PROFESSOR")
                         .requestMatchers("/chatRoom/api/**").hasRole("PROFESSOR")
-                        .requestMatchers("/reIssue").permitAll()
+                        .requestMatchers("/reIssue", "/member/findPwd").permitAll()
                         .anyRequest().authenticated());
 
 

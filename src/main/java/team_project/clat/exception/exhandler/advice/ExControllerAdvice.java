@@ -117,4 +117,11 @@ public class ExControllerAdvice {
         String errorText = HttpStatus.CONFLICT.value() +" "+ HttpStatus.CONFLICT.getReasonPhrase();
         return new CommonResultResDTO(errorText, e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundException.class)
+    public CommonResultResDTO userNotFoundExHandle(UserNotFoundException e){
+        String errorText = HttpStatus.CONFLICT.value() +" "+ HttpStatus.CONFLICT.getReasonPhrase();
+        return new CommonResultResDTO(errorText, e.getMessage());
+    }
 }
