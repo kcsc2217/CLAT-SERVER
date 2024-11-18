@@ -14,6 +14,8 @@ import team_project.clat.exception.NotFoundException;
 import team_project.clat.repository.LikeRepository;
 import team_project.clat.repository.MessageRepository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -40,13 +42,27 @@ public class LikeService {
     }
 
 
-    public LikeResDTO getLikes(Long messageId){
+    public List<LikeResDTO> getLikes(Long messageId){
 
-        List<Like> fetchByMessage = likeRepository.findByMessageId(messageId);
-
-        return new LikeResDTO(fetchByMessage);
+        return likeRepository.findByQslLikesCount(messageId);
 
     }
+/*
+    private List<LikeResDTO> getLikemessagaeIdList(Long messageId) {
+        List<Object[]> byMessageId = likeRepository.findByMessageId(messageId);
 
+        List<LikeResDTO> likeResDTOS = new ArrayList<>();
+
+        for(Object[] obj : byMessageId) {  //이모티콘 꺼내
+            Emoticon emoticon = (Emoticon) obj[0];
+             Long count = (Long) obj[1];
+
+            likeResDTOS.add(new LikeResDTO(emoticon, count));
+        }
+
+        return  likeResDTOS;
+    }
+
+ */
 
 }

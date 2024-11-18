@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = {@Index(name = "message_index", columnList = "chatroom_id, created_date")})
 public class Message extends BaseEntity{
 
     @Id

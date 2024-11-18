@@ -11,6 +11,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Boolean existsByUsername(String username);
     Member findByUsername(String username);
+    void deleteByUsername(String username);
 
 
     @Query("select distinct m from Member m left join fetch m.messageList where m.id = :memberId")

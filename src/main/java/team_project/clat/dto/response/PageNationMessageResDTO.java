@@ -1,18 +1,20 @@
 package team_project.clat.dto.response;
 
-import lombok.Data;
+
+import lombok.Getter;
 import team_project.clat.domain.Answer;
-import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Image;
 import team_project.clat.domain.Message;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Data
-public class ChatRoomMessageResDTO {
+@Getter
+
+public class PageNationMessageResDTO {
 
     private Long messageId;
 
@@ -29,29 +31,27 @@ public class ChatRoomMessageResDTO {
 
     private String answer;
 
+    private List<LikeResDTO> likeResDTOS;
 
-    public ChatRoomMessageResDTO(Message message) {
 
+
+    public PageNationMessageResDTO(Message message, List<LikeResDTO> likeResDTOS) {
         this.messageId = message.getId();
         this.senderName = message.getMember().getName();
         this.message = message.getMessage();
         this.imageUrl = message.getImages()
-                .stream().map(Image::getAccessUrl).collect(Collectors.toList());
+                                    .stream().map(Image::getAccessUrl).collect(Collectors.toList());
         this.timestamp = message.getCreatedDate();
         this.answerId = Optional.ofNullable(message.getAnswer())
-                .map(Answer::getId)
-                .orElse(null);
+                        .map(Answer::getId)
+                        .orElse(null);
         this.answer =  Optional.ofNullable(message.getAnswer())
-                .map(Answer::getAnswer)
-                .orElse(null);
+                        .map(Answer::getAnswer)
+                        .orElse(null);
+
+        this.likeResDTOS = likeResDTOS;
+
     }
 
-    public ChatRoomMessageResDTO(String roomName) {
 
-    }
-
-
-
-    public ChatRoomMessageResDTO() {
-    }
 }

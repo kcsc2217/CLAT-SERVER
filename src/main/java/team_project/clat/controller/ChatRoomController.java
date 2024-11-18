@@ -7,15 +7,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import team_project.clat.domain.ChatRoom;
-import team_project.clat.dto.request.ChatRoomCreateReqDTO;
-import team_project.clat.dto.response.CreateMemberResponse;
 import team_project.clat.domain.Member;
-import team_project.clat.domain.Message;
+import team_project.clat.dto.request.ChatRoomCreateReqDTO;
+import team_project.clat.dto.request.RoomKeyReqDTO;
 import team_project.clat.dto.response.ChatRoomInformationResDTO;
 import team_project.clat.dto.response.ChatRoomMessageResDTO;
-import team_project.clat.dto.request.RoomKeyReqDTO;
+import team_project.clat.dto.response.CreateMemberResponse;
 import team_project.clat.dto.response.RoomKeyResDTO;
-import team_project.clat.repository.ChatRoomRepository;
 import team_project.clat.service.ChatRoomMemberService;
 import team_project.clat.service.ChatRoomService;
 import team_project.clat.service.MessageService;
@@ -38,7 +36,7 @@ public class ChatRoomController {
 
     private final TokenService tokenService;
 
-    private final ChatRoomRepository chatRoomRepository;
+
 
     @PostMapping(value = "") //채팅방 생성
     public CreateMemberResponse createChatRoom(@RequestBody @Valid ChatRoomCreateReqDTO chatRoomCreateDto) {
@@ -52,26 +50,9 @@ public class ChatRoomController {
     }
 
     @GetMapping("/{chatRoomId}") // 채팅방 이름과 채팅방 메세지 조회
-    public ChatRoomMessageResDTO getFileMessage(@PathVariable Long chatRoomId ){
+    public List<ChatRoomMessageResDTO> getFileMessage(@PathVariable Long chatRoomId ){
 
-        return chatRoomService.findFetchMessageAndImage(chatRoomId);
-
-    }
-
-    @GetMapping("/subQuery/{chatRoomId}")
-    public ChatRoomMessageResDTO getSubQueryMessage(@PathVariable Long chatRoomId ){
-
-        List<Message> subQueryFetchMessageAndImage = messageService.findSubQueryFetchMessageAndImage(chatRoomId);
-
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
-
-        return new ChatRoomMessageResDTO(chatRoom);
-    }
-
-    @GetMapping("/queryUpdate/{chatRoomId}")
-    public ChatRoomMessageResDTO queryUpdateMessage(@PathVariable Long chatRoomId ){
-
-       return  messageService.findUpgradeQueryByFetchMessageAndImage(chatRoomId);
+        return messageService.findUpgradeQueryByFetchMessageAndImage(chatRoomId);
     }
 
     // 채팅방 검증 로직

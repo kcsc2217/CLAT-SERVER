@@ -3,19 +3,17 @@ package team_project.clat.service;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team_project.clat.domain.ChatRoom;
 import team_project.clat.domain.Image;
 import team_project.clat.domain.Member;
-import team_project.clat.domain.Memo;
 import team_project.clat.domain.Message;
 import team_project.clat.dto.response.*;
-import team_project.clat.dto.request.MessageMemoReqDTO;
-import team_project.clat.exception.DuplicateException;
 import team_project.clat.exception.MemberNotAccessException;
 import team_project.clat.exception.NotFoundException;
-import team_project.clat.exception.UnAuthorizationException;
 import team_project.clat.repository.*;
 
 import java.util.List;
@@ -88,24 +86,19 @@ public class MessageService {
     }
 
 
-    // 서브 쿼리를 사용한 조회
-    public List<Message> findSubQueryFetchMessageAndImage(Long chatRoomId){
-        return messageRepository.findSubFetchJoinByMessage(chatRoomId).orElseThrow(()-> new NotFoundException("해당 채팅방에 메시지는 찾을 수 없습니다"));
-    }
-
 
     // 채팅방 전체 메시지 페치조인 쿼리 개선
-    public ChatRoomMessageResDTO findUpgradeQueryByFetchMessageAndImage(Long chatRoomId){
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new NotFoundException("채팅방을 찾을 수 없습니다"));
-
-        ChatRoomMessageResDTO chatRoomMessageDTO = new ChatRoomMessageResDTO(chatRoom.getRoomName());
+    public List<ChatRoomMessageResDTO> findUpgradeQueryByFetchMessageAndImage(Long chatRoomId){
 
         List<Message> messages = messageRepository.findQueryUpdateByChatRoomId(chatRoomId).orElseThrow(() -> new NotFoundException("채팅방을 찾을 수 없습니다"));
 
-        chatRoomMessageDTO.setMessageFileResponseDTOS(messages.stream().map(MessageFileResDTO::new).collect(Collectors.toList()));
+        fetchByLikeList(messages);
 
-        return chatRoomMessageDTO;
+        return messages.stream().map(ChatRoomMessageResDTO::new).collect(Collectors.toList());
+
     }
+
+
 
     public List<MemberAnswerResDTO> findByWithAnswer(Long memberId){
         List<Message> messages = messageRepository.findMessageByUsername(memberId).orElseThrow(() -> new NotFoundException("해당 멤버의 메시지를 찾을 수 없습니다"));
@@ -113,6 +106,15 @@ public class MessageService {
         return messages.stream().map(MemberAnswerResDTO::new).toList();
     }
 
+    //페이지 네이션  Nooffset 처리한 메시지
+    public Slice<PageNationMessageResDTO> findNoOffSetByPageNationMessageList(Long chatRoomId, Long messageId,  Pageable pageable){
+       return  messageRepository.findSliceNooOffSetByMessageAndChatRoom(chatRoomId, messageId,pageable);
+    }
+
+
+    public Slice<PageNationMessageResDTO> findOffSetByPageNationMessageList(Long chatRoomId, Pageable pageable){
+        return  messageRepository.findSliceOffSetByMessageAndChatRoom(chatRoomId, pageable);
+    }
 
 
     private List<Image> convertToImages(List<FileImageResDTO> fileImageDTOList) {
@@ -130,10 +132,10 @@ public class MessageService {
 
     }
 
-    private void validationAccessMember(Member member, Message message) {
-        if(message.getMember().getId() != member.getId()){
-            throw new MemberNotAccessException("해당 멤버의 메모가 아니므로 접근 할 수 없습니다");
-        }
+    private void fetchByLikeList(List<Message> messages) {
+        List<Long> list = messages.stream().map(message -> message.getId()).toList();
+
+        messageRepository.findLikeByAllMessagesByIds(list);
     }
 
 

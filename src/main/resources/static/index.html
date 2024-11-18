@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -73,7 +73,7 @@
     <div id="messages"></div>
     <div id="input-container">
         <input type="text" id="message" placeholder="Your Message">
-        <button onclick="sendMessage()">Send</button>
+        <button onclick="window.sendMessage()">Send</button>
     </div>
 </div>
 
@@ -81,25 +81,28 @@
 <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // 토큰 값을 가져옵니다. (예: 로컬 스토리지에서)
-        var token = localStorage.getItem('Authorization');
+        var token = localStorage.getItem('Authorization'); // Fetch token from local storage
 
-        // 웹소켓을 초기화합니다.
+
+
         var socket = new SockJS('/ws');
         var stompClient = Stomp.over(socket);
 
-        var chatRoomId = 1; // 강의 아이디
+        var chatRoomId = 1; // Chat room ID
 
-        // STOMP 연결
+        const headers = {
+            Authorization: token, // 여기에서 헤더에 토큰 추가// 하트비트 설정
+        };
+// Connect to STOMP
         stompClient.connect(
-            { 'Authorization': token }, // 토큰을 헤더로 전달
-            function (frame) {
+            headers,
+            function(frame) {
                 console.log('Connected: ' + frame);
 
-                stompClient.subscribe('/sub/chat/' + chatRoomId, function (message) {
+                // 메시지 구독
+                stompClient.subscribe('/sub/chat/' + chatRoomId, function(message) {
                     var content = JSON.parse(message.body);
                     var messagesDiv = document.getElementById('messages');
-
                     var date = new Date(content.timestamp);
                     var formattedTime = date.toLocaleString();
 
@@ -108,28 +111,45 @@
                     messagesDiv.scrollTop = messagesDiv.scrollHeight;
                 });
             },
-            function (error) {
+            function(error) {
                 console.error('STOMP error:', error);
             }
         );
 
+        // Fetch initial messages
+        fetchMessages();
+
         function fetchMessages() {
             fetch('/chatRoom/' + chatRoomId)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    data.messageFileResponseDTOS.forEach(message => {
-                        appendMessage(message.senderName, message.message, message.timestamp);
-                    });
+                    console.log(data); // 응답 확인
+                    // data가 배열인 경우에만 처리
+                    if (Array.isArray(data)) {
+                        data.forEach(message => {
+                            appendMessage(message.senderName, message.message, message.timestamp);
+                        });
+                    } else {
+                        console.warn('Expected an array but received:', data); // 경고 로그 추가
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching messages:', error);
                 });
         }
 
         function appendMessage(senderName, message, timestamp) {
             var messagesDiv = document.getElementById('messages');
-
             var date = new Date(timestamp);
             var formattedTime = date.toLocaleString();
 
-            messagesDiv.innerHTML += '<p><strong>' + senderName + ':</strong> ' + message + ' <span style="color: grey; font-size: 0.8em;">(' + formattedTime + ')</span></p>';
+            messagesDiv.innerHTML += '<p><strong>' + senderName + ':</strong> ' + message +
+                ' <span style="color: grey; font-size: 0.8em;">(' + formattedTime + ')</span></p>';
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
@@ -137,7 +157,9 @@
             var message = document.getElementById('message').value;
 
             if (message) {
-                stompClient.send("/pub/chat/message", {}, JSON.stringify({
+                stompClient.send("/pub/chat/message", {
+                    'Authorization': token // 여기에서 헤더에 토큰 추가
+                }, JSON.stringify({
                     'chatRoomId': chatRoomId,
                     'message': message
                 }));
@@ -145,14 +167,10 @@
             } else {
                 alert("Please enter a message.");
             }
-        }
+        };
     });
 
 
-
-
-
-</script>
 
 </script>
 </body>
