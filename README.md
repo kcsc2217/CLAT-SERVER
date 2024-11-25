@@ -9,7 +9,7 @@
 |                                      령원                                       |                                      웅애요                                      |                                    도그                                         |
 |:------------------------------------------------------------------------------:|:------------------------------------------------------------------------------:|:------------------------------------------------------------------------------:|
 |                                   DEVELOPER                                    |                                   DEVELOPER                                    |                                   DEVELOPER                                    |
-| <img src="https://github.com/user-attachments/assets/d2045545-b489-4df6-ac3b-c36361d7f831" width="250" /> | <img src="" width="250" /> | <img src="https://github.com/user-attachments/assets/d8e14666-f0a3-413a-b880-39649563567a" width="250" /> |
+| <img src="https://github.com/user-attachments/assets/d2045545-b489-4df6-ac3b-c36361d7f831" width="250" /> | <img src="https://github.com/user-attachments/assets/c5ef6f57-f083-49ec-a7cd-8c1074b66a31" width="250" /> | <img src="https://github.com/user-attachments/assets/d8e14666-f0a3-413a-b880-39649563567a" width="250" /> |
 |                     [kcsc2217](https://github.com/kcsc2217)                    |        [ensalada-de-pechuga](https://github.com/ensalada-de-pechuga)           |                     [AKKDevMachine](https://github.com/AKKDevMachine)          |            |
 
 <br><br>
